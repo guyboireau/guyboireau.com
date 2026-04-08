@@ -1,0 +1,323 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+
+const title = 'À propos | Guy Boireau — Développeur Web Freelance Bordeaux'
+const description =
+  'Développeur web fullstack freelance à Bordeaux. Master 2 YNOV, 3 ans chez Bassetti Group. React, NestJS, TypeScript, React Native. Disponible pour vos projets.'
+
+const skills = [
+  {
+    icon: '🎨',
+    title: 'Frontend',
+    items: ['React', 'React Native', 'TypeScript', 'JavaScript', 'HTML/CSS', 'Vite', 'Astro'],
+  },
+  {
+    icon: '⚙️',
+    title: 'Backend',
+    items: ['NestJS', 'Node.js', 'Laravel', 'C#', '.NET', 'RESTful API'],
+  },
+  {
+    icon: '💾',
+    title: 'Bases de données',
+    items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Supabase', 'Prisma ORM'],
+  },
+  {
+    icon: '🚀',
+    title: 'DevOps & outils',
+    items: ['Docker', 'GitLab CI/CD', 'GitHub Actions', 'Vercel', 'Jest', 'Cypress'],
+  },
+  {
+    icon: '🔒',
+    title: 'Qualité & sécurité',
+    items: ['OWASP Top 10', 'WCAG 2.1', 'Tests unitaires', 'Swagger', 'JWT', 'Stripe'],
+  },
+]
+
+const experiences = [
+  {
+    title: 'Développeur Freelance',
+    company: 'Indépendant',
+    period: 'Novembre 2025 — aujourd\'hui',
+    description: 'Création de sites web, applications web et mobiles pour des clients. Maintenance, SEO et accompagnement mensuel.',
+    techs: ['React', 'React Native', 'NestJS', 'Supabase', 'TypeScript', 'Astro'],
+    current: true,
+  },
+  {
+    title: 'Développeur Intégrateur — Alternance',
+    company: 'BASSETTI France',
+    location: 'Bordeaux',
+    period: 'Octobre 2022 — Septembre 2025',
+    description: 'Développement d\'applications web sur mesure pour des clients industriels. Analyse des besoins, développement de fonctionnalités, livraison et déploiement.',
+    techs: ['Delphi', 'JavaScript', 'MySQL'],
+    current: false,
+  },
+  {
+    title: 'Stage — Développement C#',
+    company: 'Cerfrance Terre d\'Allier',
+    location: 'Toulon-sur-Allier',
+    period: 'Janvier — Février 2022',
+    description: 'Stage de développement logiciel en C#, découverte des bonnes pratiques et de la POO.',
+    techs: ['C#', '.NET', 'Visual Basic'],
+    current: false,
+  },
+  {
+    title: 'Stage — Développement Web',
+    company: 'Technoplane',
+    location: 'Moulins',
+    period: 'Mai — Juin 2021',
+    description: 'Développement web et apprentissage des technologies front-end.',
+    techs: ['HTML', 'CSS', 'JavaScript', 'PHP'],
+    current: false,
+  },
+]
+
+const education = [
+  {
+    degree: 'Master 2',
+    field: 'Développement Informatique',
+    school: 'YNOV Campus Bordeaux',
+    period: '2022 — 2025',
+    techs: ['React', 'TypeScript', 'NestJS', 'PostgreSQL', 'Docker', 'Jest', 'Cypress'],
+  },
+  {
+    degree: 'Bachelor 3',
+    field: 'Développement Web & Mobile',
+    school: 'YNOV Campus Bordeaux',
+    period: '2022 — 2023',
+    techs: ['React', 'Node.js', 'MongoDB', 'Docker'],
+  },
+  {
+    degree: 'BTS SIO SLAM',
+    field: 'Solutions Logicielles et Applications Métiers',
+    school: 'Lycée Sidoine Apollinaire',
+    period: '2020 — 2022',
+    techs: ['C#', 'PHP', 'HTML/CSS', 'SQL'],
+  },
+  {
+    degree: 'Baccalauréat',
+    field: 'Économie',
+    school: 'Lycée Théodore de Banville',
+    period: '2017 — 2020',
+    techs: [],
+  },
+]
+
+const values = [
+  { icon: '🎯', title: 'Écoute active', desc: 'Je prends le temps de comprendre vos enjeux métier avant de coder quoi que ce soit.' },
+  { icon: '💡', title: 'Solutions pragmatiques', desc: 'Des développements adaptés à votre budget et vos délais, sans over-engineering.' },
+  { icon: '✅', title: 'Qualité du code', desc: 'Tests, bonnes pratiques, documentation — parce que vous devez pouvoir faire évoluer votre projet.' },
+  { icon: '🤝', title: 'Transparence', desc: 'Communication régulière, délais respectés, et si un imprévu arrive — je vous en parle de suite.' },
+]
+---
+
+<BaseLayout {title} {description}>
+  <Header />
+  <main>
+    <!-- Intro -->
+    <section class="section bg-slate-900 pt-32">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <h1 class="section-title">À propos</h1>
+          <p class="section-subtitle">Parcours, compétences et manière de travailler</p>
+        </div>
+
+        <div class="glass-card p-8 md:p-12">
+          <!-- Photo + bio -->
+          <div class="flex flex-col md:flex-row items-center gap-10 mb-10">
+            <div class="reveal-scale shrink-0">
+              <div class="relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl blur opacity-30 group-hover:opacity-60 transition-opacity duration-500"></div>
+                <div class="relative w-52 h-52 md:w-60 md:h-60 rounded-2xl bg-gradient-to-t from-slate-800 to-slate-900/50 border border-slate-700/50 flex flex-col justify-end overflow-hidden">
+                  <img
+                    src="/assets/profile.png"
+                    alt="Guy Boireau"
+                    class="w-full h-[95%] object-contain object-bottom drop-shadow-2xl transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="reveal-fade-right space-y-4 text-slate-300 text-lg leading-relaxed">
+              <p class="text-xl text-slate-200 font-semibold">Guy Boireau — Développeur Web Fullstack</p>
+              <p>
+                Diplômé d'un Master 2 en Développement Informatique à YNOV Bordeaux, j'ai passé 3 ans en alternance chez <strong class="text-slate-200">BASSETTI France</strong> à développer des applications métier sur mesure pour des clients industriels.
+              </p>
+              <p>
+                Depuis novembre 2025, je travaille en <strong class="text-slate-200">freelance</strong> : je crée des sites web, des applications web et mobiles, et j'accompagne mes clients dans la durée avec des formules de maintenance.
+              </p>
+              <p class="text-primary-300 italic text-base border-l-2 border-primary-500 pl-4">
+                Ce que j'aime : transformer un besoin métier flou en quelque chose qui marche vraiment, et que le client comprend.
+              </p>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="text-center p-5 bg-slate-800/50 rounded-xl border border-slate-700 hover:border-primary-500 transition-colors stagger-item">
+              <div class="text-3xl font-bold text-gradient mb-1">3 ans</div>
+              <div class="text-slate-400 text-sm">d'expérience en entreprise</div>
+            </div>
+            <div class="text-center p-5 bg-slate-800/50 rounded-xl border border-slate-700 hover:border-primary-500 transition-colors stagger-item">
+              <div class="text-3xl font-bold text-gradient mb-1">Master 2</div>
+              <div class="text-slate-400 text-sm">Développement Informatique, YNOV</div>
+            </div>
+            <div class="text-center p-5 bg-slate-800/50 rounded-xl border border-slate-700 hover:border-primary-500 transition-colors stagger-item">
+              <div class="text-3xl font-bold text-gradient mb-1">Bordeaux</div>
+              <div class="text-slate-400 text-sm">Disponible en remote en France</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Values -->
+    <section class="section bg-slate-950">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up">
+          <h2 class="section-title text-center">Comment je travaille</h2>
+          <p class="section-subtitle text-center">Les principes qui guident chaque projet</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {values.map((v) => (
+            <div class="glass-card p-6 flex items-start gap-4 stagger-item hover-tilt">
+              <span class="text-2xl shrink-0">{v.icon}</span>
+              <div>
+                <h3 class="text-slate-200 font-semibold mb-1">{v.title}</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">{v.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="section bg-slate-900">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up">
+          <h2 class="section-title text-center">Compétences techniques</h2>
+          <p class="section-subtitle text-center">Technologies maîtrisées</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {skills.map((cat) => (
+            <div class="glass-card p-6 hover:scale-[1.02] transition-transform duration-300 stagger-item">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="text-2xl">{cat.icon}</span>
+                <h3 class="text-lg font-semibold text-primary-400">{cat.title}</h3>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                {cat.items.map((skill) => (
+                  <span class="px-3 py-1.5 bg-slate-800/80 text-slate-200 rounded-full text-sm border border-slate-700 hover:border-primary-500 transition-colors">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="section bg-slate-950">
+      <div class="max-w-4xl mx-auto">
+        <div class="reveal-fade-up">
+          <h2 class="section-title text-center">Expérience professionnelle</h2>
+          <p class="section-subtitle text-center">Mon parcours</p>
+        </div>
+
+        <div class="relative">
+          <!-- Timeline line -->
+          <div class="absolute left-4 md:left-8 top-0 bottom-0 w-px bg-slate-700"></div>
+
+          <div class="space-y-6">
+            {experiences.map((exp) => (
+              <div class="relative pl-12 md:pl-20 stagger-item">
+                <!-- Dot -->
+                <div class={`absolute left-2.5 md:left-6 top-5 w-3 h-3 rounded-full border-2 ${exp.current ? 'bg-primary-500 border-primary-400' : 'bg-slate-700 border-slate-500'}`}></div>
+
+                <div class={`glass-card p-6 ${exp.current ? 'border-primary-500/40' : ''}`}>
+                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                    <div>
+                      <h3 class="text-lg font-bold text-primary-400">{exp.title}</h3>
+                      <p class="text-slate-300 font-medium">
+                        {exp.company}
+                        {exp.location && <span class="text-slate-400 font-normal"> — {exp.location}</span>}
+                      </p>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                      {exp.current && (
+                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                      )}
+                      <span class="text-slate-400 text-sm">{exp.period}</span>
+                    </div>
+                  </div>
+                  <p class="text-slate-300 text-sm mb-4">{exp.description}</p>
+                  <div class="flex flex-wrap gap-2">
+                    {exp.techs.map((tech) => (
+                      <span class="px-2 py-1 bg-primary-500/10 text-primary-300 rounded-full text-xs border border-primary-500/20">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section class="section bg-slate-900">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up">
+          <h2 class="section-title text-center">Formation</h2>
+          <p class="section-subtitle text-center">Parcours académique</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {education.map((edu) => (
+            <div class="glass-card p-6 hover:scale-[1.02] transition-transform duration-300 group stagger-item">
+              <div class="text-3xl mb-3 text-center">🎓</div>
+              <h3 class="text-lg font-bold text-slate-200 mb-1 group-hover:text-primary-400 transition-colors">
+                {edu.degree}
+              </h3>
+              <p class="text-primary-400 font-medium text-sm mb-1">{edu.field}</p>
+              <p class="text-slate-300 text-sm mb-1">{edu.school}</p>
+              <p class="text-slate-500 text-sm mb-3">{edu.period}</p>
+              {edu.techs.length > 0 && (
+                <div class="flex flex-wrap gap-1">
+                  {edu.techs.map((tech) => (
+                    <span class="px-2 py-1 bg-slate-800 text-slate-400 rounded text-xs border border-slate-700">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section bg-slate-950">
+      <div class="max-w-3xl mx-auto text-center reveal-scale">
+        <h2 class="text-3xl font-bold text-slate-200 mb-4">Vous avez un projet ?</h2>
+        <p class="text-slate-400 mb-8">
+          Parlons-en. Premier échange gratuit, sans engagement.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/contact" class="btn-primary inline-block">Prendre contact</a>
+          <a href="/projets" class="btn-secondary inline-block">Voir mes projets</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
