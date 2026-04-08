@@ -23,10 +23,10 @@ const navLinks = [
         {navLinks.map((link) => (
           <a
             href={link.href}
-            class={`transition-colors duration-300 ${
+            class={`transition-colors duration-300 font-medium ${
               currentPath === link.href
-                ? 'text-primary-400 font-medium'
-                : 'text-slate-300 hover:text-primary-400'
+                ? 'text-primary-500'
+                : 'text-slate-600 hover:text-primary-500'
             }`}
           >
             {link.label}
@@ -40,7 +40,7 @@ const navLinks = [
       <!-- Mobile hamburger -->
       <button
         id="mobile-menu-btn"
-        class="md:hidden text-slate-300 hover:text-primary-400 transition-colors p-2"
+        class="md:hidden text-slate-600 hover:text-primary-500 transition-colors p-2"
         aria-label="Menu"
       >
         <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,21 +56,21 @@ const navLinks = [
   <!-- Mobile menu -->
   <div
     id="mobile-menu"
-    class="hidden md:hidden glass-card mx-4 mb-4 p-4 space-y-3"
+    class="hidden md:hidden bg-white border-b border-slate-200 shadow-md mx-0 p-4 space-y-2"
   >
     {navLinks.map((link) => (
       <a
         href={link.href}
-        class={`block py-2 px-3 rounded-lg transition-colors ${
+        class={`block py-2 px-3 rounded-lg transition-colors font-medium ${
           currentPath === link.href
-            ? 'text-primary-400 bg-primary-500/10'
-            : 'text-slate-300 hover:text-primary-400 hover:bg-white/5'
+            ? 'text-primary-500 bg-primary-50'
+            : 'text-slate-700 hover:text-primary-500 hover:bg-slate-50'
         }`}
       >
         {link.label}
       </a>
     ))}
-    <a href="/contact" class="btn-primary block text-center text-sm">
+    <a href="/contact" class="btn-primary block text-center text-sm mt-2">
       Devis gratuit
     </a>
   </div>
@@ -83,12 +83,12 @@ const navLinks = [
   const iconOpen = document.getElementById('icon-open')
   const iconClose = document.getElementById('icon-close')
 
-  // Scroll effect
+  // Scroll effect — add white bg + shadow on scroll
   window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
-      header?.classList.add('glass-card', 'shadow-xl')
+      header?.classList.add('bg-white', 'shadow-sm', 'border-b', 'border-slate-200')
     } else {
-      header?.classList.remove('glass-card', 'shadow-xl')
+      header?.classList.remove('bg-white', 'shadow-sm', 'border-b', 'border-slate-200')
     }
   })
 

@@ -8,17 +8,17 @@
   }
 
   body {
-    @apply bg-slate-950 text-slate-100 font-sans antialiased;
+    @apply bg-white text-slate-800 font-sans antialiased;
   }
 
   * {
-    @apply border-slate-800;
+    @apply border-slate-200;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl;
+    @apply bg-white border border-slate-200 rounded-2xl shadow-sm;
   }
 
   .btn-primary {
@@ -26,7 +26,7 @@
   }
 
   .btn-secondary {
-    @apply px-6 py-3 border-2 border-primary-500 text-primary-400 font-medium rounded-lg hover:bg-primary-500/10 transition-all duration-300;
+    @apply px-6 py-3 border-2 border-primary-500 text-primary-600 font-medium rounded-lg hover:bg-primary-500/10 transition-all duration-300;
   }
 
   .section {
@@ -34,15 +34,15 @@
   }
 
   .section-title {
-    @apply text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent;
+    @apply text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-500 bg-clip-text text-transparent;
   }
 
   .section-subtitle {
-    @apply text-lg text-slate-400 mb-12;
+    @apply text-lg text-slate-500 mb-12;
   }
 
   .animated-gradient {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    background: linear-gradient(135deg, #fff7f0 0%, #ffffff 50%, #fff7f0 100%);
     background-size: 200% 200%;
     animation: gradientShift 15s ease infinite;
   }
@@ -50,11 +50,11 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 bg-clip-text text-transparent;
   }
 
   .glow-effect {
-    text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+    text-shadow: 0 0 30px rgba(255, 107, 53, 0.25);
   }
 }
 
@@ -131,8 +131,8 @@
 
 @keyframes particleFloat {
   0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 0.6; }
-  90% { opacity: 0.6; }
+  10% { opacity: 0.5; }
+  90% { opacity: 0.5; }
   100% { transform: translateY(-100vh) translateX(50px) rotate(360deg); opacity: 0; }
 }
 
@@ -140,7 +140,7 @@
   position: absolute;
   width: 4px;
   height: 4px;
-  background: rgba(255, 107, 53, 0.4);
+  background: rgba(255, 107, 53, 0.35);
   border-radius: 50%;
   pointer-events: none;
   animation: particleFloat linear infinite;

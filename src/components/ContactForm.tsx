@@ -52,7 +52,7 @@ export default function ContactForm() {
   }
 
   const inputClass =
-    'w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all'
+    'w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all'
 
   return (
     <div className="glass-card p-8">
