@@ -64,7 +64,7 @@ export default function ContactForm() {
       {submitStatus === 'error' && (
         <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400">
           Erreur lors de l'envoi. Réessayez ou écrivez-moi directement à{' '}
-          <a href="mailto:boireau.guy@gmail.com" className="underline">boireau.guy@gmail.com</a>.
+          <a href="mailto:me@guyboireau.com" className="underline">me@guyboireau.com</a>.
         </div>
       )}
 
