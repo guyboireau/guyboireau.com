@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import ContactForm from '../components/ContactForm'
+
+const title = 'Contact | Guy Boireau — Développeur Web Freelance Bordeaux'
+const description =
+  'Contactez Guy Boireau pour votre projet web, application mobile ou dépannage informatique. Réponse sous 24h. Premier échange gratuit.'
+---
+
+<BaseLayout {title} {description}>
+  <Header />
+  <main>
+    <section class="section bg-slate-900 pt-32">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <h1 class="section-title">Parlons de votre projet</h1>
+          <p class="section-subtitle">Premier échange gratuit — réponse sous 24h</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Form (React island) -->
+          <div class="reveal-fade-left">
+            <ContactForm client:load />
+          </div>
+
+          <!-- Contact info -->
+          <div class="space-y-5 reveal-fade-right">
+            <div class="glass-card p-6 hover-tilt">
+              <div class="text-primary-400 text-2xl mb-3">📧</div>
+              <h3 class="text-lg font-semibold text-slate-200 mb-1">Email</h3>
+              <a href="mailto:boireau.guy@gmail.com" class="text-slate-400 hover:text-primary-400 transition-colors">
+                boireau.guy@gmail.com
+              </a>
+            </div>
+
+            <div class="glass-card p-6 hover-tilt">
+              <div class="text-primary-400 text-2xl mb-3">📱</div>
+              <h3 class="text-lg font-semibold text-slate-200 mb-1">Téléphone</h3>
+              <a href="tel:+33675751439" class="text-slate-400 hover:text-primary-400 transition-colors">
+                06 75 75 14 39
+              </a>
+            </div>
+
+            <div class="glass-card p-6 hover-tilt">
+              <div class="text-primary-400 text-2xl mb-3">📍</div>
+              <h3 class="text-lg font-semibold text-slate-200 mb-1">Localisation</h3>
+              <p class="text-slate-400">Bordeaux, France</p>
+              <p class="text-slate-500 text-sm mt-1">Disponible en remote partout en France</p>
+            </div>
+
+            <div class="glass-card p-6 hover-tilt">
+              <div class="text-primary-400 text-2xl mb-3">💼</div>
+              <h3 class="text-lg font-semibold text-slate-200 mb-1">LinkedIn</h3>
+              <a
+                href="https://www.linkedin.com/in/guy-boireau-876349213"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-slate-400 hover:text-primary-400 transition-colors text-sm break-all"
+              >
+                linkedin.com/in/guy-boireau-876349213
+              </a>
+            </div>
+
+            <div class="glass-card p-6">
+              <div class="text-primary-400 text-2xl mb-3">📅</div>
+              <h3 class="text-lg font-semibold text-slate-200 mb-2">Réserver un appel</h3>
+              <p class="text-slate-400 text-sm mb-4">
+                Préférez un échange oral ? Réservez directement un créneau de 15 minutes dans mon agenda.
+              </p>
+              <a
+                href="https://calendly.com/boireau-guy"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-secondary text-sm inline-block"
+              >
+                Choisir un créneau →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

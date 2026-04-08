@@ -1,0 +1,66 @@
+---
+import '../styles/global.css'
+
+export interface Props {
+  title: string
+  description: string
+  canonical?: string
+}
+
+const { title, description, canonical = Astro.url.href } = Astro.props
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Google Tag Manager -->
+    <script is:inline>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K2J6DN5X');
+    </script>
+  </head>
+  <body>
+    <!-- GTM noscript -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2J6DN5X" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+
+    <slot />
+
+    <!-- Vercel Analytics -->
+    <script is:inline>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+    <script is:inline defer src="/_vercel/insights/script.js"></script>
+
+    <!-- Scroll Reveal -->
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('revealed')
+            }
+          })
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      )
+
+      document.querySelectorAll(
+        '.reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-scale, .stagger-item'
+      ).forEach((el) => observer.observe(el))
+    </script>
+  </body>
+</html>

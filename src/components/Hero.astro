@@ -1,0 +1,81 @@
+---
+// Particles data computed at build time
+const particles = Array.from({ length: 15 }, (_, i) => ({
+  id: i,
+  left: `${Math.round((i * 7 + 3) % 100)}%`,
+  size: `${Math.round(2 + (i % 4))}px`,
+  duration: `${8 + (i % 7)}s`,
+  delay: `${(i * 1.3) % 10}s`,
+  opacity: 0.2 + (i % 5) * 0.1,
+}))
+---
+
+<section class="min-h-screen animated-gradient flex items-center justify-center relative overflow-hidden py-20 px-4 sm:px-6 lg:px-8">
+  <!-- Background blobs -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute w-96 h-96 bg-primary-500/20 rounded-full blur-3xl -top-48 -left-48 animate-float"></div>
+    <div class="absolute w-96 h-96 bg-primary-600/20 rounded-full blur-3xl -bottom-48 -right-48 animate-float" style="animation-delay:3s"></div>
+    <div class="absolute w-64 h-64 bg-orange-500/10 rounded-full blur-2xl top-1/3 right-1/4 animate-float" style="animation-delay:5s"></div>
+  </div>
+
+  <!-- Particles -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    {particles.map((p) => (
+      <div
+        class="particle"
+        style={`left:${p.left};bottom:-10px;width:${p.size};height:${p.size};animation-duration:${p.duration};animation-delay:${p.delay};opacity:${p.opacity}`}
+      />
+    ))}
+  </div>
+
+  <div class="relative z-10 text-center max-w-4xl mx-auto">
+    <!-- Badge disponibilité -->
+    <div class="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/40 rounded-full px-4 py-1.5 mb-8 hero-animate hero-animate-delay-1">
+      <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+      <span class="text-green-400 text-sm font-medium">Disponible pour de nouveaux projets</span>
+    </div>
+
+    <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+      <span class="block text-gradient glow-effect hero-animate hero-animate-delay-1">
+        Je crée votre site web
+      </span>
+      <span class="block text-slate-200 hero-animate hero-animate-delay-2">
+        et je m'en occupe pour vous
+      </span>
+    </h1>
+
+    <p class="text-xl text-slate-300 mb-3 hero-animate hero-animate-delay-2">
+      Développeur Fullstack indépendant — React · NestJS · TypeScript · React Native
+    </p>
+    <p class="text-lg text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed hero-animate hero-animate-delay-3">
+      Basé à Bordeaux. Je conçois votre site, votre application mobile ou web, et je vous accompagne sur la durée avec maintenance, mises à jour et SEO.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center hero-animate hero-animate-delay-4">
+      <a href="/services" class="btn-primary text-lg px-8 py-4 pulse-glow inline-block">
+        Voir mes offres
+      </a>
+      <a href="/contact" class="btn-secondary text-lg px-8 py-4 inline-block">
+        Me contacter
+      </a>
+    </div>
+
+    <!-- Social proof -->
+    <div class="flex flex-wrap justify-center gap-6 mt-12 hero-animate hero-animate-delay-4">
+      <div class="text-center">
+        <div class="text-2xl font-bold text-primary-400">3+</div>
+        <div class="text-xs text-slate-400">ans d'expérience</div>
+      </div>
+      <div class="w-px h-10 bg-slate-700"></div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-primary-400">5+</div>
+        <div class="text-xs text-slate-400">projets livrés</div>
+      </div>
+      <div class="w-px h-10 bg-slate-700"></div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-primary-400">Master 2</div>
+        <div class="text-xs text-slate-400">Dev informatique, YNOV Bordeaux</div>
+      </div>
+    </div>
+  </div>
+</section>

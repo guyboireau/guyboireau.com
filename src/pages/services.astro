@@ -1,0 +1,271 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+
+const title = 'Services & Tarifs | Guy Boireau — Développeur Web Freelance Bordeaux'
+const description =
+  'Formules de maintenance mensuelle à partir de 149€/mois, création de site web dès 2000€, dépannage informatique 35€/h. Développeur web freelance à Bordeaux.'
+
+const faq = [
+  {
+    q: 'Y a-t-il un engagement de durée ?',
+    a: 'Non, les formules mensuelles sont sans engagement. Vous pouvez arrêter ou changer de formule à tout moment.',
+  },
+  {
+    q: "Qu'est-ce qui est inclus dans la maintenance ?",
+    a: 'Hébergement, nom de domaine, mises à jour de sécurité, sauvegardes automatiques, et les modifications incluses selon la formule (1h/mois en Essentiel, 2h/mois en Accompagnement).',
+  },
+  {
+    q: 'Comment se déroule la création d\'un site ?',
+    a: 'Appel découverte gratuit → devis → design → développement → livraison. Je vous tiens informé à chaque étape et vous avez toujours accès aux livrables.',
+  },
+  {
+    q: 'Puis-je garder mon site existant et prendre juste la maintenance ?',
+    a: 'Oui, si votre site est techniquement compatible. On en discute lors de l\'appel découverte.',
+  },
+  {
+    q: 'Comment fonctionne le dépannage informatique ?',
+    a: 'Vous me contactez, on fixe un créneau. Je me connecte à votre ordinateur à distance (avec votre accord) et résous le problème. Facturation au temps réel passé.',
+  },
+]
+---
+
+<BaseLayout {title} {description}>
+  <Header />
+  <main>
+    <!-- Intro -->
+    <section class="section bg-slate-900 pt-32">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="reveal-fade-up">
+          <h1 class="section-title">Services & Tarifs</h1>
+          <p class="section-subtitle">
+            Votre site est en ligne… et après ? Je m'en occupe pour vous.
+          </p>
+          <p class="text-slate-300 text-lg max-w-2xl mx-auto">
+            Un site web sans suivi, c'est comme une voiture sans entretien. Je vous propose des formules simples pour que votre site reste rapide, sécurisé et visible sur Google.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Maintenance plans -->
+    <section class="section bg-slate-950">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12">
+          <h2 class="section-title text-center">Formules de suivi mensuel</h2>
+          <p class="section-subtitle text-center">Votre site en bonnes mains, chaque mois</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Essentiel -->
+          <div class="glass-card p-8 stagger-item flex flex-col">
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-slate-200 mb-2">Essentiel</h3>
+              <div class="flex items-end gap-1 mb-3">
+                <span class="text-4xl font-bold text-gradient">149€</span>
+                <span class="text-slate-400 mb-1">/mois</span>
+              </div>
+              <p class="text-slate-400 text-sm">L'essentiel pour avoir l'esprit tranquille</p>
+            </div>
+            <ul class="space-y-3 flex-grow mb-8">
+              {[
+                'Hébergement & nom de domaine inclus',
+                'Mises à jour de sécurité',
+                'Sauvegardes automatiques',
+                '1 modification/mois incluse',
+                'Support par email sous 48h',
+                'Rapport de performance mensuel',
+              ].map((item) => (
+                <li class="flex items-start gap-2 text-slate-300 text-sm">
+                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <a href="/contact" class="btn-secondary text-center block">Choisir Essentiel</a>
+          </div>
+
+          <!-- Accompagnement -->
+          <div class="glass-card p-8 border-2 border-primary-500/60 stagger-item flex flex-col relative">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold">
+              Recommandé
+            </div>
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-slate-200 mb-2">Accompagnement</h3>
+              <div class="flex items-end gap-1 mb-3">
+                <span class="text-4xl font-bold text-gradient">299€</span>
+                <span class="text-slate-400 mb-1">/mois</span>
+              </div>
+              <p class="text-slate-400 text-sm">Pour les pros qui veulent croître sur le web</p>
+            </div>
+            <ul class="space-y-3 flex-grow mb-8">
+              {[
+                'Tout le plan Essentiel +',
+                'Optimisation SEO mensuelle',
+                '1 article de blog/mois',
+                '2h d\'évolutions incluses',
+                'Rapport trafic Google Analytics',
+                'Support prioritaire sous 24h',
+                'Appel mensuel de suivi (30 min)',
+              ].map((item) => (
+                <li class="flex items-start gap-2 text-slate-300 text-sm">
+                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <a href="/contact" class="btn-primary text-center block">Choisir Accompagnement</a>
+          </div>
+
+          <!-- Sur-mesure -->
+          <div class="glass-card p-8 stagger-item flex flex-col">
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-slate-200 mb-2">Sur-mesure</h3>
+              <div class="flex items-end gap-1 mb-3">
+                <span class="text-4xl font-bold text-gradient">Sur devis</span>
+              </div>
+              <p class="text-slate-400 text-sm">Pour les projets avec des besoins spécifiques</p>
+            </div>
+            <ul class="space-y-3 flex-grow mb-8">
+              {[
+                'Forfait adapté à vos besoins',
+                'Volume d\'évolutions personnalisé',
+                'Intégrations spécifiques',
+                'Multisite ou e-commerce',
+                'SLA personnalisé',
+                'Formation équipe incluse si besoin',
+              ].map((item) => (
+                <li class="flex items-start gap-2 text-slate-300 text-sm">
+                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <a href="/contact" class="btn-secondary text-center block">Parlons-en</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Création de site -->
+    <section class="section bg-slate-900">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12">
+          <h2 class="section-title text-center">Création de site web</h2>
+          <p class="section-subtitle text-center">Votre site de A à Z, livré clé en main</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass-card p-8 stagger-item">
+            <div class="text-3xl mb-4">🌐</div>
+            <h3 class="text-xl font-bold text-slate-200 mb-2">Site vitrine</h3>
+            <div class="flex items-end gap-1 mb-4">
+              <span class="text-3xl font-bold text-gradient">à partir de 1 500€</span>
+            </div>
+            <p class="text-slate-400 text-sm mb-4">Site de présentation moderne, optimisé SEO, avec panneau d'administration si besoin.</p>
+            <ul class="space-y-2">
+              {['Design sur-mesure', 'Optimisation SEO on-page', 'Responsive mobile', 'Formation à la mise à jour', 'Livraison sous 3-4 semaines'].map((item) => (
+                <li class="flex items-start gap-2 text-slate-300 text-sm">
+                  <span class="text-primary-400 shrink-0">✓</span>{item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="glass-card p-8 stagger-item">
+            <div class="text-3xl mb-4">⚙️</div>
+            <h3 class="text-xl font-bold text-slate-200 mb-2">Application web / mobile</h3>
+            <div class="flex items-end gap-1 mb-4">
+              <span class="text-3xl font-bold text-gradient">à partir de 3 000€</span>
+            </div>
+            <p class="text-slate-400 text-sm mb-4">Application métier, marketplace, plateforme SaaS, app iOS/Android avec React Native.</p>
+            <ul class="space-y-2">
+              {['Architecture sur-mesure', 'API REST ou GraphQL', 'Dashboard d\'administration', 'Tests automatisés', 'Documentation technique'].map((item) => (
+                <li class="flex items-start gap-2 text-slate-300 text-sm">
+                  <span class="text-primary-400 shrink-0">✓</span>{item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div class="text-center mt-8 reveal-fade-up">
+          <p class="text-slate-400 mb-4">Chaque projet est unique — parlons-en pour obtenir un devis précis.</p>
+          <a href="/contact" class="btn-primary inline-block">Demander un devis gratuit</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dépannage -->
+    <section class="section bg-slate-950">
+      <div class="max-w-4xl mx-auto">
+        <div class="glass-card p-10 reveal-fade-up">
+          <div class="flex flex-col md:flex-row gap-8 items-start">
+            <div class="text-5xl shrink-0">🖥️</div>
+            <div>
+              <h2 class="text-2xl font-bold text-slate-200 mb-2">Dépannage informatique</h2>
+              <div class="flex items-end gap-1 mb-4">
+                <span class="text-3xl font-bold text-gradient">35€</span>
+                <span class="text-slate-400 mb-1">/heure</span>
+              </div>
+              <p class="text-slate-300 mb-4">
+                Dépannage à distance pour professionnels et particuliers. Virus, lenteur, problème de connexion, installation logiciel, récupération de données…
+              </p>
+              <ul class="space-y-2 mb-6">
+                {[
+                  'Prise en main à distance sécurisée',
+                  'Diagnostic gratuit avant intervention',
+                  'Facturation au temps réel',
+                  'Disponible en soirée et week-end',
+                ].map((item) => (
+                  <li class="flex items-start gap-2 text-slate-300 text-sm">
+                    <span class="text-primary-400 shrink-0">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+              <a href="/contact" class="btn-primary inline-block">Demander un dépannage</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section bg-slate-900">
+      <div class="max-w-3xl mx-auto">
+        <div class="reveal-fade-up">
+          <h2 class="section-title text-center">Questions fréquentes</h2>
+          <p class="section-subtitle text-center">Tout ce que vous voulez savoir</p>
+        </div>
+
+        <div class="space-y-4">
+          {faq.map((item) => (
+            <details class="glass-card p-6 group stagger-item cursor-pointer">
+              <summary class="text-slate-200 font-medium text-lg list-none flex items-center justify-between">
+                {item.q}
+                <span class="text-primary-400 ml-4 shrink-0 transition-transform group-open:rotate-180">▾</span>
+              </summary>
+              <p class="text-slate-400 mt-4 leading-relaxed">{item.a}</p>
+            </details>
+          ))}
+        </div>
+
+        <!-- CTA Calendly -->
+        <div class="text-center mt-12 reveal-fade-up">
+          <h3 class="text-xl font-bold text-slate-200 mb-3">Encore des questions ?</h3>
+          <p class="text-slate-400 mb-6">Réservez un appel de 15 minutes gratuit — sans engagement.</p>
+          <a
+            href="https://calendly.com/boireau-guy"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary inline-block"
+          >
+            Réserver un appel 15 min
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

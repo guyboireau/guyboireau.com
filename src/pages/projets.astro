@@ -1,0 +1,328 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+
+const title = 'Portfolio | Guy Boireau — Développeur Web Freelance Bordeaux'
+const description =
+  'Découvrez mes réalisations : La Lucarne Péniche, Niido marketplace, Les Cours de Clara. Applications React, React Native, NestJS, Supabase. Développeur freelance Bordeaux.'
+
+const featuredProjects = [
+  {
+    title: 'La Lucarne Péniche',
+    subtitle: 'Site web culturel avec CMS et panneau d\'administration',
+    description:
+      'Site web officiel de La Lucarne, péniche culturelle et bistrot fluvial à Saint-Léger-des-Vignes. Plateforme moderne avec gestion complète des événements, actualités, galerie photo et interface d\'administration pour une gestion autonome du contenu.',
+    highlights: [
+      'Interface d\'administration complète avec authentification Supabase',
+      'Gestion dynamique : événements, articles, galerie photos',
+      'Architecture React 19 + React Router 7 + Vite 7',
+      'Base de données Supabase avec Row Level Security',
+      'Déploiement automatisé sur Vercel avec domaine personnalisé',
+    ],
+    techStack: {
+      Frontend: ['React 19', 'React Router 7', 'Vite 7', 'JavaScript ES Modules'],
+      Backend: ['Supabase', 'PostgreSQL', 'Row Level Security'],
+      Déploiement: ['Vercel', 'Domaine personnalisé'],
+    },
+    images: { desktop: '/assets/lalucarne-desktop.png', mobile: '/assets/lalucarne-mobile.png' },
+    link: 'https://www.lalucarnepeniche.com',
+    linkLabel: 'Visiter le site',
+    metrics: { type: 'Mission freelance', date: 'Janvier 2026', status: 'En production' },
+  },
+  {
+    title: 'Les Cours de Clara',
+    subtitle: 'Plateforme fullstack de réservation de cours FLE avec paiement Stripe',
+    description:
+      'Application web fullstack permettant aux apprenants de réserver et payer des cours de Français Langue Étrangère en ligne. Développée avec les standards OWASP et WCAG, avec pipeline CI/CD GitLab complet.',
+    highlights: [
+      'Réservation de créneaux avec gestion du calendrier',
+      'Paiement sécurisé Stripe avec remboursements',
+      'Conformité OWASP Top 10 et WCAG 2.1',
+      'Pipeline CI/CD GitLab avec tests automatisés',
+      'API REST NestJS avec TypeScript strict',
+    ],
+    techStack: {
+      Frontend: ['React', 'TypeScript', 'Vite'],
+      Backend: ['NestJS', 'PostgreSQL', 'TypeScript strict'],
+      Qualité: ['Stripe', 'OWASP', 'WCAG 2.1', 'Jest', 'GitLab CI/CD'],
+    },
+    images: null,
+    link: 'https://claraaltounian.com/',
+    linkLabel: 'Visiter le site',
+    metrics: { type: 'Projet fullstack', date: '2024', status: 'En production' },
+  },
+]
+
+const freelanceProjects = [
+  {
+    title: 'Niido — Marketplace de services à domicile',
+    subtitle: 'Application mobile React Native (iOS/Android) + Dashboard admin React',
+    description:
+      'Marketplace mettant en relation des clients avec des professionnels du bâtiment et du service à domicile. Architecture full-stack avec deux applications distinctes partageant le même backend Supabase.',
+    highlights: [
+      '4 types d\'utilisateurs avec parcours dédiés',
+      'Système conciergerie : gestion jusqu\'à 250 logements locatifs',
+      'Missions géolocalisées, devis, messagerie temps réel',
+      'Dashboard admin : validation pros, médiation, exports CSV/Excel',
+      'Tarification TTC/HT, commissions automatiques, parrainage',
+    ],
+    techStack: {
+      Mobile: ['React Native 0.74', 'Expo SDK 54', 'TypeScript', 'React Navigation v6'],
+      Backend: ['Supabase', 'PostgreSQL', 'RLS', 'Edge Functions'],
+      Admin: ['React 19', 'Vite', 'TypeScript', 'TailwindCSS', 'Zustand'],
+      Outillage: ['React Query 5', 'Zod', 'GitHub Actions', 'Sentry', 'Vitest'],
+    },
+    images: { desktop: '/assets/niido-admin.png', mobile: '/assets/niido-mobile.png' },
+    link: null,
+    metrics: { type: 'Mission freelance', date: '2025', status: 'En phase de debug' },
+  },
+]
+
+const sideProjects = [
+  {
+    title: 'SkateDev',
+    description: 'Liste de skate-parks à Ottawa avec système de notation et commentaires.',
+    techs: ['TypeScript', 'React'],
+    link: 'https://github.com/guyboireau/SkateDev',
+  },
+  {
+    title: 'TriviaTrainer',
+    description: 'Application de quiz interactive.',
+    techs: ['Vue.js', 'JavaScript'],
+    link: 'https://github.com/guyboireau/TriviaTrainer',
+  },
+  {
+    title: 'BioDesignLab',
+    description: 'Plateforme web collaborative avec GraphQL pour ressources pédagogiques.',
+    techs: ['TypeScript', 'GraphQL', 'React'],
+    link: 'https://gitlab.com/guyboireau/BioDesignLab',
+  },
+  {
+    title: 'LuxuryCar',
+    description: 'Catalogue de voitures de luxe en MVC PHP.',
+    techs: ['PHP', 'MVC', 'MySQL'],
+    link: 'https://github.com/guyboireau/LuxuryCar',
+  },
+  {
+    title: 'OccasAuto',
+    description: 'Application de gestion d\'occasions automobiles en C#.',
+    techs: ['C#', '.NET'],
+    link: 'https://github.com/guyboireau/OccasAuto-C-',
+  },
+]
+---
+
+<BaseLayout {title} {description}>
+  <Header />
+  <main>
+    <!-- Intro -->
+    <section class="section bg-slate-900 pt-32">
+      <div class="max-w-4xl mx-auto text-center reveal-fade-up">
+        <h1 class="section-title">Mes projets</h1>
+        <p class="section-subtitle">Des réalisations concrètes pour de vrais clients</p>
+      </div>
+    </section>
+
+    <!-- Featured projects -->
+    <section class="section bg-slate-950">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl font-bold text-slate-200 mb-8 reveal-fade-up">Projets clients phares</h2>
+
+        <div class="space-y-12">
+          {featuredProjects.map((project) => (
+            <div class="glass-card p-8 border-2 border-primary-500/40 stagger-item">
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+                <div>
+                  <h3 class="text-2xl font-bold text-primary-400 mb-1">{project.title}</h3>
+                  <p class="text-slate-300 text-lg">{project.subtitle}</p>
+                </div>
+                <div class="flex flex-wrap gap-2 shrink-0">
+                  <span class="px-3 py-1 bg-primary-500/20 text-primary-300 rounded-full text-sm border border-primary-500/30">{project.metrics.type}</span>
+                  <span class="px-3 py-1 bg-slate-700/50 text-slate-300 rounded-full text-sm">{project.metrics.date}</span>
+                  <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm border border-green-500/30">{project.metrics.status}</span>
+                </div>
+              </div>
+
+              <p class="text-slate-300 mb-6">{project.description}</p>
+
+              {project.images && (
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                  <img
+                    src={project.images.desktop}
+                    alt={`${project.title} — desktop`}
+                    class="w-full md:w-2/3 rounded-lg border border-slate-700 shadow-lg object-cover"
+                    loading="lazy"
+                  />
+                  <img
+                    src={project.images.mobile}
+                    alt={`${project.title} — mobile`}
+                    class="w-full md:w-1/3 rounded-lg border border-slate-700 shadow-lg object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+
+              <div class="mb-6">
+                <h4 class="text-slate-200 font-semibold mb-3">Points clés</h4>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {project.highlights.map((h) => (
+                    <li class="flex items-start gap-2 text-slate-300 text-sm">
+                      <span class="text-primary-400 shrink-0 mt-0.5">✓</span>
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="mb-6">
+                <h4 class="text-slate-200 font-semibold mb-3">Stack technique</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {Object.entries(project.techStack).map(([label, techs]) => (
+                    <div>
+                      <div class="text-primary-400 text-sm font-medium mb-2">{label}</div>
+                      <div class="flex flex-wrap gap-1">
+                        {techs.map((tech) => (
+                          <span class="px-2 py-1 bg-slate-800 text-slate-300 rounded text-xs">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn-primary inline-block"
+                >
+                  {project.linkLabel} →
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Freelance projects -->
+    <section class="section bg-slate-900">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl font-bold text-slate-200 mb-8 reveal-fade-up">Réalisations freelance en cours</h2>
+
+        <div class="space-y-8">
+          {freelanceProjects.map((project) => (
+            <div class="glass-card p-8 border-2 border-primary-500/30 stagger-item">
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+                <div>
+                  <h3 class="text-2xl font-bold text-primary-400 mb-1">{project.title}</h3>
+                  <p class="text-slate-300">{project.subtitle}</p>
+                </div>
+                <div class="flex flex-wrap gap-2 shrink-0">
+                  <span class="px-3 py-1 bg-primary-500/20 text-primary-300 rounded-full text-sm border border-primary-500/30">{project.metrics.type}</span>
+                  <span class="px-3 py-1 bg-slate-700/50 text-slate-300 rounded-full text-sm">{project.metrics.date}</span>
+                  <span class="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-sm border border-yellow-500/30">{project.metrics.status}</span>
+                </div>
+              </div>
+
+              <p class="text-slate-300 mb-6">{project.description}</p>
+
+              {project.images && (
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                  <div class="md:w-2/3">
+                    <p class="text-slate-400 text-xs uppercase tracking-wider mb-2">Dashboard Admin</p>
+                    <img
+                      src={project.images.desktop}
+                      alt={`${project.title} — admin`}
+                      class="w-full rounded-lg border border-slate-700 shadow-lg object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div class="md:w-1/3">
+                    <p class="text-slate-400 text-xs uppercase tracking-wider mb-2">Application Mobile</p>
+                    <img
+                      src={project.images.mobile}
+                      alt={`${project.title} — mobile`}
+                      class="w-full rounded-lg border border-slate-700 shadow-lg object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div class="mb-4">
+                <h4 class="text-slate-200 font-semibold mb-3">Fonctionnalités clés</h4>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {project.highlights.map((h) => (
+                    <li class="flex items-start gap-2 text-slate-300 text-sm">
+                      <span class="text-primary-400 shrink-0 mt-0.5">✓</span>{h}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h4 class="text-slate-200 font-semibold mb-3">Stack</h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {Object.entries(project.techStack).map(([label, techs]) => (
+                    <div>
+                      <div class="text-primary-400 text-xs font-medium mb-2">{label}</div>
+                      <div class="flex flex-wrap gap-1">
+                        {techs.map((tech) => (
+                          <span class="px-2 py-1 bg-slate-800 text-slate-300 rounded text-xs">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Side projects -->
+    <section class="section bg-slate-950">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl font-bold text-slate-200 mb-8 reveal-fade-up">Projets personnels & exercices</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sideProjects.map((project) => (
+            <div class="glass-card p-6 hover:scale-105 transition-transform duration-300 group stagger-item">
+              <h3 class="text-xl font-bold text-slate-200 mb-2 group-hover:text-primary-400 transition-colors">
+                {project.title}
+              </h3>
+              <p class="text-slate-400 text-sm mb-4">{project.description}</p>
+              <div class="flex flex-wrap gap-1 mb-4">
+                {project.techs.map((tech) => (
+                  <span class="px-2 py-1 bg-slate-800 text-slate-300 rounded text-xs">{tech}</span>
+                ))}
+              </div>
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-primary-400 hover:text-primary-300 transition-colors text-sm font-medium"
+              >
+                Voir le code →
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section bg-slate-900">
+      <div class="max-w-3xl mx-auto text-center reveal-scale">
+        <h2 class="text-3xl font-bold text-slate-200 mb-4">Votre projet sera le prochain</h2>
+        <p class="text-slate-400 mb-8">Discutons de vos besoins — premier échange gratuit, sans engagement.</p>
+        <a href="/contact" class="btn-primary inline-block">Prendre contact</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

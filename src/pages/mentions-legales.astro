@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+
+const title = 'Mentions Légales | Guy Boireau'
+const description = 'Mentions légales du site guyboireau.com — Guy Boireau, développeur web freelance, auto-entrepreneur, Bordeaux.'
+---
+
+<BaseLayout {title} {description}>
+  <Header />
+  <main>
+    <section class="section bg-slate-900 pt-32 min-h-screen">
+      <div class="max-w-3xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-bold text-gradient mb-10">Mentions Légales</h1>
+
+        <div class="glass-card p-8 md:p-12 space-y-8">
+          <div>
+            <h2 class="text-2xl font-bold text-primary-400 mb-4">Éditeur du site</h2>
+            <div class="text-slate-300 space-y-1">
+              <p class="font-semibold text-slate-200">Guy Boireau — Développeur Web Freelance</p>
+              <p>Auto-entrepreneur</p>
+              <p><span class="text-slate-400">SIRET :</span> 993 605 542 00014</p>
+              <p><span class="text-slate-400">Code APE :</span> 6201Z — Programmation informatique</p>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-700 pt-8">
+            <h2 class="text-2xl font-bold text-primary-400 mb-4">Contact</h2>
+            <div class="text-slate-300 space-y-1">
+              <p><span class="text-slate-400">Adresse :</span> 17 rue Beck, 33800 Bordeaux</p>
+              <p>
+                <span class="text-slate-400">Email :</span>
+                <a href="mailto:boireau.guy@gmail.com" class="text-primary-400 hover:text-primary-300 ml-1">boireau.guy@gmail.com</a>
+              </p>
+              <p>
+                <span class="text-slate-400">Téléphone :</span>
+                <a href="tel:+33675751439" class="text-primary-400 hover:text-primary-300 ml-1">06 75 75 14 39</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-700 pt-8">
+            <h2 class="text-2xl font-bold text-primary-400 mb-4">Responsable de publication</h2>
+            <p class="text-slate-300">Guy Boireau</p>
+          </div>
+
+          <div class="border-t border-slate-700 pt-8">
+            <h2 class="text-2xl font-bold text-primary-400 mb-4">Hébergeur</h2>
+            <div class="text-slate-300 space-y-1">
+              <p class="font-semibold text-slate-200">Vercel Inc.</p>
+              <p>340 Pine Street, Suite 701, San Francisco, CA 94104, États-Unis</p>
+              <p>
+                <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" class="text-primary-400 hover:text-primary-300">
+                  vercel.com
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-700 pt-8">
+            <h2 class="text-2xl font-bold text-primary-400 mb-4">Propriété intellectuelle</h2>
+            <p class="text-slate-300 leading-relaxed">
+              L'ensemble du contenu de ce site (textes, images, code) est protégé par le droit d'auteur. Toute reproduction, même partielle, est interdite sans autorisation préalable.
+            </p>
+          </div>
+
+          <div class="border-t border-slate-700 pt-8">
+            <h2 class="text-2xl font-bold text-primary-400 mb-4">Données personnelles (RGPD)</h2>
+            <div class="text-slate-300 space-y-3 leading-relaxed">
+              <p>
+                Les données collectées via le formulaire de contact (nom, email, message) sont utilisées uniquement pour répondre à vos demandes et ne sont pas transmises à des tiers.
+              </p>
+              <p>
+                Conformément au Règlement (UE) 2016/679 (RGPD), vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ces droits, contactez-moi à{' '}
+                <a href="mailto:boireau.guy@gmail.com" class="text-primary-400 hover:text-primary-300">boireau.guy@gmail.com</a>.
+              </p>
+              <p>
+                Ce site utilise Google Tag Manager et Vercel Analytics pour analyser l'audience de manière anonymisée.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
