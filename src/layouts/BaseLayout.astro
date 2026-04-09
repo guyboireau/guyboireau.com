@@ -98,8 +98,10 @@ const jsonLd = {
     <slot />
 
     <!-- Vercel Analytics -->
-    <script is:inline>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
-    <script is:inline defer src="/_vercel/insights/script.js"></script>
+    <script>
+      import { inject } from '@vercel/analytics'
+      inject()
+    </script>
 
     <!-- Scroll Reveal -->
     <script>

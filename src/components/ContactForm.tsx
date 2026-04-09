@@ -31,7 +31,9 @@ export default function ContactForm() {
     setSubmitStatus(null)
 
     try {
-      const { error } = await getSupabase().from('portfolio_contacts').insert({
+      const client = getSupabase()
+      if (!client) throw new Error('Supabase non configuré')
+      const { error } = await client.from('portfolio_contacts').insert({
         name: formData.name,
         email: formData.email,
         message: `[${formData.project_type || 'Non précisé'}] ${formData.message}`,
