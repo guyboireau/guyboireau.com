@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { useChat } from '../hooks/useChat'
 
 const SUGGESTIONS = [
@@ -90,11 +91,24 @@ export default function ChatBot() {
                 <div
                   className={`max-w-[82%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap
                     ${msg.role === 'user'
-                      ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white rounded-br-sm shadow-sm shadow-primary-500/20'
+                      ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white rounded-br-sm shadow-sm shadow-primary-500/20 whitespace-pre-wrap'
                       : 'bg-white text-slate-700 border border-slate-200 rounded-bl-sm shadow-sm'
                     }`}
                 >
-                  {msg.content}
+                  {msg.role === 'assistant' ? (
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
+                        strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                        ul: ({ children }) => <ul className="mt-1 space-y-0.5 list-none">{children}</ul>,
+                        li: ({ children }) => <li className="flex gap-1.5 before:content-['·'] before:text-primary-400 before:font-bold">{children}</li>,
+                      }}
+                    >
+                      {msg.content}
+                    </ReactMarkdown>
+                  ) : (
+                    msg.content
+                  )}
                   {streaming && i === messages.length - 1 && msg.role === 'assistant' && msg.content === '' && (
                     <span className="inline-flex gap-1 mt-1">
                       <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
