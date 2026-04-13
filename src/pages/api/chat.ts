@@ -3,6 +3,37 @@ export const prerender = false
 import type { APIRoute } from 'astro'
 import Anthropic from '@anthropic-ai/sdk'
 
+// --- Rate limiting ---
+// Map en mémoire : IP → { count, resetAt }
+// Limite : 10 messages par tranche de 60 secondes par IP
+const ipRequests = new Map<string, { count: number; resetAt: number }>()
+const LIMIT = 10
+const WINDOW_MS = 60_000 // 1 minute
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now()
+  const record = ipRequests.get(ip)
+
+  if (!record || now > record.resetAt) {
+    // Nouvelle fenêtre
+    ipRequests.set(ip, { count: 1, resetAt: now + WINDOW_MS })
+    return false
+  }
+
+  if (record.count >= LIMIT) return true
+
+  record.count++
+  return false
+}
+
+// Nettoyage périodique pour éviter les fuites mémoire
+setInterval(() => {
+  const now = Date.now()
+  for (const [ip, record] of ipRequests) {
+    if (now > record.resetAt) ipRequests.delete(ip)
+  }
+}, 5 * 60_000) // toutes les 5 minutes
+
 const SYSTEM_PROMPT = `Tu es l'assistant IA de Guy Boireau sur son portfolio guyboireau.com.
 Tu réponds en son nom, à la première personne ("je"), en français, de façon concise et chaleureuse.
 Tu es là pour aider les visiteurs à comprendre qui est Guy, ce qu'il fait, et les orienter vers le bon service.
@@ -104,7 +135,15 @@ Stack : Next.js, TypeScript, Supabase
 - Ne fabrique JAMAIS d'informations non listées ci-dessus
 - Si une question dépasse tes connaissances sur Guy, dis-le honnêtement et redirige vers le contact`
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress }) => {
+  const ip = clientAddress ?? 'unknown'
+  if (isRateLimited(ip)) {
+    return new Response(JSON.stringify({ error: 'Trop de requêtes. Réessaie dans une minute.' }), {
+      status: 429,
+      headers: { 'Content-Type': 'application/json', 'Retry-After': '60' },
+    })
+  }
+
   const apiKey = import.meta.env.ANTHROPIC_API_KEY
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'Configuration manquante' }), {
