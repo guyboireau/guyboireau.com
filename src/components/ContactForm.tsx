@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { getSupabase } from '../lib/supabase'
 
 const PROJECT_TYPES = [
   { value: '', label: 'Type de projet' },
@@ -31,15 +30,12 @@ export default function ContactForm() {
     setSubmitStatus(null)
 
     try {
-      const client = getSupabase()
-      if (!client) throw new Error('Supabase non configuré')
-      const { error } = await client.from('portfolio_contacts').insert({
-        name: formData.name,
-        email: formData.email,
-        message: `[${formData.project_type || 'Non précisé'}] ${formData.message}`,
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       })
-
-      if (error) throw error
+      if (!res.ok) throw new Error(`Erreur ${res.status}`)
 
       setSubmitStatus('success')
       setFormData({ name: '', email: '', project_type: '', message: '' })
