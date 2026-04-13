@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import Header from '../components/Header.astro'
 import Hero from '../components/Hero.astro'
 import Footer from '../components/Footer.astro'
+import ChatBot from '../components/ChatBot.tsx'
 
 const title = 'Développeur Web Freelance Bordeaux — Guy Boireau | React · NestJS · TypeScript'
 const description =
@@ -164,8 +165,19 @@ const featuredProjects = [
       </div>
     </section>
 
-    <!-- Availability banner -->
+    <!-- Chatbot -->
     <section class="section bg-white">
+      <div class="max-w-2xl mx-auto">
+        <div class="reveal-fade-up">
+          <h2 class="section-title text-center">Une question ?</h2>
+          <p class="section-subtitle text-center">Mon assistant répond en direct</p>
+        </div>
+        <ChatBot client:load />
+      </div>
+    </section>
+
+    <!-- Availability banner -->
+    <section class="section bg-slate-50">
       <div class="max-w-4xl mx-auto text-center">
         <div class="glass-card p-10 border-2 border-green-500/30 reveal-scale">
           <div class="inline-flex items-center gap-3 mb-6">
