@@ -9,6 +9,10 @@ const description =
 
 const faq = [
   {
+    q: 'C\'est quoi exactement la gestion de la fiche Google Business ?',
+    a: 'Google Business (anciennement Google My Business) est la fiche qui apparaît sur Google Maps quand on cherche un artisan ou commerce local. Je m\'occupe de la créer si elle n\'existe pas, de mettre à jour vos horaires, ajouter des photos de vos réalisations, publier des actualités et répondre aux avis. Un artisan sans fiche active perd en moyenne 30% de ses demandes locales.',
+  },
+  {
     q: 'Y a-t-il un engagement de durée ?',
     a: 'Non, les formules mensuelles sont sans engagement. Vous pouvez arrêter ou changer de formule à tout moment.',
   },
@@ -45,105 +49,6 @@ const faq = [
           <p class="text-slate-600 text-lg max-w-2xl mx-auto">
             Un site web sans suivi, c'est comme une voiture sans entretien. Je vous propose des formules simples pour que votre site reste rapide, sécurisé et visible sur Google.
           </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Maintenance plans -->
-    <section class="section bg-slate-50">
-      <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12">
-          <h2 class="section-title text-center">Formules de suivi mensuel</h2>
-          <p class="section-subtitle text-center">Votre site en bonnes mains, chaque mois</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Essentiel -->
-          <div class="glass-card p-8 stagger-item flex flex-col">
-            <div class="mb-6">
-              <h3 class="text-xl font-bold text-slate-800 mb-2">Essentiel</h3>
-              <div class="flex items-end gap-1 mb-3">
-                <span class="text-4xl font-bold text-gradient">149€</span>
-                <span class="text-slate-500 mb-1">/mois</span>
-              </div>
-              <p class="text-slate-500 text-sm">L'essentiel pour avoir l'esprit tranquille</p>
-            </div>
-            <ul class="space-y-3 flex-grow mb-8">
-              {[
-                'Hébergement & nom de domaine inclus',
-                'Mises à jour de sécurité',
-                'Sauvegardes automatiques',
-                '1 modification/mois incluse',
-                'Support par email sous 48h',
-                'Rapport de performance mensuel',
-              ].map((item) => (
-                <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <a href="/contact" class="btn-secondary text-center block">Choisir Essentiel</a>
-          </div>
-
-          <!-- Accompagnement -->
-          <div class="glass-card p-8 border-2 border-primary-500/60 stagger-item flex flex-col relative">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold">
-              Recommandé
-            </div>
-            <div class="mb-6">
-              <h3 class="text-xl font-bold text-slate-800 mb-2">Accompagnement</h3>
-              <div class="flex items-end gap-1 mb-3">
-                <span class="text-4xl font-bold text-gradient">299€</span>
-                <span class="text-slate-500 mb-1">/mois</span>
-              </div>
-              <p class="text-slate-500 text-sm">Pour les pros qui veulent croître sur le web</p>
-            </div>
-            <ul class="space-y-3 flex-grow mb-8">
-              {[
-                'Tout le plan Essentiel +',
-                'Optimisation SEO mensuelle',
-                '1 article de blog/mois',
-                '2h d\'évolutions incluses',
-                'Rapport trafic Google Analytics',
-                'Support prioritaire sous 24h',
-                'Appel mensuel de suivi (30 min)',
-              ].map((item) => (
-                <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <a href="/contact" class="btn-primary text-center block">Choisir Accompagnement</a>
-          </div>
-
-          <!-- Sur-mesure -->
-          <div class="glass-card p-8 stagger-item flex flex-col">
-            <div class="mb-6">
-              <h3 class="text-xl font-bold text-slate-800 mb-2">Sur-mesure</h3>
-              <div class="flex items-end gap-1 mb-3">
-                <span class="text-4xl font-bold text-gradient">Sur devis</span>
-              </div>
-              <p class="text-slate-500 text-sm">Pour les projets avec des besoins spécifiques</p>
-            </div>
-            <ul class="space-y-3 flex-grow mb-8">
-              {[
-                'Forfait adapté à vos besoins',
-                'Volume d\'évolutions personnalisé',
-                'Intégrations spécifiques',
-                'Multisite ou e-commerce',
-                'SLA personnalisé',
-                'Formation équipe incluse si besoin',
-              ].map((item) => (
-                <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <a href="/contact" class="btn-secondary text-center block">Parlons-en</a>
-          </div>
         </div>
       </div>
     </section>
@@ -193,6 +98,117 @@ const faq = [
         <div class="text-center mt-8 reveal-fade-up">
           <p class="text-slate-500 mb-4">Chaque projet est unique — parlons-en pour obtenir un devis précis.</p>
           <a href="/contact" class="btn-primary inline-block">Demander un devis gratuit</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Maintenance plans -->
+    <section class="section bg-slate-50">
+      <div class="max-w-6xl mx-auto">
+        <div class="reveal-fade-up mb-12">
+          <h2 class="section-title text-center">Formules de suivi mensuel</h2>
+          <p class="section-subtitle text-center">Sans engagement — changez ou arrêtez quand vous voulez</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <!-- Pack Présence -->
+          <div class="glass-card p-8 stagger-item flex flex-col">
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-slate-800 mb-2">Pack Présence</h3>
+              <div class="flex items-end gap-1 mb-3">
+                <span class="text-4xl font-bold text-gradient">79€</span>
+                <span class="text-slate-500 mb-1">/mois</span>
+              </div>
+              <p class="text-slate-500 text-sm">Votre site en ligne et votre fiche Google tenue à jour</p>
+            </div>
+            <ul class="space-y-3 flex-grow mb-8">
+              {[
+                'Hébergement & domaine inclus',
+                'Mises à jour de sécurité',
+                'Sauvegardes automatiques',
+                'Fiche Google Business gérée ✦',
+                'Horaires, photos, infos à jour',
+                'Support email sous 72h',
+              ].map((item) => (
+                <li class="flex items-start gap-2 text-slate-600 text-sm">
+                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                </li>
+              ))}
+            </ul>
+            <a href="/contact" class="btn-secondary text-center block">Choisir</a>
+          </div>
+
+          <!-- Pack Essentiel -->
+          <div class="glass-card p-8 border-2 border-primary-500/70 stagger-item flex flex-col relative shadow-lg shadow-primary-500/10">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold whitespace-nowrap">
+              Recommandé
+            </div>
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-slate-800 mb-2">Pack Essentiel</h3>
+              <div class="flex items-end gap-1 mb-3">
+                <span class="text-4xl font-bold text-gradient">149€</span>
+                <span class="text-slate-500 mb-1">/mois</span>
+              </div>
+              <p class="text-slate-500 text-sm">Tout ce qu'il faut pour être visible et gérer votre contenu</p>
+            </div>
+            <ul class="space-y-3 flex-grow mb-8">
+              {[
+                'Tout le Pack Présence +',
+                '1 modification de contenu/mois',
+                'Support email sous 48h',
+                'Rapport mensuel simplifié',
+              ].map((item) => (
+                <li class="flex items-start gap-2 text-slate-600 text-sm">
+                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                </li>
+              ))}
+            </ul>
+            <a href="/contact" class="btn-primary text-center block">Choisir ce pack</a>
+          </div>
+
+          <!-- Pack Croissance -->
+          <div class="glass-card p-8 stagger-item flex flex-col">
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-slate-800 mb-2">Pack Croissance</h3>
+              <div class="flex items-end gap-1 mb-3">
+                <span class="text-4xl font-bold text-gradient">299€</span>
+                <span class="text-slate-500 mb-1">/mois</span>
+              </div>
+              <p class="text-slate-500 text-sm">Pour développer votre clientèle sur le web activement</p>
+            </div>
+            <ul class="space-y-3 flex-grow mb-8">
+              {[
+                'Tout le Pack Essentiel +',
+                'Optimisation SEO mensuelle',
+                '1 article / actualité par mois',
+                '2h d\'évolutions incluses',
+                'Rapport Google Analytics + Maps',
+                'Support prioritaire sous 24h',
+                'Appel mensuel de suivi (30 min)',
+              ].map((item) => (
+                <li class="flex items-start gap-2 text-slate-600 text-sm">
+                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                </li>
+              ))}
+            </ul>
+            <a href="/contact" class="btn-secondary text-center block">Choisir</a>
+          </div>
+        </div>
+
+        <!-- Google Business explication -->
+        <div class="mt-8 glass-card p-6 border border-primary-500/20 reveal-fade-up">
+          <div class="flex flex-col sm:flex-row gap-4 items-start">
+            <div class="text-3xl shrink-0">📍</div>
+            <div>
+              <p class="font-semibold text-slate-800 mb-1">✦ C'est quoi la fiche Google Business ?</p>
+              <p class="text-slate-500 text-sm leading-relaxed">
+                C'est la fiche qui apparaît sur Google Maps quand quelqu'un cherche <em>"plombier Bordeaux"</em> ou <em>"coiffeur près de moi"</em>.
+                Elle affiche vos horaires, vos photos, vos avis clients. Un artisan sans fiche à jour perd des appels chaque semaine.
+                Je la configure, la mets à jour chaque mois et réponds aux signalements — vous n'avez rien à faire.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
