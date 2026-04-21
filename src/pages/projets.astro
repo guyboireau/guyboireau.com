@@ -3,9 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 
-const title = 'Portfolio | Guy Boireau — Développeur Web Freelance Bordeaux'
+const title = 'Projets | Guy Boireau — Développeur Web Freelance Bordeaux'
 const description =
-  'Découvrez mes réalisations : La Lucarne Péniche, Niido marketplace, Les Cours de Clara. Applications React, React Native, NestJS, Supabase. Développeur freelance Bordeaux.'
+  'Réalisations de Guy Boireau : La Lucarne Péniche, Les Cours de Clara, Niido. Sites et applications qui génèrent des clients et du chiffre d\'affaires. Développeur freelance Bordeaux.'
 
 const featuredProjects = [
   {
@@ -14,11 +14,11 @@ const featuredProjects = [
     description:
       'Site web officiel de La Lucarne, péniche culturelle et bistrot fluvial à Saint-Léger-des-Vignes. Plateforme moderne avec gestion complète des événements, actualités, galerie photo et interface d\'administration pour une gestion autonome du contenu.',
     highlights: [
-      'Interface d\'administration complète avec authentification Supabase',
-      'Gestion dynamique : événements, articles, galerie photos',
-      'Architecture React 19 + React Router 7 + Vite 7',
-      'Base de données Supabase avec Row Level Security',
-      'Déploiement automatisé sur Vercel avec domaine personnalisé',
+      'Site livré en 3 semaines, dans les délais convenus',
+      'Le client gère son contenu seul : événements, articles, photos',
+      'Visible sur Google dès le premier mois de mise en ligne',
+      'Aucune compétence technique requise pour les mises à jour',
+      'Hébergement, domaine et sécurité inclus — zéro surprise',
     ],
     techStack: {
       Frontend: ['React 19', 'React Router 7', 'Vite 7', 'JavaScript ES Modules'],
@@ -36,11 +36,11 @@ const featuredProjects = [
     description:
       'Application web fullstack permettant aux apprenants de réserver et payer des cours de Français Langue Étrangère en ligne. Développée avec les standards OWASP et WCAG, avec pipeline CI/CD GitLab complet.',
     highlights: [
-      'Réservation de créneaux avec gestion du calendrier',
-      'Paiement sécurisé Stripe avec remboursements',
-      'Conformité OWASP Top 10 et WCAG 2.1',
-      'Pipeline CI/CD GitLab avec tests automatisés',
-      'API REST NestJS avec TypeScript strict',
+      'Les étudiants réservent et paient leurs cours en ligne, sans email',
+      'Clara gère son calendrier depuis un dashboard dédié',
+      'Paiements sécurisés, remboursements automatisés via Stripe',
+      'Accessible depuis mobile, tablette et desktop',
+      'Zéro interruption de service depuis la mise en production',
     ],
     techStack: {
       Frontend: ['React', 'TypeScript', 'Vite'],
@@ -59,13 +59,13 @@ const freelanceProjects = [
     title: 'Niido — Marketplace de services à domicile',
     subtitle: 'Application mobile React Native (iOS/Android) + Dashboard admin React',
     description:
-      'Marketplace mettant en relation des clients avec des professionnels du bâtiment et du service à domicile. Architecture full-stack avec deux applications distinctes partageant le même backend Supabase.',
+      'Application mobile iOS/Android mettant en relation des particuliers et des professionnels du service à domicile. Gestion de 250+ logements locatifs, paiements, messagerie temps réel.',
     highlights: [
-      '4 types d\'utilisateurs avec parcours dédiés',
-      'Système conciergerie : gestion jusqu\'à 250 logements locatifs',
-      'Missions géolocalisées, devis, messagerie temps réel',
-      'Dashboard admin : validation pros, médiation, exports CSV/Excel',
-      'Tarification TTC/HT, commissions automatiques, parrainage',
+      'Particuliers trouvent un pro qualifié en moins de 2 minutes',
+      'Professionnels reçoivent leurs missions directement sur mobile',
+      'Conciergerie : gestion de 250 logements locatifs depuis un seul tableau de bord',
+      'Paiements sécurisés, commissions automatiques, parrainage',
+      'Messagerie temps réel entre clients et prestataires',
     ],
     techStack: {
       Mobile: ['React Native 0.74', 'Expo SDK 54', 'TypeScript', 'React Navigation v6'],
@@ -280,6 +280,67 @@ const sideProjects = [
               </div>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Projets IA -->
+    <section class="section bg-slate-50">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl font-bold text-slate-800 mb-8 reveal-fade-up">Projets IA & Automatisations</h2>
+
+        <div class="glass-card p-8 border-2 border-primary-500/30 stagger-item">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+            <div>
+              <h3 class="text-2xl font-bold text-primary-400 mb-1">Agent Freelance</h3>
+              <p class="text-slate-600">Back-office IA pour freelances — analyse de briefs, devis automatique, RAG</p>
+            </div>
+            <div class="flex flex-wrap gap-2 shrink-0">
+              <span class="px-3 py-1 bg-primary-500/20 text-primary-600 rounded-full text-sm border border-primary-500/30">Projet IA</span>
+              <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm">2025</span>
+              <span class="px-3 py-1 bg-blue-500/20 text-blue-700 rounded-full text-sm border border-blue-500/30">Open source</span>
+            </div>
+          </div>
+
+          <p class="text-slate-600 mb-6">
+            Agent IA qui automatise le back-office d'un freelance : il analyse un brief entrant, génère un devis structuré, répond aux questions courantes via une base de connaissances personnelle (RAG), et suit les projets en cours. Conçu pour tourner sans supervision.
+          </p>
+
+          <div class="mb-6">
+            <h4 class="text-slate-800 font-semibold mb-3">Ce que ça fait concrètement</h4>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {[
+                'Brief entrant → analyse automatique + extraction des infos clés',
+                'Génération de devis structuré en moins de 30 secondes',
+                'RAG sur la base de connaissances personnelle du freelance',
+                'Suivi des projets en cours avec alertes de délai',
+                'Réponses automatiques aux questions récurrentes des clients',
+                'Export PDF des livrables directement depuis l\'agent',
+              ].map((h) => (
+                <li class="flex items-start gap-2 text-slate-600 text-sm">
+                  <span class="text-primary-400 shrink-0 mt-0.5">✓</span>{h}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="mb-6">
+            <h4 class="text-slate-800 font-semibold mb-3">Stack</h4>
+            <div class="flex flex-wrap gap-2">
+              {['Claude API', 'Make (Integromat)', 'RAG / embeddings', 'TypeScript', 'Supabase pgvector', 'Node.js'].map((tech) => (
+                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs border border-slate-200">{tech}</span>
+              ))}
+            </div>
+          </div>
+
+          <div class="flex gap-4 flex-wrap">
+            <a href="https://github.com/guyboireau/agent-freelance" target="_blank" rel="noopener noreferrer" class="btn-secondary inline-block text-sm">
+              Voir le code GitHub →
+            </a>
+            <a href="/contact" class="btn-primary inline-block text-sm">
+              Demander une démo
+            </a>
+          </div>
         </div>
       </div>
     </section>
