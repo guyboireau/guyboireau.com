@@ -31,6 +31,13 @@ const services = [
       'Votre site mis à jour, sauvegardé et optimisé chaque mois. Formules à partir de 149€/mois, sans engagement.',
     link: '/services',
   },
+  {
+    icon: '🤖',
+    title: 'Automatisations IA',
+    description:
+      'Vos tâches répétitives, on les supprime. Formulaire → réponse client en 60 s, leads qualifiés automatiquement, factures et relances en automatique.',
+    link: '/automatisations',
+  },
 ]
 
 const featuredProjects = [
@@ -74,7 +81,7 @@ const featuredProjects = [
           <p class="section-subtitle text-center">De la création au suivi, je m'occupe de tout</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service) => (
             <a href={service.link} class="glass-card p-8 hover:border-primary-500/40 transition-all duration-300 group stagger-item block">
               <div class="text-4xl mb-4">{service.icon}</div>
