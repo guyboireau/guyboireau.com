@@ -186,36 +186,101 @@ const useCases = [
 
     <!-- Pricing -->
     <section class="section bg-white">
-      <div class="max-w-4xl mx-auto text-center">
-        <div class="reveal-fade-up">
-          <h2 class="section-title">Tarif simple</h2>
-          <p class="section-subtitle">Un livrable, un prix fixe</p>
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up text-center mb-12">
+          <h2 class="section-title">Tarifs clairs</h2>
+          <p class="section-subtitle">Plus c'est complexe, plus c'est puissant</p>
         </div>
 
-        <div class="glass-card p-10 border-2 border-primary-500/30 reveal-scale max-w-2xl mx-auto">
-          <div class="text-5xl mb-6">🤖</div>
-          <div class="flex items-end gap-2 justify-center mb-4">
-            <span class="text-5xl font-bold text-gradient">500€</span>
-            <span class="text-slate-500 mb-2">/ automatisation</span>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <!-- Basique -->
+          <div class="glass-card p-8 flex flex-col stagger-item">
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-slate-800 mb-2">Basique</h3>
+              <div class="flex items-end gap-1 mb-3">
+                <span class="text-4xl font-bold text-gradient">100€</span>
+                <span class="text-slate-500 mb-1">/ automatisation</span>
+              </div>
+              <p class="text-slate-500 text-sm">Un déclencheur, une action. Idéal pour démarrer.</p>
+            </div>
+            <ul class="space-y-3 flex-grow mb-8">
+              {[
+                'Ex : formulaire → email de confirmation',
+                'Ex : nouvel avis → notification Slack',
+                'Ex : paiement reçu → ligne dans Google Sheets',
+                'Livraison sous 48h',
+                'Support 15 jours inclus',
+              ].map((item) => (
+                <li class="flex items-start gap-2 text-slate-600 text-sm">
+                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                </li>
+              ))}
+            </ul>
+            <a href="#demo" class="btn-secondary text-center block">Démarrer</a>
           </div>
-          <p class="text-slate-500 mb-8 max-w-lg mx-auto">
-            Workflow conçu, testé et documenté. Vous décrivez le problème en langage simple, je construis la solution technique. Livraison sous 5 jours ouvrés.
-          </p>
-          <ul class="space-y-3 text-left max-w-sm mx-auto mb-8">
-            {[
-              'Audit de votre process actuel',
-              'Conception & déploiement du workflow',
-              'Tests complets avant livraison',
-              'Documentation & formation (30 min)',
-              'Support 30 jours inclus',
-            ].map((item) => (
-              <li class="flex items-start gap-2 text-slate-600 text-sm">
-                <span class="text-primary-400 shrink-0">✓</span>{item}
-              </li>
-            ))}
-          </ul>
-          <a href="#demo" class="btn-primary inline-block">Décrire mon besoin</a>
+
+          <!-- Standard -->
+          <div class="glass-card p-8 border-2 border-primary-500/70 flex flex-col stagger-item relative shadow-lg shadow-primary-500/10">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold whitespace-nowrap">
+              Le plus demandé
+            </div>
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-slate-800 mb-2">Standard</h3>
+              <div class="flex items-end gap-1 mb-3">
+                <span class="text-4xl font-bold text-gradient">250€</span>
+                <span class="text-slate-500 mb-1">/ automatisation</span>
+              </div>
+              <p class="text-slate-500 text-sm">Workflow multi-étapes avec logique conditionnelle.</p>
+            </div>
+            <ul class="space-y-3 flex-grow mb-8">
+              {[
+                'Ex : lead → qualification → CRM → agenda',
+                'Ex : formulaire → réponse IA en 60 s',
+                'Ex : avis Google → réponse automatique contextualisée',
+                'Logique si/sinon, filtres, délais',
+                'Livraison sous 3 jours ouvrés',
+                'Support 30 jours inclus',
+              ].map((item) => (
+                <li class="flex items-start gap-2 text-slate-600 text-sm">
+                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                </li>
+              ))}
+            </ul>
+            <a href="#demo" class="btn-primary text-center block">Choisir ce palier</a>
+          </div>
+
+          <!-- Sur-mesure -->
+          <div class="glass-card p-8 flex flex-col stagger-item">
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-slate-800 mb-2">Sur-mesure</h3>
+              <div class="flex items-end gap-1 mb-3">
+                <span class="text-4xl font-bold text-gradient">500€+</span>
+                <span class="text-slate-500 mb-1">/ automatisation</span>
+              </div>
+              <p class="text-slate-500 text-sm">IA avancée, RAG, plusieurs systèmes connectés.</p>
+            </div>
+            <ul class="space-y-3 flex-grow mb-8">
+              {[
+                'Ex : brief email → devis généré par IA',
+                'Ex : agent de back-office autonome',
+                'Ex : RAG sur votre base de connaissances',
+                'Intégration Claude / GPT-4o',
+                'Livraison sous 5–7 jours ouvrés',
+                'Support 60 jours + documentation',
+              ].map((item) => (
+                <li class="flex items-start gap-2 text-slate-600 text-sm">
+                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                </li>
+              ))}
+            </ul>
+            <a href="#demo" class="btn-secondary text-center block">Discuter du projet</a>
+          </div>
         </div>
+
+        <p class="text-center text-slate-500 text-sm mt-6 reveal-fade-up">
+          Pas sûr du palier ? Décrivez votre besoin — je vous oriente sans engagement.
+        </p>
       </div>
     </section>
 
