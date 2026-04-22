@@ -247,6 +247,72 @@ const faq = [
       </div>
     </section>
 
+    <!-- Automatisations IA -->
+    <section class="section bg-white">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <span class="inline-block px-4 py-1.5 bg-primary-500/10 text-primary-600 rounded-full text-sm font-semibold mb-4">
+            Nouveau
+          </span>
+          <h2 class="section-title">Automatisations IA</h2>
+          <p class="section-subtitle">Vos tâches répétitives, on les supprime</p>
+          <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+            Votre formulaire répond tout seul. Vos leads sont qualifiés avant même que vous décrochiez. Vos relances partent sans que vous y pensiez.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          {[
+            {
+              icon: '⚡',
+              title: 'Réponse automatique en 60 secondes',
+              desc: 'Un client remplit votre formulaire de contact → il reçoit une réponse personnalisée en moins d\'une minute, 24h/24, 7j/7.',
+            },
+            {
+              icon: '🎯',
+              title: 'Qualification automatique des leads',
+              desc: 'Un lead entre → il est qualifié, catégorisé et envoyé directement dans votre CRM ou votre agenda. Vous ne traitez que les vraies opportunités.',
+            },
+            {
+              icon: '📄',
+              title: 'Factures, relances & rapports',
+              desc: 'Génération automatique de devis et factures, relances de paiement planifiées, rapports hebdomadaires envoyés sans intervention.',
+            },
+            {
+              icon: '🔗',
+              title: 'Vos outils connectés entre eux',
+              desc: 'Notion, Google Sheets, Slack, Stripe, Airtable, Gmail… Tout ce que vous utilisez déjà, branché ensemble avec Make + IA.',
+            },
+          ].map((item) => (
+            <div class="glass-card p-8 stagger-item hover:border-primary-500/40 transition-all duration-300">
+              <div class="text-3xl mb-4">{item.icon}</div>
+              <h3 class="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
+              <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="glass-card p-8 border-2 border-primary-500/30 reveal-scale">
+          <div class="flex flex-col md:flex-row md:items-center gap-6">
+            <div class="flex-1">
+              <div class="inline-block px-3 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold mb-3">
+                3 paliers de prix
+              </div>
+              <h3 class="text-2xl font-bold text-slate-800 mb-2">
+                À partir de <span class="text-gradient">100€ / automatisation</span>
+              </h3>
+              <p class="text-slate-500">
+                Basique à 100€, standard à 250€, sur-mesure avec IA à partir de 500€. Workflow livré clé en main, testé et documenté.
+              </p>
+            </div>
+            <a href="/automatisations" class="btn-primary shrink-0 inline-block text-center">
+              Voir la démo →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- FAQ -->
     <section class="section bg-white">
       <div class="max-w-3xl mx-auto">

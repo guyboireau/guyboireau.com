@@ -6,15 +6,20 @@ const PROJECT_TYPES = [
   { value: 'app-web', label: 'Application web' },
   { value: 'app-mobile', label: 'Application mobile' },
   { value: 'maintenance', label: 'Maintenance / évolution' },
+  { value: 'automatisation', label: 'Automatisation IA' },
   { value: 'depannage', label: 'Dépannage informatique' },
   { value: 'autre', label: 'Autre' },
 ]
 
-export default function ContactForm() {
+interface Props {
+  defaultType?: string
+}
+
+export default function ContactForm({ defaultType = '' }: Props) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    project_type: '',
+    project_type: defaultType,
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
