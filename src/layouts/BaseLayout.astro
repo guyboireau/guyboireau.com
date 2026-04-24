@@ -7,6 +7,7 @@ export interface Props {
   canonical?: string
   ogImage?: string
   ogType?: string
+  keywords?: string
 }
 
 const {
@@ -15,33 +16,95 @@ const {
   canonical = Astro.url.href,
   ogImage = '/og-image.svg',
   ogType = 'website',
+  keywords = 'développeur web bordeaux, freelance bordeaux, création site web bordeaux, développeur web freelance, react bordeaux, typescript bordeaux, site web artisan bordeaux',
 } = Astro.props
 
 const ogImageAbsolute = new URL(ogImage, Astro.site).toString()
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: 'Guy Boireau',
-  jobTitle: 'Développeur Web Freelance',
-  url: 'https://guyboireau.com',
-  email: 'me@guyboireau.com',
-  telephone: '+33675751439',
-  image: 'https://guyboireau.com/assets/profile.png',
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Bordeaux',
-    addressRegion: 'Nouvelle-Aquitaine',
-    postalCode: '33000',
-    addressCountry: 'FR',
-  },
-  sameAs: [
-    'https://www.linkedin.com/in/guy-boireau',
-    'https://github.com/guyboireau',
-    'https://gitlab.com/guyboireau',
-  ],
-  knowsAbout: ['React', 'TypeScript', 'NestJS', 'React Native', 'PostgreSQL', 'Supabase', 'Astro'],
+const sameAs = [
+  'https://www.linkedin.com/in/guy-boireau',
+  'https://github.com/guyboireau',
+  'https://gitlab.com/guyboireau',
+]
+
+const address = {
+  '@type': 'PostalAddress',
+  streetAddress: 'Bordeaux',
+  addressLocality: 'Bordeaux',
+  addressRegion: 'Nouvelle-Aquitaine',
+  postalCode: '33000',
+  addressCountry: 'FR',
 }
+
+const areaServed = [
+  { '@type': 'City', 'name': 'Bordeaux' },
+  { '@type': 'City', 'name': 'Mérignac' },
+  { '@type': 'City', 'name': 'Pessac' },
+  { '@type': 'City', 'name': 'Talence' },
+  { '@type': 'City', 'name': 'Villenave-d\'Ornon' },
+  { '@type': 'City', 'name': 'Mérignac' },
+  { '@type': 'AdministrativeArea', 'name': 'Gironde' },
+  { '@type': 'AdministrativeArea', 'name': 'Nouvelle-Aquitaine' },
+  { '@type': 'Country', 'name': 'France' },
+]
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': 'https://guyboireau.com/#person',
+    name: 'Guy Boireau',
+    jobTitle: 'Développeur Web Freelance',
+    url: 'https://guyboireau.com',
+    email: 'me@guyboireau.com',
+    telephone: '+33675751439',
+    image: 'https://guyboireau.com/assets/profile.png',
+    address,
+    sameAs,
+    knowsAbout: ['React', 'TypeScript', 'NestJS', 'React Native', 'PostgreSQL', 'Supabase', 'Astro'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    '@id': 'https://guyboireau.com/#business',
+    name: 'Guy Boireau — Développeur Web Freelance Bordeaux',
+    alternateName: 'Guy Boireau Développeur Web',
+    url: 'https://guyboireau.com',
+    telephone: '+33675751439',
+    email: 'me@guyboireau.com',
+    logo: 'https://guyboireau.com/assets/logo.png',
+    image: 'https://guyboireau.com/assets/profile.png',
+    description: 'Développeur web freelance à Bordeaux. Création de sites web, applications web et mobiles sur-mesure. Maintenance mensuelle, SEO local. Devis gratuit.',
+    address,
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 44.8378,
+      longitude: -0.5792,
+    },
+    areaServed,
+    priceRange: '€€',
+    currenciesAccepted: 'EUR',
+    paymentAccepted: 'Virement bancaire, Chèque',
+    openingHours: 'Mo-Fr 09:00-18:00',
+    taxID: '993 605 542 00014',
+    founder: {
+      '@type': 'Person',
+      '@id': 'https://guyboireau.com/#person',
+      name: 'Guy Boireau',
+    },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Services de développement web',
+      itemListElement: [
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Création de site vitrine', description: 'Site web professionnel sur-mesure à partir de 1 000€' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Application web & mobile', description: 'Application métier, marketplace, app iOS/Android à partir de 3 000€' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Maintenance mensuelle', description: 'Hébergement, mises à jour, SEO local à partir de 79€/mois' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dépannage informatique', description: 'Prise en main à distance, 35€/heure' } },
+      ],
+    },
+    sameAs,
+  },
+]
 ---
 
 <!DOCTYPE html>
@@ -52,6 +115,12 @@ const jsonLd = {
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Guy Boireau" />
     <meta name="theme-color" content="#ff6b35" />
+    <meta name="keywords" content={keywords} />
+    <!-- Geo tags for local SEO -->
+    <meta name="geo.region" content="FR-33" />
+    <meta name="geo.placename" content="Bordeaux" />
+    <meta name="geo.position" content="44.8378;-0.5792" />
+    <meta name="ICBM" content="44.8378, -0.5792" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -83,6 +152,9 @@ const jsonLd = {
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <!-- Slot pour JSON-LD supplémentaire par page -->
+    <slot name="jsonld" />
 
     <!-- Google Tag Manager -->
     <script is:inline>

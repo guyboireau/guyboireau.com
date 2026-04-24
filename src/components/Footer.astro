@@ -11,11 +11,13 @@ const year = new Date().getFullYear()
           <img src="/assets/logo.png" alt="Guy Boireau" class="h-8 w-auto" />
           <span class="text-lg font-bold text-gradient">Guy Boireau</span>
         </div>
-        <p class="text-slate-400 text-sm">
-          Développeur Web Freelance<br />
-          Bordeaux, France
-        </p>
-        <p class="text-slate-500 text-xs mt-2">SIRET : 993 605 542 00014</p>
+        <address class="not-italic">
+          <p class="text-slate-400 text-sm">
+            Développeur Web Freelance<br />
+            <span itemprop="addressLocality">Bordeaux</span>, <span itemprop="addressCountry">France</span>
+          </p>
+          <p class="text-slate-500 text-xs mt-2">SIRET : 993 605 542 00014</p>
+        </address>
       </div>
 
       <!-- Navigation -->
@@ -36,12 +38,12 @@ const year = new Date().getFullYear()
         <h3 class="text-slate-200 font-semibold mb-3">Contact</h3>
         <ul class="space-y-2">
           <li>
-            <a href="mailto:me@guyboireau.com" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">
+            <a href="mailto:me@guyboireau.com" class="text-slate-400 hover:text-primary-400 transition-colors text-sm" itemprop="email">
               me@guyboireau.com
             </a>
           </li>
           <li>
-            <a href="tel:+33675751439" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">
+            <a href="tel:+33675751439" class="text-slate-400 hover:text-primary-400 transition-colors text-sm" itemprop="telephone">
               06 75 75 14 39
             </a>
           </li>
