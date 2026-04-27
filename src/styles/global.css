@@ -1,6 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-primary-300: #fdba74;
+  --color-primary-400: #fb923c;
+  --color-primary-500: #ff6b35;
+  --color-primary-600: #ea580c;
+  --color-primary-700: #c2410c;
+}
 
 @layer base {
   html {
