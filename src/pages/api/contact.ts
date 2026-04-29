@@ -72,10 +72,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const projectLabel = project_type || 'Non précisé'
     const e = escapeHtml
 
-    const { data, error } = await resend.emails.send({
+    const { data: _data, error } = await resend.emails.send({
       from: 'Portfolio <onboarding@resend.dev>',
       to: 'boireauguy@gmail.com',
-      reply_to: email,
+      replyTo: email,
       subject: `[Portfolio] Nouveau message de ${e(name)} — ${e(projectLabel)}`,
       html: `
         <div style="font-family: sans-serif; max-width: 560px; margin: 0 auto; color: #1e293b;">
