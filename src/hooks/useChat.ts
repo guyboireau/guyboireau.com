@@ -49,7 +49,13 @@ export function useChat() {
             const payload = line.slice(6)
             if (payload === '[DONE]') continue
 
-            const { text, error: apiError } = JSON.parse(payload)
+            let parsed: { text?: string; error?: string } = {}
+            try {
+              parsed = JSON.parse(payload)
+            } catch {
+              continue
+            }
+            const { text, error: apiError } = parsed
             if (apiError) throw new Error(apiError)
             setMessages((prev) => {
               const updated = [...prev]
