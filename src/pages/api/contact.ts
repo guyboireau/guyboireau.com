@@ -3,6 +3,14 @@ export const prerender = false
 import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
+import { z } from 'zod'
+
+const contactSchema = z.object({
+  name: z.string().min(2).max(100),
+  email: z.string().email().max(320),
+  project_type: z.string().max(100).optional(),
+  message: z.string().min(10).max(5000),
+})
 
 const ipStore = new Map<string, { count: number; resetAt: number }>()
 const RATE_LIMIT = 5
@@ -39,14 +47,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   }
 
   try {
-    const { name, email, project_type, message } = await request.json()
-
-    if (!name || !email || !message) {
-      return new Response(JSON.stringify({ error: 'Champs requis manquants' }), {
+    const body = await request.json()
+    const parsed = contactSchema.safeParse(body)
+    if (!parsed.success) {
+      return new Response(JSON.stringify({ error: 'Données invalides', details: parsed.error.flatten().fieldErrors }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       })
     }
+    const { name, email, project_type, message } = parsed.data
 
     // Sauvegarde Supabase
     const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL
