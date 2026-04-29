@@ -182,7 +182,7 @@ const sideProjects = [
                     <div>
                       <div class="text-primary-400 text-sm font-medium mb-2">{label}</div>
                       <div class="flex flex-wrap gap-1">
-                        {techs.map((tech) => (
+                        {techs.map((tech: string) => (
                           <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">{tech}</span>
                         ))}
                       </div>
@@ -270,7 +270,7 @@ const sideProjects = [
                     <div>
                       <div class="text-primary-400 text-xs font-medium mb-2">{label}</div>
                       <div class="flex flex-wrap gap-1">
-                        {techs.map((tech) => (
+                        {techs.map((tech: string) => (
                           <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">{tech}</span>
                         ))}
                       </div>
