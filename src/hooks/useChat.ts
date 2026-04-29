@@ -67,7 +67,7 @@ export function useChat() {
             })
           }
         }
-      } catch (err) {
+      } catch (_err) {
         setError('Une erreur est survenue. Réessaie dans un instant.')
         // Supprime le placeholder vide en cas d'erreur
         setMessages((prev) => prev.slice(0, -1))
