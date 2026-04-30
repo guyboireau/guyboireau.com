@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -22,8 +26,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
+      - name: Lint & Type check
         run: npm run lint
+        # Note: lint script runs `astro check && eslint .`
+        # astro check covers TypeScript type checking for Astro components
 
       - name: Build
         run: npm run build
