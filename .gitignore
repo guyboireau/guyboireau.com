@@ -18,7 +18,9 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
+!.env.test
 
 # macOS-specific files
 .DS_Store
 .vercel
+.env.test
