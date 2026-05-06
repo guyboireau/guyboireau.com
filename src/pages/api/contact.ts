@@ -2,8 +2,8 @@ export const prerender = false
 
 import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
-import { createClient } from '@supabase/supabase-js'
 import { z } from 'zod'
+import { getSupabase } from '@/lib/supabase'
 
 const contactSchema = z.object({
   name: z.string().min(2).max(100),
@@ -58,10 +58,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const { name, email, project_type, message } = parsed.data
 
     // Sauvegarde Supabase
-    const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL
-    const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY
-    if (supabaseUrl && supabaseKey) {
-      const supabase = createClient(supabaseUrl, supabaseKey)
+    const supabase = getSupabase()
+    if (supabase) {
       const { error: dbError } = await supabase.from('portfolio_contacts').insert({
         name,
         email,
@@ -102,41 +100,35 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                 <td style="padding: 8px 0;"><a href="mailto:${e(email)}" style="color: #ff6b35;">${e(email)}</a></td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #64748b; font-size: 13px;">Type de projet</td>
-                <td style="padding: 8px 0;">${e(projectLabel)}</td>
+                <td style="padding: 8px 0; color: #64748b; font-size: 13px;">Projet</td>
+                <td style="padding: 8px 0; font-weight: 600;">${e(projectLabel)}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #64748b; font-size: 13px; vertical-align: top;">Message</td>
+                <td style="padding: 8px 0; white-space: pre-wrap;">${e(message)}</td>
               </tr>
             </table>
-            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px;">
-              <p style="margin: 0; color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Message</p>
-              <p style="margin: 0; line-height: 1.6; white-space: pre-wrap;">${e(message)}</p>
-            </div>
-            <div style="margin-top: 24px; text-align: center;">
-              <a href="mailto:${e(email)}?subject=Re: ${e(projectLabel)}"
-                 style="display: inline-block; background: linear-gradient(135deg, #ff6b35, #ea580c); color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">
-                Répondre à ${e(name)}
-              </a>
+            <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; font-size: 12px; color: #94a3b8;">
+              Envoyé depuis le formulaire de contact de guyboireau.com
             </div>
           </div>
         </div>
       `,
+      text: `Nouveau message de ${name} (${email})\nProjet: ${projectLabel}\n\n${message}`,
     })
 
     if (error) {
-      console.error('[contact] Erreur Resend:', error)
-      return new Response(JSON.stringify({ error: error.message }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      })
+      console.error('[contact] Resend error:', error)
+      throw new Error("Erreur lors de l'envoi de l'email")
     }
 
-    return new Response(JSON.stringify({ ok: true }), {
+    return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     })
-  } catch (error) {
-    console.error('[contact] Erreur interne du serveur:', error)
-    const message = error instanceof Error ? error.message : 'Erreur interne'
-    return new Response(JSON.stringify({ error: message }), {
+  } catch (err) {
+    console.error('[contact] Error:', err)
+    return new Response(JSON.stringify({ error: 'Erreur serveur' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     })

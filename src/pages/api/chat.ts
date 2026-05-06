@@ -2,6 +2,7 @@ export const prerender = false
 
 import type { APIRoute } from 'astro'
 import Anthropic from '@anthropic-ai/sdk'
+import { z } from 'zod'
 import { SYSTEM_PROMPT } from '@/data/system-prompt'
 
 // --- Rate limiting ---
@@ -36,6 +37,15 @@ setInterval(() => {
   }
 }, 5 * 60_000) // toutes les 5 minutes
 
+const messageSchema = z.object({
+  role: z.enum(['user', 'assistant']),
+  content: z.string().min(1).max(4000),
+})
+
+const chatBodySchema = z.object({
+  messages: z.array(messageSchema).min(1).max(20),
+})
+
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ip = clientAddress ?? 'unknown'
   if (isRateLimited(ip)) {
@@ -53,15 +63,22 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     })
   }
 
-  let messages: { role: 'user' | 'assistant'; content: string }[]
+  let messages: z.infer<typeof messageSchema>[]
   try {
     const body = await request.json()
-    messages = body.messages
+    const parsed = chatBodySchema.safeParse(body)
+    if (!parsed.success) {
+      return new Response(
+        JSON.stringify({ error: 'Données invalides', details: parsed.error.flatten().fieldErrors }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+    messages = parsed.data.messages
   } catch {
-    return new Response(JSON.stringify({ error: 'Corps de requête invalide' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    })
+    return new Response(
+      JSON.stringify({ error: 'Corps de requête invalide' }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    )
   }
 
   const client = new Anthropic({ apiKey })
