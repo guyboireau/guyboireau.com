@@ -5,6 +5,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { z } from 'zod'
 import { SYSTEM_PROMPT } from '@/data/system-prompt'
 import { chatRateLimiter } from '@/lib/rate-limit'
+import { CLAUDE_MODEL, CHAT_MAX_TOKENS } from '@/data/ai-config'
 
 const messageSchema = z.object({
   role: z.enum(['user', 'assistant']),
@@ -53,8 +54,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const client = new Anthropic({ apiKey })
 
   const stream = await client.messages.stream({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 512,
+    model: CLAUDE_MODEL,
+    max_tokens: CHAT_MAX_TOKENS,
     system: SYSTEM_PROMPT,
     messages,
   })
