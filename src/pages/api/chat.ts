@@ -4,38 +4,7 @@ import type { APIRoute } from 'astro'
 import Anthropic from '@anthropic-ai/sdk'
 import { z } from 'zod'
 import { SYSTEM_PROMPT } from '@/data/system-prompt'
-
-// --- Rate limiting ---
-// Map en mémoire : IP → { count, resetAt }
-// Limite : 10 messages par tranche de 60 secondes par IP
-// TODO: remplacer par Redis / Upstash KV pour production multi-instance
-const ipRequests = new Map<string, { count: number; resetAt: number }>()
-const LIMIT = 10
-const WINDOW_MS = 60_000 // 1 minute
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now()
-  const record = ipRequests.get(ip)
-
-  if (!record || now > record.resetAt) {
-    // Nouvelle fenêtre
-    ipRequests.set(ip, { count: 1, resetAt: now + WINDOW_MS })
-    return false
-  }
-
-  if (record.count >= LIMIT) return true
-
-  record.count++
-  return false
-}
-
-// Nettoyage périodique pour éviter les fuites mémoire
-setInterval(() => {
-  const now = Date.now()
-  for (const [ip, record] of ipRequests) {
-    if (now > record.resetAt) ipRequests.delete(ip)
-  }
-}, 5 * 60_000) // toutes les 5 minutes
+import { chatRateLimiter } from '@/lib/rate-limit'
 
 const messageSchema = z.object({
   role: z.enum(['user', 'assistant']),
@@ -48,7 +17,7 @@ const chatBodySchema = z.object({
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ip = clientAddress ?? 'unknown'
-  if (isRateLimited(ip)) {
+  if (await chatRateLimiter(ip)) {
     return new Response(JSON.stringify({ error: 'Trop de requêtes. Réessaie dans une minute.' }), {
       status: 429,
       headers: { 'Content-Type': 'application/json', 'Retry-After': '60' },
@@ -84,7 +53,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const client = new Anthropic({ apiKey })
 
   const stream = await client.messages.stream({
-    model: 'claude-3-5-haiku-latest',
+    model: 'claude-haiku-4-5-20251001',
     max_tokens: 512,
     system: SYSTEM_PROMPT,
     messages,

@@ -4,6 +4,7 @@ import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
 import { z } from 'zod'
 import { getSupabase } from '@/lib/supabase'
+import { contactRateLimiter } from '@/lib/rate-limit'
 
 const contactSchema = z.object({
   name: z.string().min(2).max(100),
@@ -11,24 +12,6 @@ const contactSchema = z.object({
   project_type: z.string().max(100).optional(),
   message: z.string().min(10).max(5000),
 })
-
-// --- Rate limiting ---
-// TODO: remplacer par Redis / Upstash KV pour production multi-instance (cf. TD-002 dans TECHNICAL_DEBT.md)
-const ipStore = new Map<string, { count: number; resetAt: number }>()
-const RATE_LIMIT = 5
-const WINDOW_MS = 60_000
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now()
-  const record = ipStore.get(ip)
-  if (!record || now > record.resetAt) {
-    ipStore.set(ip, { count: 1, resetAt: now + WINDOW_MS })
-    return false
-  }
-  if (record.count >= RATE_LIMIT) return true
-  record.count++
-  return false
-}
 
 function escapeHtml(unsafe: string): string {
   return unsafe
@@ -41,7 +24,7 @@ function escapeHtml(unsafe: string): string {
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ip = clientAddress ?? 'unknown'
-  if (isRateLimited(ip)) {
+  if (await contactRateLimiter(ip)) {
     return new Response(JSON.stringify({ error: 'Trop de requêtes. Réessaie dans une minute.' }), {
       status: 429,
       headers: { 'Content-Type': 'application/json', 'Retry-After': '60' },
@@ -105,5 +88,30 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                 <td style="padding: 8px 0; color: #64748b; font-size: 13px;">Projet</td>
                 <td style="padding: 8px 0; font-weight: 600;">${e(projectLabel)}</td>
               </tr>
-              <tr>
-                <td style="
+            </table>
+            <div style="margin-top: 24px;">
+              <p style="color: #64748b; font-size: 13px; margin-bottom: 8px;">Message</p>
+              <div style="background: white; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; white-space: pre-wrap;">${e(message)}</div>
+            </div>
+          </div>
+        </div>
+      `,
+    })
+
+    if (error) {
+      console.error('[contact] Resend error:', error)
+      throw new Error("Erreur lors de l'envoi de l'email")
+    }
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  } catch (err) {
+    console.error('[contact] Error:', err)
+    return new Response(JSON.stringify({ error: "Une erreur est survenue lors de l'envoi du message." }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+}
