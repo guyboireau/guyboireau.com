@@ -12,6 +12,8 @@ const contactSchema = z.object({
   message: z.string().min(10).max(5000),
 })
 
+// --- Rate limiting ---
+// TODO: remplacer par Redis / Upstash KV pour production multi-instance (cf. TD-002 dans TECHNICAL_DEBT.md)
 const ipStore = new Map<string, { count: number; resetAt: number }>()
 const RATE_LIMIT = 5
 const WINDOW_MS = 60_000
@@ -104,33 +106,4 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                 <td style="padding: 8px 0; font-weight: 600;">${e(projectLabel)}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #64748b; font-size: 13px; vertical-align: top;">Message</td>
-                <td style="padding: 8px 0; white-space: pre-wrap;">${e(message)}</td>
-              </tr>
-            </table>
-            <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; font-size: 12px; color: #94a3b8;">
-              Envoyé depuis le formulaire de contact de guyboireau.com
-            </div>
-          </div>
-        </div>
-      `,
-      text: `Nouveau message de ${name} (${email})\nProjet: ${projectLabel}\n\n${message}`,
-    })
-
-    if (error) {
-      console.error('[contact] Resend error:', error)
-      throw new Error("Erreur lors de l'envoi de l'email")
-    }
-
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    })
-  } catch (err) {
-    console.error('[contact] Error:', err)
-    return new Response(JSON.stringify({ error: 'Erreur serveur' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    })
-  }
-}
+                <td style="
