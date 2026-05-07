@@ -18,7 +18,7 @@ const chatBodySchema = z.object({
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ip = clientAddress ?? 'unknown'
-  if (await chatRateLimiter(ip)) {
+  if (chatRateLimiter(ip)) {
     return new Response(JSON.stringify({ error: 'Trop de requêtes. Réessaie dans une minute.' }), {
       status: 429,
       headers: { 'Content-Type': 'application/json', 'Retry-After': '60' },
