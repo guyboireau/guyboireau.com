@@ -18,7 +18,6 @@ export function useChat() {
       ]
       setMessages(newMessages)
       setStreaming(true)
-      // Placeholder vide pour le message assistant en cours
       setMessages((prev) => [...prev, { role: 'assistant', content: '' }])
 
       try {
@@ -62,7 +61,7 @@ export function useChat() {
               const updated = [...prev]
               updated[updated.length - 1] = {
                 role: 'assistant',
-                content: updated[updated.length - 1].content + text,
+                content: updated[updated.length - 1].content + (text ?? ''),
               }
               return updated
             })
