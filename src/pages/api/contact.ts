@@ -64,7 +64,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const projectLabel = project_type || 'Non précisé'
     const e = escapeHtml
 
-    const { data: _data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: import.meta.env.RESEND_FROM_EMAIL ?? 'Portfolio <onboarding@resend.dev>',
       to: 'boireauguy@gmail.com',
       replyTo: email,
@@ -100,7 +100,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
     if (error) {
       console.error('[contact] Resend error:', error)
-      throw new Error('Erreur lors de l\'envoi de l\'email')
+      throw new Error("Erreur lors de l'envoi de l'email")
     }
 
     return new Response(JSON.stringify({ success: true }), {
@@ -109,7 +109,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     })
   } catch (err) {
     console.error('[contact] Error:', err)
-    return new Response(JSON.stringify({ error: 'Erreur serveur' }), {
+    return new Response(JSON.stringify({ error: "Erreur serveur. Réessaie plus tard." }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     })
