@@ -49,7 +49,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         name,
         email,
         message: `[${project_type || 'Non précisé'}] ${message}`,
-      })
+      } as any)
       if (dbError) console.error('[contact] Supabase error:', dbError)
     }
 
