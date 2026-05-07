@@ -2,10 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
+import PricingSimulator from '../components/PricingSimulator.tsx'
 
 const title = 'Services & Tarifs | Guy Boireau — Développeur Web Freelance Bordeaux'
 const description =
-  'Formules de maintenance mensuelle à partir de 149€/mois, création de site web dès 2000€, dépannage informatique 35€/h. Développeur web freelance à Bordeaux.'
+  'Création de site web à partir de 500€ avec simulateur de devis interactif. Formules de maintenance mensuelle à partir de 79€/mois, sans engagement. Développeur web freelance à Bordeaux.'
 
 const faq = [
   {
@@ -65,51 +66,21 @@ const faq = [
       </div>
     </section>
 
-    <!-- Création de site -->
+    <!-- Création de site — Simulateur interactif -->
     <section class="section bg-white">
       <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12">
-          <h2 class="section-title text-center">Création de site web</h2>
-          <p class="section-subtitle text-center">Votre site de A à Z, livré clé en main</p>
+        <div class="reveal-fade-up mb-12 text-center">
+          <h2 class="section-title">Création de site web</h2>
+          <p class="section-subtitle">Composez votre site, le prix se calcule en direct</p>
+          <p class="text-slate-600 text-lg max-w-2xl mx-auto mt-4">
+            Tout commence à <strong class="text-primary-500">500€</strong>. Cochez les options dont vous avez besoin et voyez le total en temps réel.
+          </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="glass-card p-8 stagger-item">
-            <div class="text-3xl mb-4">🌐</div>
-            <h3 class="text-xl font-bold text-slate-800 mb-2">Site vitrine</h3>
-            <div class="flex items-end gap-1 mb-4">
-              <span class="text-3xl font-bold text-gradient">à partir de 1 000€</span>
-            </div>
-            <p class="text-slate-500 text-sm mb-4">Site de présentation moderne, optimisé SEO, avec panneau d'administration si besoin.</p>
-            <ul class="space-y-2">
-              {['Design sur-mesure', 'Optimisation SEO on-page', 'Responsive mobile', 'Formation à la mise à jour', 'Livraison sous 3-4 semaines'].map((item) => (
-                <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 shrink-0">✓</span>{item}
-                </li>
-              ))}
-            </ul>
-          </div>
+        <PricingSimulator client:load />
 
-          <div class="glass-card p-8 stagger-item">
-            <div class="text-3xl mb-4">⚙️</div>
-            <h3 class="text-xl font-bold text-slate-800 mb-2">Application web / mobile</h3>
-            <div class="flex items-end gap-1 mb-4">
-              <span class="text-3xl font-bold text-gradient">à partir de 3 000€</span>
-            </div>
-            <p class="text-slate-500 text-sm mb-4">Application métier, marketplace, plateforme SaaS, app iOS/Android avec React Native.</p>
-            <ul class="space-y-2">
-              {['Architecture sur-mesure', 'API REST ou GraphQL', 'Dashboard d\'administration', 'Tests automatisés', 'Documentation technique'].map((item) => (
-                <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 shrink-0">✓</span>{item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div class="text-center mt-8 reveal-fade-up">
-          <p class="text-slate-500 mb-4">Chaque projet est unique — parlons-en pour obtenir un devis précis.</p>
-          <a href="/contact" class="btn-primary inline-block">Demander un devis gratuit</a>
+        <div class="text-center mt-12 reveal-fade-up">
+          <p class="text-slate-500 mb-4">Besoin d'une application web, d'une marketplace ou d'un SaaS ? <a href="/contact" class="text-primary-500 hover:underline">Contactez-moi</a> pour un devis sur-mesure.</p>
         </div>
       </div>
     </section>

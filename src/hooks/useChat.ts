@@ -18,7 +18,6 @@ export function useChat() {
       ]
       setMessages(newMessages)
       setStreaming(true)
-      // Placeholder vide pour le message assistant en cours
       setMessages((prev) => [...prev, { role: 'assistant', content: '' }])
 
       try {
@@ -29,6 +28,7 @@ export function useChat() {
         })
 
         if (!res.ok || !res.body) {
+          if (res.status === 429) throw new Error('RATE_LIMIT')
           throw new Error(`Erreur ${res.status}`)
         }
 
@@ -61,15 +61,19 @@ export function useChat() {
               const updated = [...prev]
               updated[updated.length - 1] = {
                 role: 'assistant',
-                content: updated[updated.length - 1].content + text,
+                content: updated[updated.length - 1].content + (text ?? ''),
               }
               return updated
             })
           }
         }
       } catch (_err) {
-        setError('Une erreur est survenue. Réessaie dans un instant.')
-        // Supprime le placeholder vide en cas d'erreur
+        const isRateLimit = _err instanceof Error && _err.message === 'RATE_LIMIT'
+        setError(
+          isRateLimit
+            ? 'Trop de messages envoyés. Attends une minute avant de réessayer.'
+            : 'Une erreur est survenue. Réessaie dans un instant.'
+        )
         setMessages((prev) => prev.slice(0, -1))
       } finally {
         setStreaming(false)
