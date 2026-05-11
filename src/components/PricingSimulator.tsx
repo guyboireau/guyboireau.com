@@ -73,11 +73,11 @@ const BLOCKS: BlockConfig[] = [
   },
 ]
 
-const BASE_TOTAL = 500
+const _BASE_TOTAL = 500
 
 export default function PricingSimulator() {
   const [selected, setSelected] = useState<Set<string>>(new Set(['base-design', 'base-deploy']))
-  const [subQty, setSubQty] = useState<Record<string, number>>({ 'sub-host': 1, 'sub-backup': 1, 'sub-security': 1, 'sub-edit': 1, 'sub-report': 1, 'sub-seo': 1 })
+  const [_subQty, _setSubQty] = useState<Record<string, number>>({ 'sub-host': 1, 'sub-backup': 1, 'sub-security': 1, 'sub-edit': 1, 'sub-report': 1, 'sub-seo': 1 })
   const [optPages, setOptPages] = useState(1)
   const [boostHours, setBoostHours] = useState(1)
 
@@ -111,7 +111,7 @@ export default function PricingSimulator() {
     for (const block of BLOCKS) {
       const opt = block.options.find((o) => o.id === id)
       if (opt && block.isSubscription) {
-        const qty = subQty[id] ?? 1
+        const qty = _subQty[id] ?? 1
         return sum + opt.price * qty
       }
     }

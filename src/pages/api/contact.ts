@@ -8,7 +8,7 @@ import { contactRateLimiter } from '@/lib/rate-limit'
 
 const contactSchema = z.object({
   name: z.string().min(2).max(100),
-  email: z.string().email().max(320),
+  email: z.string().email({ message: 'Email invalide' }).max(320),
   project_type: z.string().max(100).optional(),
   message: z.string().min(10).max(5000),
 })
@@ -35,7 +35,13 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const body = await request.json()
     const parsed = contactSchema.safeParse(body)
     if (!parsed.success) {
-      return new Response(JSON.stringify({ error: 'Données invalides', details: parsed.error.flatten().fieldErrors }), {
+      const fieldErrors: Record<string, string[]> = {}
+      for (const issue of parsed.error.issues) {
+        const path = issue.path.join('.') || 'form'
+        if (!fieldErrors[path]) fieldErrors[path] = []
+        fieldErrors[path].push(issue.message)
+      }
+      return new Response(JSON.stringify({ error: 'Données invalides', details: fieldErrors }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       })
@@ -45,11 +51,12 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     // Sauvegarde Supabase
     const supabase = getSupabase()
     if (supabase) {
-      const { error: dbError } = await supabase.from('portfolio_contacts').insert({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: dbError } = await (supabase as any).from('portfolio_contacts').insert({
         name,
         email,
         message: `[${project_type || 'Non précisé'}] ${message}`,
-      } as any)
+      })
       if (dbError) console.error('[contact] Supabase error:', dbError)
     }
 

@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST } from '@/pages/api/contact'
-import { createClient } from '@supabase/supabase-js'
 
 vi.mock('resend', () => ({
   Resend: vi.fn().mockImplementation(function () {
@@ -85,8 +84,6 @@ describe('/api/contact', () => {
   })
 
   it('envoie l’email et retourne 200 en cas de succès', async () => {
-    const { Resend } = await import('resend')
-    const { createClient } = await import('@supabase/supabase-js')
 
     const ctx = createContactRequest({
       name: 'Jean Dupont',

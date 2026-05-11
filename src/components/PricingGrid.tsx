@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { useEffect, useState } from 'react';
+import { getSupabase } from '@/lib/supabase';
 
 interface PricingFeature {
   name: string;
@@ -16,9 +16,9 @@ interface PricingTier {
   ctaLabel: string;
 }
 
-const supabase = createClient();
+const supabase = getSupabase();
 
-export default function PricingGrid(): JSX.Element {
+export default function PricingGrid(): React.JSX.Element {
   const [tiers, setTiers] = useState<PricingTier[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,6 +29,10 @@ export default function PricingGrid(): JSX.Element {
         setLoading(true);
         setError(null);
 
+        if (!supabase) {
+          throw new Error('Supabase non configuré');
+        }
+
         const { data, error: supabaseError } = await supabase
           .from('pricing_tiers')
           .select('*')
@@ -38,26 +42,29 @@ export default function PricingGrid(): JSX.Element {
           throw supabaseError;
         }
 
-        const validated = (data ?? []).map((item): PricingTier => ({
-          id: String(item.id),
-          name: String(item.name),
-          price: Number(item.price),
-          description: String(item.description),
-          features: Array.isArray(item.features)
-            ? item.features.map((f: unknown): PricingFeature => {
-                const record =
-                  typeof f === 'object' && f !== null
-                    ? (f as Record<string, unknown>)
-                    : {};
-                return {
-                  name: String(record.name ?? ''),
-                  included: Boolean(record.included),
-                };
-              })
-            : [],
-          highlighted: Boolean(item.highlighted),
-          ctaLabel: String(item.cta_label ?? 'Choisir'),
-        }));
+        const validated = (data ?? []).map((raw: unknown): PricingTier => {
+          const item = raw as Record<string, unknown>;
+          return {
+            id: String(item.id ?? ''),
+            name: String(item.name ?? ''),
+            price: Number(item.price ?? 0),
+            description: String(item.description ?? ''),
+            features: Array.isArray(item.features)
+              ? item.features.map((f: unknown): PricingFeature => {
+                  const record =
+                    typeof f === 'object' && f !== null
+                      ? (f as Record<string, unknown>)
+                      : {};
+                  return {
+                    name: String(record.name ?? ''),
+                    included: Boolean(record.included),
+                  };
+                })
+              : [],
+            highlighted: Boolean(item.highlighted),
+            ctaLabel: String(item.cta_label ?? 'Choisir'),
+          };
+        });
 
         setTiers(validated);
       } catch (err) {

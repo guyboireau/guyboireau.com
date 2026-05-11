@@ -64,7 +64,7 @@ export async function sendContactEmail(
       to: ["guy@guyboireau.com"],
       subject: `Nouveau message de ${input.name}`,
       text: `De: ${input.name} <${input.email}>\n\n${input.message}`,
-      reply_to: input.email,
+      replyTo: input.email,
     });
 
     if (error) {
@@ -90,7 +90,11 @@ export async function saveContactMessage(
 ): Promise<{ id: string } | { error: string }> {
   try {
     const supabase = getSupabase();
-    const { data, error } = await supabase
+    if (!supabase) {
+      return { error: "Supabase client not initialized" };
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase as any)
       .from("contacts")
       .insert({
         name: input.name,

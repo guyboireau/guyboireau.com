@@ -31,7 +31,7 @@ export default function ContactForm({ defaultType = '' }: Props) {
   ) => {
     const { name, value } = e.target
 
-    setFormData((prev) => {
+    setFormData((prev: ContactFormData) => {
       const next = { ...prev }
       switch (name) {
         case 'name':
