@@ -65,7 +65,6 @@ describe('ContactForm', () => {
       body: JSON.stringify({
         name: 'Jean Dupont',
         email: 'jean@example.com',
-        project_type: '',
         message: 'Bonjour, je voudrais un site vitrine.',
       }),
     })
@@ -96,7 +95,7 @@ describe('ContactForm', () => {
 
     fireEvent.change(screen.getByLabelText(/Nom/i), { target: { value: 'Jean Dupont' } })
     fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'jean@example.com' } })
-    fireEvent.change(screen.getByLabelText(/Message/i), { target: { value: 'Bonjour !' } })
+    fireEvent.change(screen.getByLabelText(/Message/i), { target: { value: 'Bonjour, je teste !' } })
 
     const button = screen.getByRole('button', { name: /Envoyer le message/i })
     fireEvent.click(button)
