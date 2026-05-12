@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST } from '@/pages/api/contact'
-import { createClient } from '@supabase/supabase-js'
 
 vi.mock('resend', () => ({
   Resend: vi.fn().mockImplementation(function () {
