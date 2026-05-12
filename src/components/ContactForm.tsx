@@ -25,6 +25,7 @@ export default function ContactForm({ defaultType = '' }: Props) {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({})
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -55,14 +56,29 @@ export default function ContactForm({ defaultType = '' }: Props) {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus(null)
+    setFieldErrors({})
+
+    const payload = {
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      message: formData.message.trim(),
+      ...(formData.project_type ? { project_type: formData.project_type } : {}),
+    }
 
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       })
-      if (!res.ok) throw new Error(`Erreur ${res.status}`)
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        if (res.status === 400 && data?.details) {
+          setFieldErrors(data.details as Record<string, string[]>)
+        }
+        throw new Error(`Erreur ${res.status}`)
+      }
 
       setSubmitStatus('success')
       setFormData({ name: '', email: '', project_type: '', message: '' })
@@ -108,9 +124,13 @@ export default function ContactForm({ defaultType = '' }: Props) {
             value={formData.name}
             onChange={handleChange}
             required
-            className={inputClass}
+            minLength={2}
+            className={`${inputClass} ${fieldErrors.name ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' : ''}`}
             placeholder="Votre nom"
           />
+          {fieldErrors.name && (
+            <p className="mt-1 text-xs text-red-400">{fieldErrors.name[0]}</p>
+          )}
         </div>
 
         <div>
@@ -124,9 +144,12 @@ export default function ContactForm({ defaultType = '' }: Props) {
             value={formData.email}
             onChange={handleChange}
             required
-            className={inputClass}
+            className={`${inputClass} ${fieldErrors.email ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' : ''}`}
             placeholder="votre@email.com"
           />
+          {fieldErrors.email && (
+            <p className="mt-1 text-xs text-red-400">{fieldErrors.email[0]}</p>
+          )}
         </div>
 
         <div>
@@ -158,10 +181,14 @@ export default function ContactForm({ defaultType = '' }: Props) {
             value={formData.message}
             onChange={handleChange}
             required
+            minLength={10}
             rows={5}
-            className={`${inputClass} resize-none`}
+            className={`${inputClass} resize-none ${fieldErrors.message ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' : ''}`}
             placeholder="Décrivez votre projet..."
           />
+          {fieldErrors.message && (
+            <p className="mt-1 text-xs text-red-400">{fieldErrors.message[0]}</p>
+          )}
         </div>
 
         <button
