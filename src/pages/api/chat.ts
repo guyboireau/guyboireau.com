@@ -2,43 +2,23 @@ export const prerender = false
 
 import type { APIRoute } from 'astro'
 import Anthropic from '@anthropic-ai/sdk'
+import { z } from 'zod'
 import { SYSTEM_PROMPT } from '@/data/system-prompt'
+import { chatRateLimiter } from '@/lib/rate-limit'
+import { CLAUDE_MODEL, CHAT_MAX_TOKENS } from '@/data/ai-config'
 
-// --- Rate limiting ---
-// Map en mémoire : IP → { count, resetAt }
-// Limite : 10 messages par tranche de 60 secondes par IP
-// TODO: remplacer par Redis / Upstash KV pour production multi-instance
-const ipRequests = new Map<string, { count: number; resetAt: number }>()
-const LIMIT = 10
-const WINDOW_MS = 60_000 // 1 minute
+const messageSchema = z.object({
+  role: z.enum(['user', 'assistant']),
+  content: z.string().min(1).max(4000),
+})
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now()
-  const record = ipRequests.get(ip)
-
-  if (!record || now > record.resetAt) {
-    // Nouvelle fenêtre
-    ipRequests.set(ip, { count: 1, resetAt: now + WINDOW_MS })
-    return false
-  }
-
-  if (record.count >= LIMIT) return true
-
-  record.count++
-  return false
-}
-
-// Nettoyage périodique pour éviter les fuites mémoire
-setInterval(() => {
-  const now = Date.now()
-  for (const [ip, record] of ipRequests) {
-    if (now > record.resetAt) ipRequests.delete(ip)
-  }
-}, 5 * 60_000) // toutes les 5 minutes
+const chatBodySchema = z.object({
+  messages: z.array(messageSchema).min(1).max(20),
+})
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ip = clientAddress ?? 'unknown'
-  if (isRateLimited(ip)) {
+  if (chatRateLimiter(ip)) {
     return new Response(JSON.stringify({ error: 'Trop de requêtes. Réessaie dans une minute.' }), {
       status: 429,
       headers: { 'Content-Type': 'application/json', 'Retry-After': '60' },
@@ -53,22 +33,29 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     })
   }
 
-  let messages: { role: 'user' | 'assistant'; content: string }[]
+  let messages: z.infer<typeof messageSchema>[]
   try {
     const body = await request.json()
-    messages = body.messages
+    const parsed = chatBodySchema.safeParse(body)
+    if (!parsed.success) {
+      return new Response(
+        JSON.stringify({ error: 'Données invalides', details: parsed.error.flatten().fieldErrors }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+    messages = parsed.data.messages
   } catch {
-    return new Response(JSON.stringify({ error: 'Corps de requête invalide' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    })
+    return new Response(
+      JSON.stringify({ error: 'Corps de requête invalide' }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    )
   }
 
   const client = new Anthropic({ apiKey })
 
   const stream = await client.messages.stream({
-    model: 'claude-3-5-haiku-latest',
-    max_tokens: 512,
+    model: CLAUDE_MODEL,
+    max_tokens: CHAT_MAX_TOKENS,
     system: SYSTEM_PROMPT,
     messages,
   })

@@ -7,7 +7,7 @@ import ChatBot from '../components/ChatBot.tsx'
 
 const title = 'Guy Boireau — Votre présence sur Internet, clé en main | Développeur Web Freelance Bordeaux'
 const description =
-  'Guy Boireau, développeur web freelance à Bordeaux. Site web professionnel, fiche Google gérée, automatisations IA. Formules dès 149€/mois, sans engagement. Devis gratuit.'
+  'Guy Boireau, développeur web freelance à Bordeaux. Création de site web à partir de 500€ avec simulateur de devis interactif. Maintenance mensuelle dès 79€/mois, sans engagement. Devis gratuit.'
 
 const services = [
   {
@@ -48,6 +48,14 @@ const featuredProjects = [
     link: 'https://www.lalucarnepeniche.com',
     status: 'En production',
     images: { desktop: '/assets/lalucarne-desktop.png', mobile: '/assets/lalucarne-mobile.png' },
+  },
+  {
+    title: 'Arnault Janvier — Maître Verrier',
+    subtitle: 'Site vitrine multilingue FR/EN/ES pour artisan vitrailliste avec back-office CMS',
+    techs: ['Next.js 15', 'TypeScript', 'Supabase', 'next-intl'],
+    link: 'https://arnault-janvier.fr',
+    status: 'En production',
+    images: null,
   },
   {
     title: 'Niido',
@@ -224,17 +232,17 @@ const featuredProjects = [
           <div class="flex flex-col md:flex-row md:items-center gap-6">
             <div class="flex-1">
               <div class="inline-block px-3 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold mb-3">
-                Pack Essentiel
+                Simulateur interactif
               </div>
               <h3 class="text-2xl font-bold text-slate-800 mb-2">
-                Présence en ligne complète — <span class="text-gradient">149€/mois</span>
+                Votre site à partir de <span class="text-gradient">500€</span> — composez-le en direct
               </h3>
               <p class="text-slate-500">
-                Site web + fiche Google Business gérée + modifications incluses + support. Tout compris, sans surprise.
+                Cochez les options dont vous avez besoin (pages supplémentaires, formulaire, boutique, blog…) et voyez le prix se calculer en temps réel. Transparent, sans surprise.
               </p>
             </div>
             <a href="/services" class="btn-primary shrink-0 inline-block text-center">
-              Voir le détail →
+              Simuler mon devis →
             </a>
           </div>
         </div>
@@ -249,7 +257,7 @@ const featuredProjects = [
           <p class="section-subtitle">Des clients, pas des témoignages de catalogue</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div class="glass-card p-8 stagger-item border border-primary-500/20">
             <div class="text-primary-400 text-4xl mb-4 leading-none">"</div>
             <p class="text-slate-600 leading-relaxed mb-6">
@@ -257,11 +265,27 @@ const featuredProjects = [
             </p>
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-500 font-bold shrink-0">
+                GB
+              </div>
+              <div>
+                <p class="font-semibold text-slate-800 text-sm">Gilles Boireau</p>
+                <p class="text-slate-500 text-xs">La Lucarne Péniche — Saint-Léger-des-Vignes</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card p-8 stagger-item border border-primary-500/20">
+            <div class="text-primary-400 text-4xl mb-4 leading-none">"</div>
+            <p class="text-slate-600 leading-relaxed mb-6">
+              Guy a créé un site à l'image de mon atelier — élégant, multilingue, avec une galerie que je gère seul. Depuis la mise en ligne, je reçois des demandes de clients anglophones et espagnols que je n'aurais jamais touchés avant.
+            </p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-500 font-bold shrink-0">
                 AJ
               </div>
               <div>
                 <p class="font-semibold text-slate-800 text-sm">Arnault Janvier</p>
-                <p class="text-slate-500 text-xs">La Lucarne Péniche — Saint-Léger-des-Vignes</p>
+                <p class="text-slate-500 text-xs">Maître Verrier — arnault-janvier.fr</p>
               </div>
             </div>
           </div>

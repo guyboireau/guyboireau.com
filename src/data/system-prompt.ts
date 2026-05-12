@@ -62,20 +62,46 @@ Stack : Next.js, TypeScript, Supabase
 
 ## Services & Tarifs
 
-### Formules de maintenance mensuelle (sans engagement)
-- Essentiel — 149€/mois : hébergement + domaine inclus, mises à jour sécurité, sauvegardes,
-  1 modification/mois, support email sous 48h, rapport de performance mensuel
-- Accompagnement — 299€/mois (recommandé) : tout l'Essentiel + optimisation SEO mensuelle,
-  1 article de blog/mois, 2h d'évolutions incluses, rapport Google Analytics,
-  support prioritaire sous 24h, appel mensuel de suivi 30 min
-- Sur-mesure — sur devis : forfait adapté, intégrations spécifiques, multisite, SLA personnalisé,
-  formation équipe incluse si besoin
+### Création de site web — simulateur interactif
+Tout site commence à 500€ (base obligatoire : design + intégration 400€ + mise en ligne 100€).
+Options à cocher :
+- Page supplémentaire — +100€/page
+- Formulaire de contact — +60€
+- Prise de RDV en ligne (Calendly) — +80€
+- Boutique en ligne (jusqu'à 20 produits) — +400€
+- Blog / actualités — +150€
+- Galerie photos optimisée — +80€
+- Version bilingue FR/EN — +200€
+- Rédaction des textes (copywriting) — +150€
 
-### Création de site web
-- Site vitrine : à partir de 1 500€ — design sur-mesure, SEO on-page, responsive, formation,
-  livraison sous 3-4 semaines
-- Application web/mobile : à partir de 3 000€ — architecture sur-mesure, API REST,
-  dashboard admin, tests automatisés, documentation technique
+Présence en ligne (one shot) :
+- Fiche Google Business — 80€
+- Page Facebook pro — 60€
+- Page Instagram pro — 60€
+- Pixel Meta / Google Tag Manager — 60€
+- Google Analytics — 50€
+
+Boosts ponctuels :
+- Modification hors abonnement — 60€/h
+- Refonte graphique partielle — à partir de 200€
+- Optimisation vitesse / Core Web Vitals — 150€
+- Audit SEO complet — 200€
+
+### Formules de maintenance mensuelle (sans engagement)
+- Présence — 79€/mois : hébergement + domaine, mises à jour sécurité, sauvegardes, fiche Google Business gérée, support email sous 72h
+- Essentiel — 149€/mois (recommandé) : tout le Pack Présence + 1 modification/mois, support sous 48h, rapport mensuel simplifié
+- Croissance — 299€/mois : tout l'Essentiel + optimisation SEO mensuelle, 1 article/mois, 2h d'évolutions, rapport Google Analytics + Maps, support prioritaire sous 24h, appel mensuel de suivi 30 min
+
+Abonnement à la carte (sans engagement) :
+- Hébergement + domaine — 15€/mois
+- Sauvegardes automatiques — 10€/mois
+- Mises à jour sécurité — 15€/mois
+- 1 modification/mois incluse — 15€/mois
+- Rapport de performance mensuel — 10€/mois
+- SEO de base mensuel — 20€/mois
+
+### Application web / mobile
+Sur devis — architecture sur-mesure, API REST, dashboard admin, tests automatisés, documentation technique
 
 ### Dépannage informatique à distance
 - 35€/heure — pour professionnels et particuliers

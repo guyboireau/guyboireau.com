@@ -2,8 +2,9 @@ export const prerender = false
 
 import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
-import { createClient } from '@supabase/supabase-js'
 import { z } from 'zod'
+import { getSupabase } from '@/lib/supabase'
+import { contactRateLimiter } from '@/lib/rate-limit'
 
 const contactSchema = z.object({
   name: z.string().min(2).max(100),
@@ -11,22 +12,6 @@ const contactSchema = z.object({
   project_type: z.string().max(100).optional(),
   message: z.string().min(10).max(5000),
 })
-
-const ipStore = new Map<string, { count: number; resetAt: number }>()
-const RATE_LIMIT = 5
-const WINDOW_MS = 60_000
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now()
-  const record = ipStore.get(ip)
-  if (!record || now > record.resetAt) {
-    ipStore.set(ip, { count: 1, resetAt: now + WINDOW_MS })
-    return false
-  }
-  if (record.count >= RATE_LIMIT) return true
-  record.count++
-  return false
-}
 
 function escapeHtml(unsafe: string): string {
   return unsafe
@@ -39,7 +24,7 @@ function escapeHtml(unsafe: string): string {
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ip = clientAddress ?? 'unknown'
-  if (isRateLimited(ip)) {
+  if (await contactRateLimiter(ip)) {
     return new Response(JSON.stringify({ error: 'Trop de requêtes. Réessaie dans une minute.' }), {
       status: 429,
       headers: { 'Content-Type': 'application/json', 'Retry-After': '60' },
@@ -50,7 +35,13 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const body = await request.json()
     const parsed = contactSchema.safeParse(body)
     if (!parsed.success) {
-      return new Response(JSON.stringify({ error: 'Données invalides', details: parsed.error.flatten().fieldErrors }), {
+      const fieldErrors: Record<string, string[]> = {}
+      for (const issue of parsed.error.issues) {
+        const path = issue.path.join('.') || 'form'
+        if (!fieldErrors[path]) fieldErrors[path] = []
+        fieldErrors[path].push(issue.message)
+      }
+      return new Response(JSON.stringify({ error: 'Données invalides', details: fieldErrors }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       })
@@ -58,11 +49,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const { name, email, project_type, message } = parsed.data
 
     // Sauvegarde Supabase
-    const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL
-    const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY
-    if (supabaseUrl && supabaseKey) {
-      const supabase = createClient(supabaseUrl, supabaseKey)
-      const { error: dbError } = await supabase.from('portfolio_contacts').insert({
+    const supabase = getSupabase()
+    if (supabase) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: dbError } = await (supabase as any).from('portfolio_contacts').insert({
         name,
         email,
         message: `[${project_type || 'Non précisé'}] ${message}`,
@@ -102,19 +92,13 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                 <td style="padding: 8px 0;"><a href="mailto:${e(email)}" style="color: #ff6b35;">${e(email)}</a></td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #64748b; font-size: 13px;">Type de projet</td>
-                <td style="padding: 8px 0;">${e(projectLabel)}</td>
+                <td style="padding: 8px 0; color: #64748b; font-size: 13px;">Projet</td>
+                <td style="padding: 8px 0; font-weight: 600;">${e(projectLabel)}</td>
               </tr>
             </table>
-            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px;">
-              <p style="margin: 0; color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Message</p>
-              <p style="margin: 0; line-height: 1.6; white-space: pre-wrap;">${e(message)}</p>
-            </div>
-            <div style="margin-top: 24px; text-align: center;">
-              <a href="mailto:${e(email)}?subject=Re: ${e(projectLabel)}"
-                 style="display: inline-block; background: linear-gradient(135deg, #ff6b35, #ea580c); color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">
-                Répondre à ${e(name)}
-              </a>
+            <div style="margin-top: 24px;">
+              <p style="color: #64748b; font-size: 13px; margin-bottom: 8px;">Message</p>
+              <div style="background: white; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; white-space: pre-wrap;">${e(message)}</div>
             </div>
           </div>
         </div>
@@ -122,21 +106,17 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     })
 
     if (error) {
-      console.error('[contact] Erreur Resend:', error)
-      return new Response(JSON.stringify({ error: error.message }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      })
+      console.error('[contact] Resend error:', error)
+      throw new Error("Erreur lors de l'envoi de l'email")
     }
 
-    return new Response(JSON.stringify({ ok: true }), {
+    return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     })
-  } catch (error) {
-    console.error('[contact] Erreur interne du serveur:', error)
-    const message = error instanceof Error ? error.message : 'Erreur interne'
-    return new Response(JSON.stringify({ error: message }), {
+  } catch (err) {
+    console.error('[contact] Error:', err)
+    return new Response(JSON.stringify({ error: "Une erreur est survenue lors de l'envoi du message." }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     })
