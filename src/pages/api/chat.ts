@@ -38,14 +38,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const body = await request.json()
     const parsed = chatBodySchema.safeParse(body)
     if (!parsed.success) {
-      const fieldErrors: Record<string, string[]> = {}
-      for (const issue of parsed.error.issues) {
-        const path = issue.path.join('.') || 'form'
-        if (!fieldErrors[path]) fieldErrors[path] = []
-        fieldErrors[path].push(issue.message)
-      }
       return new Response(
-        JSON.stringify({ error: 'Données invalides', details: fieldErrors }),
+        JSON.stringify({ error: 'Données invalides', details: parsed.error.flatten().fieldErrors }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       )
     }
