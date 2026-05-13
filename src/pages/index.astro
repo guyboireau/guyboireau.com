@@ -40,6 +40,44 @@ const services = [
   },
 ]
 
+const trustMetrics = [
+  '10+ projets livrés',
+  'Réponse sous 24h',
+  '100% clients satisfaits',
+  'Bordeaux & toute la France',
+  'Devis gratuit',
+]
+
+const problems = [
+  { icon: '📅', text: "Votre site date de plusieurs années — ou vous n'en avez pas du tout." },
+  { icon: '🔍', text: "Vos clients ne vous trouvent pas sur Google quand ils cherchent un pro près de chez eux." },
+  { icon: '🔁', text: "Vous refaites les mêmes tâches manuelles chaque semaine : devis, relances, prise de rendez-vous." },
+  { icon: '😤', text: "Votre dernier prestataire a disparu après la livraison — et le site, personne ne s'en occupe." },
+]
+
+const processSteps = [
+  {
+    num: '01',
+    title: 'On discute',
+    desc: "Appel ou message gratuit. Je comprends votre activité, vos besoins, votre budget. Aucun engagement.",
+  },
+  {
+    num: '02',
+    title: 'Je propose',
+    desc: "Devis détaillé sous 48h. Tarif fixe, délai annoncé, aucune surprise cachée.",
+  },
+  {
+    num: '03',
+    title: 'On construit',
+    desc: "Vous suivez l'avancement en direct. Je livre par étapes, vous validez à chaque fois.",
+  },
+  {
+    num: '04',
+    title: 'Livraison & suivi',
+    desc: "Mise en ligne, formation sur l'outil, 30 jours de garantie. Je reste disponible après.",
+  },
+]
+
 const featuredProjects = [
   {
     title: 'La Lucarne Péniche',
@@ -81,10 +119,50 @@ const featuredProjects = [
   <main>
     <Hero />
 
-    <!-- Services overview -->
+    <!-- Trust bar -->
+    <div class="border-y border-slate-200 bg-slate-50 py-3 overflow-hidden">
+      <div class="flex items-center gap-0 trust-marquee">
+        {[...trustMetrics, ...trustMetrics].map((metric, i) => (
+          <span class="flex items-center gap-6 px-6 whitespace-nowrap text-sm font-medium text-slate-600 shrink-0">
+            {metric}
+            <span class="text-primary-400 text-base" aria-hidden="true">◆</span>
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <!-- Le problème -->
     <section class="section bg-white">
+      <div class="max-w-4xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <span class="inline-block text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">01 — Le problème</span>
+          <h2 class="section-title">Vous vous reconnaissez ?</h2>
+          <p class="section-subtitle">La plupart de mes clients sont arrivés avec une de ces situations.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+          {problems.map((problem) => (
+            <div class="flex items-start gap-4 glass-card p-6 stagger-item">
+              <span class="text-2xl shrink-0 mt-0.5">{problem.icon}</span>
+              <p class="text-slate-600 leading-relaxed">{problem.text}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="text-center reveal-fade-up">
+          <p class="text-slate-500 mb-6">Si vous avez dit oui à au moins une — on a des choses à se dire.</p>
+          <a href="/contact" class="btn-primary inline-block">
+            Parlons de votre projet →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services overview -->
+    <section class="section bg-slate-50">
       <div class="max-w-6xl mx-auto">
         <div class="reveal-fade-up">
+          <span class="block text-center text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">02 — Ce que je fais</span>
           <h2 class="section-title text-center">Ce que je fais</h2>
           <p class="section-subtitle text-center">De la création au suivi, je m'occupe de tout</p>
         </div>
@@ -124,9 +202,10 @@ const featuredProjects = [
     </section>
 
     <!-- Featured projects -->
-    <section class="section bg-slate-50">
+    <section class="section bg-white">
       <div class="max-w-6xl mx-auto">
         <div class="reveal-fade-up">
+          <span class="block text-center text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">03 — Résultats</span>
           <h2 class="section-title text-center">Projets récents</h2>
           <p class="section-subtitle text-center">Ce que j'ai livré pour mes clients</p>
         </div>
@@ -186,6 +265,40 @@ const featuredProjects = [
         <div class="text-center mt-10 reveal-fade-up">
           <a href="/projets" class="btn-secondary inline-block">
             Voir tous mes projets
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Processus -->
+    <section class="section bg-slate-50">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <span class="block text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">04 — Comment ça se passe</span>
+          <h2 class="section-title">Simple. Transparent. Sans surprise.</h2>
+          <p class="section-subtitle">Du premier message à la mise en ligne, voici exactement ce qui se passe.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {processSteps.map((step) => (
+            <div class="glass-card p-7 stagger-item relative overflow-hidden group hover:border-primary-500/30 transition-all duration-300">
+              <div class="text-6xl font-black text-primary-500/10 absolute -top-2 -right-2 leading-none select-none group-hover:text-primary-500/15 transition-colors">
+                {step.num}
+              </div>
+              <div class="relative z-10">
+                <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary-500/10 text-primary-500 font-bold text-sm mb-4">
+                  {step.num}
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-3">{step.title}</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">{step.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="text-center mt-10 reveal-fade-up">
+          <a href="/contact" class="btn-primary inline-block">
+            Parlons de votre projet →
           </a>
         </div>
       </div>
