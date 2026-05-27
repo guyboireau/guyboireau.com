@@ -165,6 +165,18 @@
 .hover-tilt { transition: transform 0.3s ease; }
 .hover-tilt:hover { transform: perspective(800px) rotateX(2deg) rotateY(-2deg) scale(1.02); }
 
+/* ===== TRUST MARQUEE ===== */
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.trust-marquee {
+  animation: marquee 25s linear infinite;
+  width: max-content;
+}
+
 /* ===== REDUCED MOTION ===== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -178,4 +190,5 @@
     opacity: 1 !important;
   }
   .particle { display: none !important; }
+  .trust-marquee { animation: none !important; }
 }

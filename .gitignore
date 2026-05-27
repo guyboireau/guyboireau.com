@@ -24,3 +24,9 @@ pnpm-debug.log*
 .DS_Store
 .vercel
 .env.test
+
+# Claude Code & local tools
+agentdb.rvf
+agentdb.rvf.lock
+SECURITY_AUDIT.md
+SECURITY_REVIEW_POST_FIX.md

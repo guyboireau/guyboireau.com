@@ -25,7 +25,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     })
   }
 
-  const apiKey = import.meta.env.ANTHROPIC_API_KEY
+  const apiKey = process.env.ANTHROPIC_API_KEY
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'Configuration manquante' }), {
       status: 500,

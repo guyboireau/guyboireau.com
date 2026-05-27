@@ -3,7 +3,7 @@ export const prerender = false
 import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
 import { z } from 'zod'
-import { getSupabase } from '@/lib/supabase'
+import { getSupabaseServer } from '@/lib/supabase.server'
 import { contactRateLimiter } from '@/lib/rate-limit'
 
 const contactSchema = z.object({
@@ -49,7 +49,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const { name, email, project_type, message } = parsed.data
 
     // Sauvegarde Supabase
-    const supabase = getSupabase()
+    const supabase = getSupabaseServer()
     if (supabase) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error: dbError } = await (supabase as any).from('portfolio_contacts').insert({
@@ -61,7 +61,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     }
 
     // Envoi email via Resend
-    const resendApiKey = import.meta.env.RESEND_API_KEY
+    const resendApiKey = process.env.RESEND_API_KEY
     if (!resendApiKey) {
       console.error('[contact] RESEND_API_KEY manquante')
       throw new Error('Clé API Resend manquante')
