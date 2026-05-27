@@ -26,6 +26,7 @@ pnpm-debug.log*
 .env.test
 
 # Claude Code & local tools
+ruvector.db
 agentdb.rvf
 agentdb.rvf.lock
 SECURITY_AUDIT.md
