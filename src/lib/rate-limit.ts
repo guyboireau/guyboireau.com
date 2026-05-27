@@ -1,10 +1,27 @@
-// Rate limiting in-memory — fonctionne uniquement sur instance unique. Pour production multi-instance, migrer vers Upstash KV (@upstash/ratelimit).
-
+/**
+ * Rate limiting in-memory par IP.
+ *
+ * ATTENTION — Limitation critique sur Vercel / serverless :
+ * Chaque requête peut s'exécuter sur une instance différente. Le Map
+ * en mémoire est donc réinitialisé à chaque cold start et ne partage
+ * pas l'état entre les instances. Ce rate limiter ne protège réellement
+ * que contre les abus sur une même instance (déploiement mono-instance
+ * ou warm container).
+ *
+ * Pour une protection robuste en production multi-instance, migrer vers :
+ * - Upstash KV + @upstash/ratelimit (recommandé sur Vercel)
+ * - Redis + ioredis / node-rate-limiter-flexible
+ * - Cloudflare Workers KV si edge
+ */
 type RateLimitEntry = {
   count: number;
   resetAt: number;
 };
 
+/**
+ * Crée un rate limiter in-memory simple (fenêtre fixe).
+ * Adapté aux déploiements mono-instance ; inefficace sur Vercel serverless.
+ */
 export function createRateLimiter(
   limit: number,
   windowMs: number
