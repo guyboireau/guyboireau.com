@@ -11,7 +11,8 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 | Technologie | Version |
 |-------------|---------|
-| Astro | 5.x |
+| Astro | 6.x |
+| @astrojs/vercel | 10.x |
 | React | 19.x |
 | Tailwind CSS | 4.x |
 | TypeScript | strict |
@@ -21,11 +22,12 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 ## Fonctionnalités
 
-- **Chatbot IA** — Assistant conversationnel propulsé par Claude 3.5 Haiku via streaming SSE
+- **Chatbot IA** — Assistant conversationnel propulsé par Claude via streaming SSE
 - **Formulaire de contact** — Validation Zod, persistance Supabase et envoi d'email via Resend
 - **SEO avancé** — JSON-LD (Person / LocalBusiness), sitemap auto-généré, balises Open Graph, métadonnées géographiques
 - **Animations CSS** — Animations légères avec prise en charge de `prefers-reduced-motion`
 - **Analytics** — Vercel Analytics
+- **Sécurité renforcée** — Rate limiting sur `/api/chat` et `/api/contact`, headers HTTP via `vercel.json`, client Supabase serveur dédié (`@supabase/supabase-js` SSR), overrides CVE (`devalue`, `fast-uri`)
 
 ---
 
@@ -47,8 +49,8 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 | Route | Méthode | Description |
 |-------|---------|-------------|
-| `/api/chat` | `POST` | Streaming SSE vers Claude 3.5 Haiku avec rate limiting |
-| `/api/contact` | `POST` | Validation Zod, insertion Supabase, envoi Resend avec rate limiting |
+| `/api/chat` | `POST` | Streaming SSE vers Claude avec rate limiting (IP + User-Agent) |
+| `/api/contact` | `POST` | Validation Zod, insertion Supabase (client serveur SSR), envoi Resend avec rate limiting |
 
 ---
 
