@@ -11,7 +11,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 | Technologie | Version |
 |-------------|---------|
-| Astro | 5.x |
+| Astro | 6.x |
 | React | 19.x |
 | Tailwind CSS | 4.x |
 | TypeScript | strict |
@@ -21,7 +21,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 ## Fonctionnalités
 
-- **Chatbot IA** — Assistant conversationnel propulsé par Claude 3.5 Haiku via streaming SSE
+- **Chatbot IA** — Assistant conversationnel propulsé par Claude Haiku via streaming SSE
 - **Formulaire de contact** — Validation Zod, persistance Supabase et envoi d'email via Resend
 - **SEO avancé** — JSON-LD (Person / LocalBusiness), sitemap auto-généré, balises Open Graph, métadonnées géographiques
 - **Animations CSS** — Animations légères avec prise en charge de `prefers-reduced-motion`
@@ -47,8 +47,8 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 | Route | Méthode | Description |
 |-------|---------|-------------|
-| `/api/chat` | `POST` | Streaming SSE vers Claude 3.5 Haiku avec rate limiting |
-| `/api/contact` | `POST` | Validation Zod, insertion Supabase, envoi Resend avec rate limiting |
+| `/api/chat` | `POST` | Streaming SSE vers Claude Haiku avec rate limiting renforcé (IP + user-agent), Supabase server client |
+| `/api/contact` | `POST` | Validation Zod, insertion Supabase, envoi Resend avec rate limiting, Supabase server client pour persistance sécurisée |
 
 ---
 
