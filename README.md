@@ -11,7 +11,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 | Technologie | Version |
 |-------------|---------|
-| Astro | 5.x |
+| Astro | 6.x |
 | React | 19.x |
 | Tailwind CSS | 4.x |
 | TypeScript | strict |
@@ -47,8 +47,12 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 | Route | Méthode | Description |
 |-------|---------|-------------|
-| `/api/chat` | `POST` | Streaming SSE vers Claude 3.5 Haiku avec rate limiting |
-| `/api/contact` | `POST` | Validation Zod, insertion Supabase, envoi Resend avec rate limiting |
+| `/api/chat` | `POST` | Streaming SSE vers Claude 3.5 Haiku avec rate limiting (5 req/min par IP) |
+| `/api/contact` | `POST` | Validation Zod, insertion Supabase, envoi Resend avec rate limiting (3 req/heure par IP) |
+
+### Sécurité des API
+
+Les deux endpoints utilisent un rate limiter en mémoire (Map côté serveur Astro) avec fenêtres glissantes indépendantes. Le client Supabase server (`supabase/server.ts`) est utilisé côté API pour bénéficier de la session SSR et des Row Level Security policies.
 
 ---
 
@@ -62,6 +66,17 @@ npm run check    # Vérification TypeScript (astro check)
 npm run lint     # Lint ESLint + type check
 npm run test     # Tests unitaires avec Vitest
 ```
+
+---
+
+## Supabase
+
+Le projet utilise deux clients Supabase :
+
+| Client | Fichier | Usage |
+|--------|---------|-------|
+| Browser | `src/lib/supabase/client.ts` | Composants React (authentification) |
+| Server | `src/lib/supabase/server.ts` | Endpoints API (SSR, cookies de session) |
 
 ---
 
