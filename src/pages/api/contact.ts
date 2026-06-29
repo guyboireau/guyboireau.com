@@ -51,8 +51,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     // Sauvegarde Supabase
     const supabase = getSupabaseServer()
     if (supabase) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: dbError } = await (supabase as any).from('portfolio_contacts').insert({
+      const { error: dbError } = await supabase.from('portfolio_contacts').insert({
         name,
         email,
         message: `[${project_type || 'Non précisé'}] ${message}`,

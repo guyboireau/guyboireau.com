@@ -93,8 +93,7 @@ export async function saveContactMessage(
     if (!supabase) {
       return { error: "Supabase client not initialized" };
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from("contacts")
       .insert({
         name: input.name,

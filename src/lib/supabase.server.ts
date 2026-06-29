@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
+import type { Database } from '@/types/database'
 
-let _client: ReturnType<typeof createClient> | null = null
+let _client: ReturnType<typeof createClient<Database>> | null = null
 
 /**
  * Client Supabase pour le serveur uniquement.
@@ -12,6 +13,6 @@ export function getSupabaseServer() {
   const url = process.env.PUBLIC_SUPABASE_URL
   const key = process.env.PUBLIC_SUPABASE_ANON_KEY
   if (!url || !key) return null
-  _client = createClient(url, key)
+  _client = createClient<Database>(url, key)
   return _client
 }
