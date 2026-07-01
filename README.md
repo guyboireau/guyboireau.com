@@ -98,7 +98,7 @@ Créer un fichier `.env` à la racine (voir `.env.example`) :
 Le workflow GitHub Actions (`.github/workflows/ci.yml`) s'exécute à chaque push / PR sur `main` :
 
 1. Checkout du code
-2. Setup Node.js 20 avec cache `npm`
+2. Setup Node.js 22 avec cache `npm`
 3. Cache du build Astro (`.astro`, `.vite`)
 4. Installation des dépendances (`npm ci`)
 5. **Lint** (`npm run lint`)
