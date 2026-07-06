@@ -14,14 +14,15 @@ const PROJECT_TYPES: Array<{ value: string; label: string }> = [
 
 interface Props {
   defaultType?: ContactFormData['project_type']
+  defaultMessage?: string
 }
 
-export default function ContactForm({ defaultType = '' }: Props) {
+export default function ContactForm({ defaultType = '', defaultMessage = '' }: Props) {
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
     project_type: defaultType,
-    message: '',
+    message: defaultMessage,
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null)

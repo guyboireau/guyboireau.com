@@ -7,6 +7,11 @@ import ContactForm from '../components/ContactForm'
 const title = 'Contact | Guy Boireau — Développeur Web Freelance Bordeaux'
 const description =
   'Contactez Guy Boireau pour votre projet web, application mobile ou dépannage informatique. Réponse sous 24h. Premier échange gratuit.'
+
+const forfaitNom = Astro.url.searchParams.get('nom')
+const defaultMessage = forfaitNom
+  ? `Bonjour, je suis intéressé par le forfait « ${forfaitNom} ».`
+  : ''
 ---
 
 <BaseLayout {title} {description}>
@@ -22,7 +27,7 @@ const description =
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <!-- Form (React island) -->
           <div class="reveal-fade-up">
-            <ContactForm client:load />
+            <ContactForm client:load defaultMessage={defaultMessage} />
           </div>
 
           <!-- Contact info -->
