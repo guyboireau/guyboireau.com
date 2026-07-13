@@ -10,76 +10,85 @@ interface PricingTier {
   id: string;
   name: string;
   price: number;
+  currency: string;
   description: string;
   features: PricingFeature[];
   highlighted?: boolean;
+  highlighted_label?: string;
   ctaLabel: string;
 }
 
-const supabase = getSupabase();
+interface PricingGridProps {
+  /** Passer les tiers pré-chargés côté serveur pour éviter le fetch client-side. */
+  initialTiers?: PricingTier[];
+}
 
-export default function PricingGrid(): React.JSX.Element {
-  const [tiers, setTiers] = useState<PricingTier[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+const formatPrice = (price: number, currency: string) =>
+  new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: currency || 'EUR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(price);
+
+async function fetchTiers(): Promise<PricingTier[]> {
+  const supabase = getSupabase();
+  if (!supabase) throw new Error('Supabase non configuré');
+
+  const { data, error } = await supabase
+    .from('pricing_tiers')
+    .select('*')
+    .order('price', { ascending: true });
+
+  if (error) throw error;
+
+  return (data ?? []).map((raw: unknown): PricingTier => {
+    const item = raw as Record<string, unknown>;
+    return {
+      id: String(item.id ?? ''),
+      name: String(item.name ?? ''),
+      price: Number(item.price ?? 0),
+      currency: String(item.currency ?? 'EUR'),
+      description: String(item.description ?? ''),
+      features: Array.isArray(item.features)
+        ? item.features.map((f: unknown): PricingFeature => {
+            const record =
+              typeof f === 'object' && f !== null
+                ? (f as Record<string, unknown>)
+                : {};
+            return {
+              name: String(record.name ?? ''),
+              included: Boolean(record.included),
+            };
+          })
+        : [],
+      highlighted: Boolean(item.highlighted),
+      highlighted_label: item.highlighted_label ? String(item.highlighted_label) : undefined,
+      ctaLabel: String(item.cta_label ?? 'Choisir'),
+    };
+  });
+}
+
+export default function PricingGrid({ initialTiers }: PricingGridProps): React.JSX.Element {
+  const [tiers, setTiers] = useState<PricingTier[]>(initialTiers ?? []);
+  const [loading, setLoading] = useState<boolean>(!initialTiers);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchPricing() {
-      try {
-        setLoading(true);
-        setError(null);
+    if (initialTiers) return;
 
-        if (!supabase) {
-          throw new Error('Supabase non configuré');
-        }
+    let cancelled = false;
+    setLoading(true);
+    fetchTiers()
+      .then((data) => { if (!cancelled) setTiers(data); })
+      .catch((err) => {
+        if (!cancelled)
+          setError(err instanceof Error ? err.message : 'Erreur lors du chargement des tarifs');
+      })
+      .finally(() => { if (!cancelled) setLoading(false); });
 
-        const { data, error: supabaseError } = await supabase
-          .from('pricing_tiers')
-          .select('*')
-          .order('price', { ascending: true });
-
-        if (supabaseError) {
-          throw supabaseError;
-        }
-
-        const validated = (data ?? []).map((raw: unknown): PricingTier => {
-          const item = raw as Record<string, unknown>;
-          return {
-            id: String(item.id ?? ''),
-            name: String(item.name ?? ''),
-            price: Number(item.price ?? 0),
-            description: String(item.description ?? ''),
-            features: Array.isArray(item.features)
-              ? item.features.map((f: unknown): PricingFeature => {
-                  const record =
-                    typeof f === 'object' && f !== null
-                      ? (f as Record<string, unknown>)
-                      : {};
-                  return {
-                    name: String(record.name ?? ''),
-                    included: Boolean(record.included),
-                  };
-                })
-              : [],
-            highlighted: Boolean(item.highlighted),
-            ctaLabel: String(item.cta_label ?? 'Choisir'),
-          };
-        });
-
-        setTiers(validated);
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : 'Erreur lors du chargement des tarifs'
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchPricing();
-  }, []);
+    return () => { cancelled = true; };
+  }, [initialTiers]);
 
   if (loading) {
     return (
@@ -125,7 +134,7 @@ export default function PricingGrid(): React.JSX.Element {
           >
             {tier.highlighted && (
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-indigo-600 px-3 py-1 text-xs font-medium text-white">
-                Recommandé
+                {tier.highlighted_label ?? 'Recommandé'}
               </span>
             )}
 
@@ -134,7 +143,7 @@ export default function PricingGrid(): React.JSX.Element {
 
             <p className="mt-4 flex items-baseline">
               <span className="text-4xl font-bold tracking-tight text-gray-900">
-                {tier.price.toFixed(2)} €
+                {formatPrice(tier.price, tier.currency)}
               </span>
               <span className="ml-1 text-sm font-semibold text-gray-600">
                 / projet
@@ -166,74 +175,19 @@ export default function PricingGrid(): React.JSX.Element {
               ))}
             </ul>
 
-            <button
-              type="button"
-              className={`mt-8 w-full rounded-lg px-4 py-3 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+            <a
+              href={`/contact?forfait=${encodeURIComponent(tier.id)}&subject=${encodeURIComponent(tier.name)}`}
+              className={`mt-8 block w-full rounded-lg px-4 py-3 text-center text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
                 tier.highlighted
                   ? 'bg-indigo-600 text-white hover:bg-indigo-700'
                   : 'bg-gray-900 text-white hover:bg-gray-800'
               }`}
-              onClick={() =>
-                (window.location.href = `mailto:contact@guyboireau.com?subject=Demande%20${encodeURIComponent(
-                  tier.name
-                )}`)
-              }
             >
               {tier.ctaLabel}
-            </button>
+            </a>
           </article>
         ))}
       </div>
-
-      {/* 
-        FIXME: La récupération des tarifs est effectuée côté client avec useEffect et useState.
-        Pourquoi le fix est nécessaire: Cela provoque un Cumulative Layout Shift (CLS) au hydratation,
-        dégrade le Largest Contentful Paint (LCP) et empêche l'indexation SEO des prix par les moteurs de recherche.
-        Comportement attendu: Transformer ce composant en Server Component (Next.js App Router) ou utiliser
-        getStaticProps avec revalidation ISR (Pages Router) pour prérendre la grille côté serveur.
-        Dépendances: Nécessite de déplacer la logique de fetch dans une async function côté serveur
-        et d'utiliser le client Supabase serveur (supabase-server) pour éviter d'exposer la clé anon au bundle client.
-        Contrainte technique: Si des tarifs doivent être personnalisés par utilisateur connecté,
-        il faudra alors utiliser une stratégie hybride (skeleton côté serveur + hydration côté client).
-      */}
-
-      {/* 
-        FIXME: Le formatage des prix utilise toFixed(2) avec une devise hardcodée en EUR.
-        Pourquoi le fix est nécessaire: Le site pourrait accueillir des clients internationaux
-        (Canada, Belgique, Suisse) et le créateur pourrait facturer en USD ou CAD selon la localisation.
-        Comportement attendu: Utiliser Intl.NumberFormat avec la locale du navigateur ou une préférence
-        utilisateur stockée en base, et récupérer la devise depuis la colonne 'currency' de la table Supabase.
-        Dépendances: Ajouter la colonne 'currency' (code ISO 4217, ex: 'EUR', 'CAD') dans la table
-        'pricing_tiers' et une stratégie de fallback sur 'EUR' pour les entrées historiques.
-        Contrainte technique: Intl.NumberFormat est natif mais nécessite des tests sur Safari < 14
-        si le projet doit supporter des navigateurs legacy.
-      */}
-
-      {/* 
-        FIXME: L'action du bouton CTA utilise un mailto simple sans contexte du forfait ni tracking.
-        Pourquoi le fix est nécessaire: Le mailto perd le contexte de sélection (l'utilisateur doit
-        répéter son choix dans l'email), ne permet pas de mesurer le taux de conversion, et n'offre
-        pas d'expérience de réservation fluide.
-        Comportement attendu: Rediriger vers /contact?forfait=tier.id avec préremplissage du formulaire,
-        ou ouvrir un widget Calendly/Cal.com avec prefill sur le forfait sélectionné.
-        Dépendances: Variable d'environnement NEXT_PUBLIC_CALENDLY_URL ou équivalent, et mise à jour
-        du composant ContactForm pour consommer les paramètres d'URL.
-        Contrainte technique: Si utilisation de Calendly, vérifier que le prefill supporte les caractères
-        spéciaux (accents) via encodeURIComponent et que le plan Calendly permet l'UTM tracking.
-      */}
-
-      {/* 
-        FIXME: La mise en évidence du forfait "Recommandé" repose sur un booléen 'highlighted' statique
-        en base sans gestion de campagne temporelle.
-        Pourquoi le fix est nécessaire: Le besoin métier évolue vers des campagnes saisonnières
-        (ex: "Offre été", "Black Friday") où le forfait mis en avant change selon la période.
-        Comportement attendu: Créer une table 'pricing_campaigns' liée à 'pricing_tiers' avec des
-        dates de validité (start_at, end_at) et un libellé personnalisable (ex: "Populaire", "-20%").
-        Dépendances: Migration Supabase pour ajouter la table 'pricing_campaigns' avec clé étrangère
-        et politiques RLS. Jointure Supabase supplémentaire dans la requête de fetch.
-        Contrainte technique: Gestion des timezones (UTC côté DB vs locale côté client) pour déterminer
-        la campagne active. Utiliser la date serveur pour le prérendu afin d'éviter les décalages d'hydratation.
-      */}
     </section>
   );
 }
