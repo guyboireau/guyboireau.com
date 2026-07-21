@@ -90,8 +90,8 @@ const featuredProjects = [
   {
     title: 'Arnault Janvier — Maître Verrier',
     subtitle: 'Site vitrine multilingue FR/EN/ES pour artisan vitrailliste avec back-office CMS',
-    techs: ['Next.js 15', 'TypeScript', 'Supabase', 'next-intl'],
-    link: 'https://arnault-janvier.fr',
+    techs: ['Next.js 16', 'TypeScript', 'Supabase', 'next-intl'],
+    link: 'https://www.arnault-janvier-vitrail.fr',
     status: 'En production',
     images: null,
   },
@@ -102,14 +102,6 @@ const featuredProjects = [
     link: null,
     status: 'En phase de debug',
     images: { desktop: '/assets/niido-admin.png', mobile: '/assets/niido-mobile.png' },
-  },
-  {
-    title: 'Les Cours de Clara',
-    subtitle: 'Plateforme de réservation de cours FLE avec paiement Stripe',
-    techs: ['React', 'NestJS', 'PostgreSQL', 'Stripe'],
-    link: 'https://claraaltounian.com/',
-    status: 'En production',
-    images: null,
   },
 ]
 ---
@@ -370,7 +362,7 @@ const featuredProjects = [
           <p class="section-subtitle">Des clients, pas des témoignages de catalogue</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           <div class="glass-card p-8 stagger-item border border-primary-500/20">
             <div class="text-primary-400 text-4xl mb-4 leading-none">"</div>
             <p class="text-slate-600 leading-relaxed mb-6">
@@ -398,23 +390,7 @@ const featuredProjects = [
               </div>
               <div>
                 <p class="font-semibold text-slate-800 text-sm">Arnault Janvier</p>
-                <p class="text-slate-500 text-xs">Maître Verrier — arnault-janvier.fr</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="glass-card p-8 stagger-item border border-primary-500/20">
-            <div class="text-primary-400 text-4xl mb-4 leading-none">"</div>
-            <p class="text-slate-600 leading-relaxed mb-6">
-              Avant, je passais du temps à gérer mon agenda par email. Maintenant mes étudiants réservent et paient en ligne directement. Le site s'est rentabilisé en quelques semaines.
-            </p>
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-500 font-bold shrink-0">
-                CA
-              </div>
-              <div>
-                <p class="font-semibold text-slate-800 text-sm">Clara Altounian</p>
-                <p class="text-slate-500 text-xs">Cours de français FLE — claraaltounian.com</p>
+                <p class="text-slate-500 text-xs">Maître Verrier — arnault-janvier-vitrail.fr</p>
               </div>
             </div>
           </div>

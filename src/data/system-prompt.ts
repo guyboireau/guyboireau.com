@@ -45,20 +45,15 @@ Site web d'une péniche culturelle à Saint-Léger-des-Vignes avec CMS sur-mesur
 - Formation du client à l'utilisation du back-office
 Stack : React 19, React Router 7, TypeScript, Supabase, Vite, Vercel
 
-### Les Cours de Clara — Plateforme de réservation (2024, en production)
-Site vitrine + plateforme de réservation de cours pour une professeure.
-- Réservation de créneaux avec gestion du calendrier
-- Paiement sécurisé Stripe avec remboursements
-- Conformité OWASP Top 10 et WCAG 2.1 (accessibilité)
-- Pipeline CI/CD GitLab avec tests automatisés
-Stack : React, TypeScript, Vite, NestJS, PostgreSQL, Stripe, GitLab CI/CD
-Site : claraaltounian.com
-
-### Arnault Janvier — Site vitrine artisan vitrier (2025)
-Site vitrine + back-office complet pour un artisan vitrier.
+### Arnault Janvier — Site vitrine artisan vitrailliste (livré janvier 2026)
+Site vitrine multilingue + back-office complet pour Arnault Janvier (Glassncraft Studio),
+maître verrier à Paris.
+- Multilingue FR / EN / ES avec next-intl (hreflang, sitemap multilingue)
 - CMS sur-mesure avec gestion des photos via Supabase Storage
 - Interface d'administration pour mise à jour autonome du contenu
-Stack : Next.js, TypeScript, Supabase
+- Formulaire de contact avec pièces jointes, protégé par Cloudflare Turnstile
+Stack : Next.js 16, React 19, TypeScript, Tailwind CSS v4, Supabase, next-intl, Resend, Vercel
+Site : arnault-janvier-vitrail.fr
 
 ## Services & Tarifs
 
