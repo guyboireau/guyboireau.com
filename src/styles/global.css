@@ -1,11 +1,38 @@
 @import "tailwindcss";
 
+/* ===== POLICE DE MARQUE — Cormorant Garamond (auto-hébergée, variable) ===== */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('/fonts/cormorant-garamond.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ===== JETONS DE MARQUE « Atelier » ===== */
+:root {
+  --gb-terracotta: #a0493b;   /* encre du sceau — couleur primaire */
+  --gb-terracotta-soft: #b9604b;
+  --gb-cream: #f4ecdd;        /* ivoire / crème */
+  --gb-cream-2: #faf5ec;
+  --gb-forest: #25332b;       /* vert forêt — fonds sombres */
+  --gb-ink: #2c2723;          /* brun encre — texte */
+  --gb-serif: 'Cormorant Garamond', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+}
+
 @theme {
-  --color-primary-300: #fdba74;
-  --color-primary-400: #fb923c;
-  --color-primary-500: #ff6b35;
-  --color-primary-600: #ea580c;
-  --color-primary-700: #c2410c;
+  /* Rampe primaire — terracotta du sceau gb */
+  --color-primary-50: #faf3ef;
+  --color-primary-100: #f4e2da;
+  --color-primary-200: #e7c3b6;
+  --color-primary-300: #d69e8c;
+  --color-primary-400: #c17960;
+  --color-primary-500: #a0493b;
+  --color-primary-600: #8a3d31;
+  --color-primary-700: #6f3026;
+
+  /* Police display exposée en utilitaire `font-display` */
+  --font-display: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
 }
 
 @layer base {
@@ -40,7 +67,8 @@
   }
 
   .section-title {
-    @apply text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-500 bg-clip-text text-transparent;
+    font-family: var(--gb-serif);
+    @apply text-5xl md:text-6xl font-semibold mb-4 bg-gradient-to-r from-[#8a3d31] to-[#2c2723] bg-clip-text text-transparent;
   }
 
   .section-subtitle {
@@ -48,7 +76,7 @@
   }
 
   .animated-gradient {
-    background: linear-gradient(135deg, #fff7f0 0%, #ffffff 50%, #fff7f0 100%);
+    background: linear-gradient(135deg, #f6efe2 0%, #ffffff 50%, #f6efe2 100%);
     background-size: 200% 200%;
     animation: gradientShift 15s ease infinite;
   }
@@ -60,7 +88,7 @@
   }
 
   .glow-effect {
-    text-shadow: 0 0 30px rgba(255, 107, 53, 0.25);
+    text-shadow: 0 0 30px rgba(160, 73, 59, 0.22);
   }
 }
 
@@ -146,7 +174,7 @@
   position: absolute;
   width: 4px;
   height: 4px;
-  background: rgba(255, 107, 53, 0.35);
+  background: rgba(160, 73, 59, 0.32);
   border-radius: 50%;
   pointer-events: none;
   animation: particleFloat linear infinite;
@@ -155,8 +183,8 @@
 /* ===== PULSE GLOW ===== */
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 53, 0.2); }
-  50% { box-shadow: 0 0 40px rgba(255, 107, 53, 0.4); }
+  0%, 100% { box-shadow: 0 0 20px rgba(160, 73, 59, 0.18); }
+  50% { box-shadow: 0 0 40px rgba(160, 73, 59, 0.38); }
 }
 .pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
 

@@ -14,9 +14,18 @@ const navLinks = [
 <header id="site-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
-      <a href="/" class="flex items-center gap-3">
-        <img src="/assets/logo.svg" alt="Guy Boireau" class="h-10 w-auto" />
-        <span class="text-xl font-bold text-gradient hidden sm:inline">Guy Boireau</span>
+      <a href="/" class="flex items-center gap-2.5 group" aria-label="Guy Boireau — Accueil">
+        <img
+          src="/assets/logo-seal.svg"
+          alt="Guy Boireau — Agence Web · Bordeaux"
+          width="44"
+          height="44"
+          class="h-11 w-11 transition-transform duration-500 ease-out group-hover:rotate-[24deg]"
+        />
+        <span class="hidden sm:flex flex-col leading-none">
+          <span class="font-display text-2xl font-semibold text-primary-600">Guy Boireau</span>
+          <span class="text-[10px] tracking-[0.22em] uppercase text-slate-500 mt-1">Agence Web · Bordeaux</span>
+        </span>
       </a>
 
       <!-- Desktop nav -->

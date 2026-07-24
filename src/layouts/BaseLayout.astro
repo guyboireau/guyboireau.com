@@ -14,7 +14,7 @@ const {
   title,
   description,
   canonical = Astro.url.href,
-  ogImage = '/og-image.svg',
+  ogImage = '/og-image.png',
   ogType = 'website',
   keywords = 'développeur web bordeaux, freelance bordeaux, création site web bordeaux, développeur web freelance, react bordeaux, typescript bordeaux, site web artisan bordeaux',
 } = Astro.props
@@ -114,7 +114,7 @@ const jsonLd = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Guy Boireau" />
-    <meta name="theme-color" content="#ff6b35" />
+    <meta name="theme-color" content="#a0493b" />
     <meta name="keywords" content={keywords} />
     <!-- Geo tags for local SEO -->
     <meta name="geo.region" content="FR-33" />
@@ -143,9 +143,21 @@ const jsonLd = [
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageAbsolute} />
 
-    <!-- Favicons -->
+    <!-- Favicons — sceau gb -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="msapplication-TileColor" content="#a0493b" />
+
+    <!-- Police de marque (préchargement) -->
+    <link
+      rel="preload"
+      href="/fonts/cormorant-garamond.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
     <!-- Sitemap -->
     <link rel="sitemap" href="/sitemap-index.xml" />
