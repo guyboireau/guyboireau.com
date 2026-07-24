@@ -77,7 +77,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       subject: `[Portfolio] Nouveau message de ${e(name)} — ${e(projectLabel)}`,
       html: `
         <div style="font-family: sans-serif; max-width: 560px; margin: 0 auto; color: #1e293b;">
-          <div style="background: linear-gradient(135deg, #ff6b35, #ea580c); padding: 24px 32px; border-radius: 12px 12px 0 0;">
+          <div style="background: linear-gradient(135deg, #a0493b, #8a3d31); padding: 24px 32px; border-radius: 12px 12px 0 0;">
             <h1 style="margin: 0; color: white; font-size: 20px;">Nouveau message sur ton portfolio</h1>
           </div>
           <div style="background: #f8fafc; padding: 32px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 12px 12px;">
@@ -88,7 +88,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #64748b; font-size: 13px;">Email</td>
-                <td style="padding: 8px 0;"><a href="mailto:${e(email)}" style="color: #ff6b35;">${e(email)}</a></td>
+                <td style="padding: 8px 0;"><a href="mailto:${e(email)}" style="color: #a0493b;">${e(email)}</a></td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #64748b; font-size: 13px;">Projet</td>
