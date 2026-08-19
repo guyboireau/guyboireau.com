@@ -1,4 +1,6 @@
 ---
+import HeroGrid from './HeroGrid.astro'
+
 // Quinze particules. Leurs positions et rythmes sont dans le bloc <style> en
 // bas du composant (règles :nth-child), pas en attribut style : la CSP du
 // site n'autorise aucun style en ligne, et un <style> de composant reçoit
@@ -7,6 +9,9 @@ const particles = Array.from({ length: 15 }, (_, i) => i)
 ---
 
 <section id="hero" class="min-h-screen animated-gradient flex items-center justify-center relative overflow-hidden py-20 px-4 sm:px-6 lg:px-8">
+  <!-- Maillage de points — plan de fond, chargé seulement sur desktop -->
+  <HeroGrid />
+
   <!-- Background blobs — plan lointain -->
   <div data-parallax="0.18" class="absolute inset-0 overflow-hidden pointer-events-none">
     <div class="absolute w-96 h-96 bg-primary-500/10 rounded-full blur-3xl -top-48 -left-48 animate-float"></div>
