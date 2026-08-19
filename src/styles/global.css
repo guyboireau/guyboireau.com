@@ -56,12 +56,65 @@
     @apply bg-white border border-slate-200 rounded-2xl shadow-sm;
   }
 
+  /* Cartes cliquables uniquement — un bloc de texte ne se soulève pas */
+  .lift {
+    transition:
+      transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.26s ease,
+      border-color 0.26s ease;
+    will-change: transform;
+  }
+
+  .lift:hover {
+    transform: translateY(-5px);
+    @apply shadow-lg shadow-slate-900/5;
+  }
+
+  /* Souligné qui se dessine de la gauche vers la droite */
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    padding-bottom: 2px;
+  }
+
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+
   .btn-primary {
-    @apply px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium rounded-lg hover:from-primary-600 hover:to-primary-700 transition-all duration-300 shadow-lg shadow-primary-500/20 hover:shadow-primary-500/40 hover:scale-105;
+    @apply px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium rounded-lg hover:from-primary-600 hover:to-primary-700 shadow-lg shadow-primary-500/20 hover:shadow-primary-500/40;
+    transition:
+      transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.24s ease,
+      background-color 0.24s ease;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
   }
 
   .btn-secondary {
-    @apply px-6 py-3 border-2 border-primary-500 text-primary-600 font-medium rounded-lg hover:bg-primary-500/10 transition-all duration-300;
+    @apply px-6 py-3 border-2 border-primary-500 text-primary-600 font-medium rounded-lg hover:bg-primary-500/10;
+    transition:
+      transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.24s ease,
+      border-color 0.24s ease;
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary:active {
+    transform: translateY(0);
   }
 
   .section {
@@ -241,4 +294,14 @@ html.lenis body {
   .particle { display: none !important; }
   .trust-marquee { animation: none !important; }
   html.lenis { scroll-behavior: auto; }
+
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .lift:hover {
+    transform: none !important;
+  }
+
+  .link-underline {
+    transition: none !important;
+  }
 }
