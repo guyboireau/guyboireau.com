@@ -1,0 +1,345 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+
+const title = 'Facturation électronique 2026-2027 — mise en conformité | Guy Boireau, Bordeaux'
+const description =
+  "Réception des factures électroniques obligatoire au 1er septembre 2026, émission au 1er septembre 2027 pour les PME, TPE et micro-entreprises. Diagnostic de conformité, connecteur vers plateforme agréée, accompagnement complet."
+const keywords =
+  'facturation électronique 2026, obligation facture électronique PME, plateforme agréée facturation, connecteur facturation électronique, mise en conformité facture électronique bordeaux'
+
+const calendrier = [
+  {
+    date: '1er septembre 2026',
+    qui: 'Toutes les entreprises assujetties à la TVA',
+    quoi: 'Obligation de pouvoir recevoir des factures électroniques',
+    detail:
+      "Sans exception de taille. Dès cette date, un fournisseur peut vous adresser ses factures au format électronique et vous devez être en mesure de les recevoir via une plateforme agréée.",
+    imminent: true,
+  },
+  {
+    date: '1er septembre 2026',
+    qui: 'Grandes entreprises et entreprises de taille intermédiaire',
+    quoi: "Obligation d'émettre au format électronique",
+    detail:
+      "Concrètement : si vous facturez une grande entreprise ou une ETI, votre client sera lui-même en flux électronique et vous demandera de suivre.",
+    imminent: false,
+  },
+  {
+    date: '1er septembre 2027',
+    qui: 'PME, TPE et micro-entreprises',
+    quoi: "Obligation d'émettre au format électronique",
+    detail:
+      "Vos factures devront partir dans un format structuré, transmises par une plateforme agréée. Le PDF envoyé par email ne sera plus une facture valide entre entreprises.",
+    imminent: false,
+  },
+]
+
+const implications = [
+  {
+    icon: '📥',
+    title: 'Recevoir',
+    desc: "Vos factures fournisseurs arriveront par une plateforme, plus par email. Il faut choisir cette plateforme, la raccorder à votre comptabilité et savoir où les factures atterrissent.",
+  },
+  {
+    icon: '📤',
+    title: 'Émettre',
+    desc: "Une facture électronique n'est pas un PDF : c'est un fichier structuré, lisible par une machine (Factur-X, UBL, CII). Votre outil de facturation doit savoir le produire.",
+  },
+  {
+    icon: '📊',
+    title: 'Transmettre les données',
+    desc: "En parallèle des factures entre entreprises, certaines opérations — ventes aux particuliers, opérations internationales, encaissements — donnent lieu à une transmission de données à l'administration.",
+  },
+  {
+    icon: '🔗',
+    title: "Raccorder l'existant",
+    desc: "C'est là que ça coince en pratique : entre votre outil de gestion actuel et la plateforme agréée, il manque presque toujours une pièce.",
+  },
+]
+
+const etapes = [
+  {
+    num: '01',
+    title: "Faire l'inventaire",
+    desc: "Combien de factures émises et reçues par mois, dans quel outil, sous quel format, avec quelle reprise manuelle derrière. C'est ce qui détermine tout le reste.",
+  },
+  {
+    num: '02',
+    title: 'Choisir une plateforme',
+    desc: "Le marché compte plusieurs dizaines de plateformes agréées. Le bon choix dépend de votre volume, de votre logiciel de gestion et de votre secteur — pas du classement du moment.",
+  },
+  {
+    num: '03',
+    title: 'Raccorder votre outil',
+    desc: "Si votre logiciel propose un connecteur natif vers la plateforme retenue, tant mieux. Sinon, il faut le construire : c'est le cas le plus fréquent hors des grands éditeurs.",
+  },
+  {
+    num: '04',
+    title: "Tester avant l'échéance",
+    desc: "Émission, réception, rejets, cas particuliers (avoirs, acomptes, autoliquidation). Un raccordement testé en août 2027 est un raccordement testé trop tard.",
+  },
+]
+
+const offres = [
+  {
+    title: 'Diagnostic de conformité',
+    price: '900 €',
+    duration: 'Livré sous 1 semaine',
+    desc: "Où vous en êtes, ce qui manque, quelle plateforme retient votre situation.",
+    items: [
+      'Inventaire de vos flux de facturation entrants et sortants',
+      'Compatibilité de votre outil de gestion actuel',
+      'Comparatif argumenté de 3 plateformes agréées adaptées à votre cas',
+      'Plan de mise en conformité daté, avec budget',
+      'Document écrit remis en fin de mission',
+    ],
+    highlighted: false,
+  },
+  {
+    title: 'Connecteur',
+    price: '3 500 – 8 000 €',
+    duration: 'Selon le nombre de flux',
+    desc: "Le pont entre votre outil de gestion et la plateforme agréée.",
+    items: [
+      'Développement du connecteur émission et réception',
+      'Formats structurés : Factur-X, UBL ou CII selon la plateforme',
+      'Reprise des cas particuliers : avoirs, acomptes, autoliquidation',
+      'Journal des rejets et des relances',
+      'Recette avec vos factures réelles avant mise en production',
+    ],
+    highlighted: true,
+  },
+  {
+    title: 'Accompagnement complet',
+    price: '6 000 – 12 000 €',
+    duration: 'Selon le périmètre',
+    desc: "Du diagnostic à la première clôture, sans intermédiaire supplémentaire.",
+    items: [
+      'Diagnostic inclus',
+      'Sélection et contractualisation de la plateforme',
+      'Intégration technique complète',
+      'Transfert de compétences à votre équipe administrative',
+      'Recette et accompagnement sur le premier mois de production',
+    ],
+    highlighted: false,
+  },
+]
+
+const faq = [
+  {
+    q: 'Suis-je concerné si je suis auto-entrepreneur ?',
+    a: "Oui. L'obligation de réception au 1er septembre 2026 concerne toutes les entreprises assujetties à la TVA, sans seuil de taille. L'obligation d'émettre arrive au 1er septembre 2027 pour les micro-entreprises comme pour les PME.",
+  },
+  {
+    q: 'Un PDF envoyé par email, ça ne suffit plus ?',
+    a: "Entre entreprises, non. Une facture électronique au sens de la réforme est un fichier structuré que la machine du destinataire peut lire sans ressaisie — un PDF classique n'en est pas une. Le format Factur-X est une exception utile : c'est un PDF lisible par un humain, avec les données structurées embarquées à l'intérieur.",
+  },
+  {
+    q: 'Ma plateforme peut-elle être choisie librement ?',
+    a: "Vous choisissez votre plateforme parmi celles agréées par l'administration, et votre fournisseur peut en avoir une autre : les plateformes s'échangent les factures entre elles. Le choix engage surtout votre quotidien — tarif, ergonomie, qualité du raccordement à votre outil de gestion.",
+  },
+  {
+    q: 'Mon logiciel de gestion annonce qu\'il sera compatible. Ai-je encore besoin de quelqu\'un ?',
+    a: "Parfois non, et je vous le dirai. Le diagnostic sert précisément à ça. Le connecteur devient nécessaire quand votre outil est ancien, spécifique à votre métier, développé en interne, ou quand la compatibilité annoncée ne couvre pas vos cas réels — avoirs, acomptes, refacturation.",
+  },
+  {
+    q: 'Combien de temps faut-il prévoir ?',
+    a: "Un diagnostic tient en une semaine. Un connecteur demande de trois à huit semaines selon le nombre de flux et la disponibilité de votre éditeur. L'échéance d'émission est en septembre 2027 : le moment confortable pour s'en occuper, c'est maintenant, pas au printemps 2027 quand tout le monde s'y mettra.",
+  },
+]
+---
+
+<BaseLayout {title} {description} {keywords}>
+  <script slot="jsonld" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  })} />
+  <Header />
+  <main>
+    <!-- Intro -->
+    <section class="section bg-slate-50 pt-32">
+      <div class="max-w-4xl mx-auto text-center reveal-fade-up">
+        <span class="inline-block px-4 py-1.5 bg-primary-500/10 text-primary-600 rounded-full text-sm font-semibold mb-4">
+          Échéance réglementaire
+        </span>
+        <h1 class="section-title">Facturation électronique : ce qui change</h1>
+        <p class="section-subtitle">
+          Réception obligatoire au 1er septembre 2026. Émission au 1er septembre 2027 pour les PME, TPE et micro-entreprises.
+        </p>
+        <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+          La réforme s'applique à toutes les entreprises assujetties à la TVA. Elle ne demande pas de changer de métier — seulement de raccorder votre facturation à une plateforme agréée, et de savoir produire un format structuré. Voici le calendrier, ce qu'il implique, et ce que je peux faire.
+        </p>
+      </div>
+    </section>
+
+    <!-- Calendrier -->
+    <section class="section bg-white">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <h2 class="section-title">Le calendrier légal</h2>
+          <p class="section-subtitle">Deux dates, trois obligations distinctes</p>
+        </div>
+
+        <div class="space-y-5">
+          {calendrier.map((etape) => (
+            <div class={`glass-card p-7 stagger-item ${etape.imminent ? 'border-2 border-primary-500/40' : ''}`}>
+              <div class="flex flex-col md:flex-row md:items-start gap-5">
+                <div class="shrink-0 md:w-52">
+                  <div class="text-xl font-bold text-primary-500">{etape.date}</div>
+                  <div class="text-slate-500 text-sm mt-1">{etape.qui}</div>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-slate-800 mb-2">{etape.quoi}</h3>
+                  <p class="text-slate-600 text-sm leading-relaxed">{etape.detail}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p class="text-slate-500 text-sm mt-6 text-center reveal-fade-up">
+          Calendrier fixé par la loi de finances. Les dates ont déjà été reportées par le passé — elles peuvent l'être encore, mais miser dessus n'est pas une stratégie.
+        </p>
+      </div>
+    </section>
+
+    <!-- Implications -->
+    <section class="section bg-slate-50">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <h2 class="section-title">Ce que ça implique</h2>
+          <p class="section-subtitle">Quatre sujets, dont un seul est vraiment technique</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {implications.map((item) => (
+            <div class="glass-card p-8 stagger-item">
+              <div class="text-3xl mb-4">{item.icon}</div>
+              <h3 class="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
+              <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Étapes -->
+    <section class="section bg-white">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <h2 class="section-title">Ce que vous devez faire</h2>
+          <p class="section-subtitle">Dans cet ordre, sans sauter la première étape</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {etapes.map((etape) => (
+            <div class="glass-card p-7 stagger-item relative overflow-hidden group">
+              <div class="text-6xl font-black text-primary-500/10 absolute -top-2 -right-2 leading-none select-none">
+                {etape.num}
+              </div>
+              <div class="relative z-10">
+                <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary-500/10 text-primary-500 font-bold text-sm mb-4">
+                  {etape.num}
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-3">{etape.title}</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">{etape.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Offres -->
+    <section class="section bg-slate-50">
+      <div class="max-w-6xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <h2 class="section-title">Trois niveaux d'accompagnement</h2>
+          <p class="section-subtitle">Vous n'avez pas forcément besoin du troisième</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {offres.map((offre) => (
+            <div class={`glass-card p-8 stagger-item flex flex-col ${offre.highlighted ? 'border-2 border-primary-500/70 shadow-lg shadow-primary-500/10 relative' : ''}`}>
+              {offre.highlighted && (
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold whitespace-nowrap">
+                  Le plus demandé
+                </div>
+              )}
+              <div class="mb-6">
+                <h3 class="text-xl font-bold text-slate-800 mb-2">{offre.title}</h3>
+                <div class="text-3xl font-bold text-gradient mb-1">{offre.price}</div>
+                <p class="text-slate-400 text-xs mb-3">{offre.duration}</p>
+                <p class="text-slate-500 text-sm">{offre.desc}</p>
+              </div>
+              <ul class="space-y-3 flex-grow mb-8">
+                {offre.items.map((item) => (
+                  <li class="flex items-start gap-2 text-slate-600 text-sm">
+                    <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+              <a href="/contact?subject=Facturation%20électronique" class={offre.highlighted ? 'btn-primary text-center block' : 'btn-secondary text-center block'}>
+                En parler
+              </a>
+            </div>
+          ))}
+        </div>
+
+        <p class="text-slate-500 text-sm mt-8 text-center reveal-fade-up max-w-2xl mx-auto">
+          Prix au forfait, annoncés avant de commencer. Le diagnostic est déduit du projet s'il est engagé dans les 3 mois.
+        </p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section bg-white">
+      <div class="max-w-3xl mx-auto">
+        <div class="reveal-fade-up">
+          <h2 class="section-title text-center">Questions fréquentes</h2>
+          <p class="section-subtitle text-center">Les cinq qui reviennent le plus</p>
+        </div>
+
+        <div class="space-y-4">
+          {faq.map((item) => (
+            <details class="glass-card p-6 group stagger-item cursor-pointer">
+              <summary class="text-slate-800 font-medium text-lg list-none flex items-center justify-between">
+                {item.q}
+                <span class="text-primary-400 ml-4 shrink-0 transition-transform group-open:rotate-180">▾</span>
+              </summary>
+              <p class="text-slate-500 mt-4 leading-relaxed">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section bg-slate-50">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="glass-card p-10 border-2 border-primary-500/30 reveal-scale">
+          <h2 class="text-3xl font-bold text-slate-800 mb-4">Commencez par le diagnostic</h2>
+          <p class="text-slate-600 text-lg mb-8 max-w-2xl mx-auto">
+            Une semaine, 900 €, un document écrit : ce que vous devez faire, avec quelle plateforme, pour quel budget. Si votre outil actuel suffit, le document le dira aussi.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/contact?subject=Diagnostic%20facturation%20électronique" class="btn-primary inline-block">
+              Demander un diagnostic
+            </a>
+            <a href="/services" class="btn-secondary inline-block">
+              Voir toutes les offres
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
