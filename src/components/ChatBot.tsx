@@ -63,7 +63,7 @@ export default function ChatBot() {
       </div>
 
       {/* Messages */}
-      <div ref={messagesRef} className="h-72 overflow-y-auto px-6 py-4 space-y-4 bg-slate-50/50">
+      <div ref={messagesRef} data-lenis-prevent className="h-72 overflow-y-auto px-6 py-4 space-y-4 bg-slate-50/50">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center gap-4">
             <p className="text-slate-500 text-sm">

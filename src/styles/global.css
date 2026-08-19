@@ -36,7 +36,9 @@
 }
 
 @layer base {
-  html {
+  /* Pas de `scroll-behavior: smooth` ici : Lenis pilote le défilement.
+     Le repli natif est réactivé plus bas quand Lenis ne tourne pas. */
+  html:not(.lenis) {
     scroll-behavior: smooth;
   }
 
@@ -205,6 +207,25 @@
   width: max-content;
 }
 
+/* ===== LENIS — DÉFILEMENT FLUIDE ===== */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 /* ===== REDUCED MOTION ===== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -219,4 +240,5 @@
   }
   .particle { display: none !important; }
   .trust-marquee { animation: none !important; }
+  html.lenis { scroll-behavior: auto; }
 }
