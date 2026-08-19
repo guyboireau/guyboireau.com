@@ -202,9 +202,11 @@ const featuredProjects = [
           <p class="section-subtitle text-center">Ce que j'ai livré pour mes clients</p>
         </div>
 
-        <div class="space-y-8">
-          {featuredProjects.map((project) => (
-            <div class="glass-card lift p-8 hover:border-primary-500/30 stagger-item">
+        <div id="projects-scroller" class="projects-scroller">
+          <div class="projects-viewport">
+            <div class="projects-track space-y-8">
+              {featuredProjects.map((project) => (
+                <div class="glass-card lift p-8 hover:border-primary-500/30 stagger-item">
               <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
                 <div>
                   <h3 class="text-2xl font-bold text-primary-400 mb-1">{project.title}</h3>
@@ -258,8 +260,10 @@ const featuredProjects = [
                   </a>
                 )}
               </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
         <div class="text-center mt-10 reveal-fade-up">
@@ -482,3 +486,87 @@ const featuredProjects = [
   </main>
   <Footer />
 </BaseLayout>
+
+<script>
+  // Défilement horizontal des projets — le scroll vertical fait défiler les cartes
+  // latéralement. Desktop large uniquement, désactivé en mouvement réduit : la
+  // liste verticale reste le comportement par défaut, y compris sans JavaScript.
+  const scroller = document.getElementById('projects-scroller')
+
+  if (scroller) {
+    const viewport = scroller.querySelector<HTMLElement>('.projects-viewport')
+    const track = scroller.querySelector<HTMLElement>('.projects-track')
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const wideScreen = window.matchMedia('(min-width: 1024px)')
+
+    let active = false
+    let distance = 0
+    let ticking = false
+
+    const disable = () => {
+      active = false
+      scroller.classList.remove('is-horizontal')
+      scroller.style.height = ''
+      if (track) track.style.transform = ''
+    }
+
+    const measure = () => {
+      if (!viewport || !track) return
+      distance = Math.max(0, track.scrollWidth - viewport.clientWidth)
+      // Un écran de défilement vertical par carte à parcourir, plus un pour la lecture
+      scroller.style.height = `${viewport.clientHeight + distance}px`
+    }
+
+    const update = () => {
+      ticking = false
+      if (!active || !track) return
+      const rect = scroller.getBoundingClientRect()
+      const travelled = Math.min(Math.max(-rect.top, 0), distance)
+      track.style.transform = `translate3d(${-travelled}px, 0, 0)`
+    }
+
+    const onScroll = () => {
+      if (!active || ticking) return
+      ticking = true
+      requestAnimationFrame(update)
+    }
+
+    const enable = () => {
+      if (!viewport || !track) return
+      active = true
+      scroller.classList.add('is-horizontal')
+      // Les cartes hors écran ne déclencheraient jamais l'observateur d'apparition
+      track.querySelectorAll('.stagger-item').forEach((card) => card.classList.add('revealed'))
+      measure()
+      update()
+    }
+
+    const evaluate = () => {
+      if (wideScreen.matches && !reducedMotion.matches) enable()
+      else disable()
+    }
+
+    evaluate()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', () => {
+      if (active) {
+        measure()
+        update()
+      }
+    })
+    wideScreen.addEventListener('change', evaluate)
+    reducedMotion.addEventListener('change', evaluate)
+
+    // Navigation clavier : amène la carte qui reçoit le focus dans le champ de vision
+    track?.addEventListener('focusin', (event) => {
+      if (!active || !viewport) return
+      const card = (event.target as HTMLElement).closest<HTMLElement>('.projects-track > *')
+      if (!card) return
+      const cards = Array.from(track.children) as HTMLElement[]
+      const index = cards.indexOf(card)
+      if (index < 0 || cards.length < 2) return
+      const progress = index / (cards.length - 1)
+      window.scrollTo({ top: scroller.offsetTop + progress * distance, behavior: 'auto' })
+    })
+  }
+</script>
