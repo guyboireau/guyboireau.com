@@ -172,7 +172,7 @@ const featuredProjects = [
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service) => (
-            <a href={service.link} class="glass-card p-8 hover:border-primary-500/40 transition-all duration-300 group stagger-item block">
+            <a href={service.link} class="glass-card lift p-8 hover:border-primary-500/40 group stagger-item block">
               <div class="text-4xl mb-4">{service.icon}</div>
               <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-primary-400 transition-colors">
                 {service.title}
@@ -204,7 +204,7 @@ const featuredProjects = [
 
         <div class="space-y-8">
           {featuredProjects.map((project) => (
-            <div class="glass-card p-8 hover:border-primary-500/30 transition-all duration-300 stagger-item">
+            <div class="glass-card lift p-8 hover:border-primary-500/30 stagger-item">
               <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
                 <div>
                   <h3 class="text-2xl font-bold text-primary-400 mb-1">{project.title}</h3>
@@ -281,7 +281,7 @@ const featuredProjects = [
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {processSteps.map((step) => (
-            <div class="glass-card p-7 stagger-item relative overflow-hidden group hover:border-primary-500/30 transition-all duration-300">
+            <div class="glass-card lift p-7 stagger-item relative overflow-hidden group hover:border-primary-500/30">
               <div class="text-6xl font-black text-primary-500/10 absolute -top-2 -right-2 leading-none select-none group-hover:text-primary-500/15 transition-colors">
                 {step.num}
               </div>

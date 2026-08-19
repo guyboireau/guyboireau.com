@@ -64,7 +64,7 @@ const isExpertise = expertises.some((link) => link.href === currentPath)
         {navLinks.map((link) => (
           <a
             href={link.href}
-            class={`transition-colors duration-300 font-medium ${
+            class={`link-underline transition-colors duration-300 font-medium ${
               currentPath === link.href
                 ? 'text-primary-500'
                 : 'text-slate-600 hover:text-primary-500'
