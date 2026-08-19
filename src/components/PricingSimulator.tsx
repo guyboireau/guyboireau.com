@@ -19,8 +19,7 @@ const BLOCKS: BlockConfig[] = [
     title: 'La base',
     subtitle: 'Tout site commence ici',
     options: [
-      { id: 'base-design', label: 'Design + intégration', price: 400 },
-      { id: 'base-deploy', label: 'Mise en ligne + configuration', price: 100 },
+      { id: 'base-setup', label: 'Mise en service : design, intégration, mise en ligne', price: 490 },
     ],
   },
   {
@@ -49,8 +48,8 @@ const BLOCKS: BlockConfig[] = [
     ],
   },
   {
-    title: 'Abonnement mensuel (sans engagement)',
-    subtitle: 'Votre site reste en vie',
+    title: 'Abonnement mensuel (engagement 12 mois)',
+    subtitle: 'Votre site reste en vie — premier mois offert, sans engagement +20 €/mois',
     isSubscription: true,
     options: [
       { id: 'sub-host', label: 'Hébergement + domaine', price: 15, unit: '/mois' },
@@ -73,10 +72,10 @@ const BLOCKS: BlockConfig[] = [
   },
 ]
 
-const _BASE_TOTAL = 500
+const _BASE_TOTAL = 490
 
 export default function PricingSimulator() {
-  const [selected, setSelected] = useState<Set<string>>(new Set(['base-design', 'base-deploy']))
+  const [selected, setSelected] = useState<Set<string>>(new Set(['base-setup']))
   const [subQty, _setSubQty] = useState<Record<string, number>>({ 'sub-host': 1, 'sub-backup': 1, 'sub-security': 1, 'sub-edit': 1, 'sub-report': 1, 'sub-seo': 1 })
   const [optPages, setOptPages] = useState(1)
   const [boostHours, setBoostHours] = useState(1)

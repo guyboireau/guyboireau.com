@@ -6,7 +6,7 @@ import PricingSimulator from '../components/PricingSimulator.tsx'
 
 const title = 'Services & Tarifs | Guy Boireau — Développeur Web Freelance Bordeaux'
 const description =
-  'Formules de suivi mensuel à partir de 79€/mois. Applications métier, automatisations et sites web sur-mesure. Développeur web freelance à Bordeaux.'
+  "Diagnostic à 1 400 €, premier lot en production de 6 000 à 10 000 €, suivi mensuel dès 79€/mois. Applications métier et automatisation pour les structures de 5 à 30 salariés, à Bordeaux."
 
 const faq = [
   {
@@ -15,11 +15,19 @@ const faq = [
   },
   {
     q: 'Y a-t-il un engagement de durée ?',
-    a: 'Non, les formules mensuelles sont sans engagement. Vous pouvez arrêter ou changer de formule à tout moment.',
+    a: "Les formules mensuelles sont engagées 12 mois, avec le premier mois offert. Vous pouvez changer de formule à tout moment pendant cette période. Si l'engagement ne vous convient pas, la même formule existe sans engagement pour 20 € de plus par mois.",
   },
   {
     q: "Qu'est-ce qui est inclus dans la maintenance ?",
     a: 'Hébergement, nom de domaine, mises à jour de sécurité, sauvegardes automatiques, et les modifications incluses selon la formule (1h/mois en Essentiel, 2h/mois en Accompagnement).',
+  },
+  {
+    q: 'À quoi sert le diagnostic si je sais déjà ce que je veux ?',
+    a: "Souvent à confirmer votre intuition, parfois à la corriger. Il chiffre ce que l'existant vous coûte réellement chaque année et classe les pistes par rapport gain/effort — c'est ce qui permet de choisir par quoi commencer. Si vous engagez le projet dans les 3 mois, il est déduit.",
+  },
+  {
+    q: 'Pourquoi commencer par un seul processus ?',
+    a: "Parce qu'un outil livré en 6 semaines et utilisé tous les jours vous apprend plus que 6 mois de spécifications. Le premier lot est en production, avec vos données réelles et vos équipes dessus. Les lots suivants sont décidés à partir de ce qui s'est passé, pas de ce qu'on avait imaginé.",
   },
   {
     q: 'Comment se déroule la création d\'un site ?',
@@ -57,40 +65,212 @@ const faq = [
         <div class="reveal-fade-up">
           <h1 class="section-title">Services & Tarifs</h1>
           <p class="section-subtitle">
-            Votre site est en ligne… et après ? Je m'en occupe pour vous.
+            On commence petit, on met en production, on élargit ensuite.
           </p>
           <p class="text-slate-600 text-lg max-w-2xl mx-auto">
-            Un site web sans suivi, c'est comme une voiture sans entretien. Je vous propose des formules simples pour que votre site reste rapide, sécurisé et visible sur Google.
+            Les projets qui échouent sont ceux qui essaient de tout couvrir d'un coup. Je travaille par lots : un diagnostic pour savoir où votre temps se perd, un premier processus outillé et mis en production, puis les suivants. Tarifs au forfait, annoncés avant de commencer.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Création de site — Simulateur interactif -->
+    <!-- Diagnostic -->
     <section class="section bg-white">
       <div class="max-w-5xl mx-auto">
         <div class="reveal-fade-up mb-12 text-center">
-          <h2 class="section-title">Création de site web</h2>
+          <span class="inline-block px-4 py-1.5 bg-primary-500/10 text-primary-600 rounded-full text-sm font-semibold mb-4">
+            Le point de départ
+          </span>
+          <h2 class="section-title">Où votre temps se perd</h2>
+          <p class="section-subtitle">Deux jours pour savoir quoi outiller en premier</p>
+        </div>
+
+        <div class="glass-card p-8 md:p-10 border-2 border-primary-500/30 reveal-scale">
+          <div class="flex flex-col md:flex-row gap-8">
+            <div class="md:w-1/3 shrink-0">
+              <div class="text-4xl font-bold text-gradient mb-1">1 400 €</div>
+              <p class="text-slate-500 text-sm mb-6">2 jours d'intervention</p>
+              <a href="/contact?subject=Diagnostic" class="btn-primary block text-center">
+                Demander un diagnostic
+              </a>
+              <p class="text-slate-400 text-xs mt-4 leading-relaxed">
+                Déduit du projet s'il est engagé dans les 3 mois.
+              </p>
+            </div>
+            <div class="flex-1">
+              <p class="text-slate-600 mb-6 leading-relaxed">
+                Je passe deux jours dans votre organisation — vos outils, vos fichiers, vos habitudes de travail. Vous repartez avec un document écrit de 10 à 15 pages, pas avec une présentation.
+              </p>
+              <h3 class="text-slate-800 font-semibold mb-3">Ce que contient le document</h3>
+              <ul class="space-y-3">
+                {[
+                  'Cartographie des tâches répétitives : qui les fait, combien de temps, à quelle fréquence',
+                  "Chiffrage du coût annuel de l'existant, en heures et en euros",
+                  '3 pistes priorisées, chacune avec sa faisabilité technique et son budget',
+                ].map((item) => (
+                  <li class="flex items-start gap-2 text-slate-600 text-sm">
+                    <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Premier lot en production -->
+    <section class="section bg-slate-50">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <h2 class="section-title">Premier lot en production</h2>
+          <p class="section-subtitle">Un processus traité de bout en bout, utilisé pour de vrai</p>
+        </div>
+
+        <div class="glass-card p-8 md:p-10 stagger-item">
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8 pb-8 border-b border-slate-200">
+            <div>
+              <div class="text-4xl font-bold text-gradient mb-1">6 000 – 10 000 €</div>
+              <p class="text-slate-500 text-sm">Livré en 4 à 8 semaines</p>
+            </div>
+            <a href="/contact?subject=Premier%20lot" class="btn-primary inline-block text-center shrink-0">
+              En parler
+            </a>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-slate-800 font-semibold mb-3">Ce qui est compris</h3>
+              <ul class="space-y-3">
+                {[
+                  'Cadrage du processus retenu avec les personnes qui le font',
+                  'Maquettes validées avant la moindre ligne de code',
+                  "Import de l'existant : Excel, ancienne base, export ERP",
+                  'Mise en production, pas une démonstration',
+                  'Transfert de compétences à vos équipes',
+                  'Un mois de garantie après la mise en production',
+                ].map((item) => (
+                  <li class="flex items-start gap-2 text-slate-600 text-sm">
+                    <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-slate-800 font-semibold mb-3">Exemples de périmètre</h3>
+              <ul class="space-y-3">
+                {[
+                  'Suivi de commandes atelier',
+                  'Fiches de contrôle qualité avec photos depuis mobile',
+                  "Planning d'interventions terrain",
+                  'Gestion de devis complexes',
+                ].map((item) => (
+                  <li class="flex items-start gap-2 text-slate-600 text-sm">
+                    <span class="text-primary-400 mt-0.5 shrink-0">→</span>{item}
+                  </li>
+                ))}
+              </ul>
+              <p class="text-slate-500 text-sm mt-6 leading-relaxed">
+                Un seul de ces périmètres à la fois. C'est ce qui permet de tenir 4 à 8 semaines et d'apprendre de l'usage réel avant d'élargir.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Automatisations IA -->
+    <section class="section bg-white">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <span class="inline-block px-4 py-1.5 bg-primary-500/10 text-primary-600 rounded-full text-sm font-semibold mb-4">
+            Nouveau
+          </span>
+          <h2 class="section-title">Automatisations IA</h2>
+          <p class="section-subtitle">Vos tâches répétitives, on les supprime</p>
+          <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+            Votre formulaire répond tout seul. Vos leads sont qualifiés avant même que vous décrochiez. Vos relances partent sans que vous y pensiez.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          {[
+            {
+              icon: '⚡',
+              title: 'Réponse automatique en 60 secondes',
+              desc: 'Un client remplit votre formulaire de contact → il reçoit une réponse personnalisée en moins d\'une minute, 24h/24, 7j/7.',
+            },
+            {
+              icon: '🎯',
+              title: 'Qualification automatique des leads',
+              desc: 'Un lead entre → il est qualifié, catégorisé et envoyé directement dans votre CRM ou votre agenda. Vous ne traitez que les vraies opportunités.',
+            },
+            {
+              icon: '📄',
+              title: 'Factures, relances & rapports',
+              desc: 'Génération automatique de devis et factures, relances de paiement planifiées, rapports hebdomadaires envoyés sans intervention.',
+            },
+            {
+              icon: '🔗',
+              title: 'Vos outils connectés entre eux',
+              desc: 'Notion, Google Sheets, Slack, Stripe, Airtable, Gmail… Tout ce que vous utilisez déjà, branché ensemble avec Make + IA.',
+            },
+          ].map((item) => (
+            <div class="glass-card p-8 stagger-item hover:border-primary-500/40 transition-all duration-300">
+              <div class="text-3xl mb-4">{item.icon}</div>
+              <h3 class="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
+              <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="glass-card p-8 border-2 border-primary-500/30 reveal-scale">
+          <div class="flex flex-col md:flex-row md:items-center gap-6">
+            <div class="flex-1">
+              <div class="inline-block px-3 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold mb-3">
+                3 paliers de prix
+              </div>
+              <h3 class="text-2xl font-bold text-slate-800 mb-2">
+                À partir de <span class="text-gradient">100€ / automatisation</span>
+              </h3>
+              <p class="text-slate-500">
+                Basique à 100€, standard à 250€, sur-mesure avec IA à partir de 500€. Workflow livré clé en main, testé et documenté.
+              </p>
+            </div>
+            <a href="/automatisations" class="btn-primary shrink-0 inline-block text-center">
+              Voir la démo →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Création de site — Simulateur interactif -->
+    <section class="section bg-slate-50">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <h2 class="section-title">Sites & présence en ligne</h2>
           <p class="section-subtitle">Composez votre site, le prix se calcule en direct</p>
           <p class="text-slate-600 text-lg max-w-2xl mx-auto mt-4">
-            Tout commence à <strong class="text-primary-500">500€</strong>. Cochez les options dont vous avez besoin et voyez le total en temps réel.
+            <strong class="text-primary-500">Mise en service 490 €</strong>, puis abonnement mensuel. Cochez les options dont vous avez besoin et voyez le total en temps réel.
           </p>
         </div>
 
         <PricingSimulator client:load />
 
         <div class="text-center mt-12 reveal-fade-up">
-          <p class="text-slate-500 mb-4">Besoin d'une application web, d'une marketplace ou d'un SaaS ? <a href="/contact" class="text-primary-500 hover:underline">Contactez-moi</a> pour un devis sur-mesure.</p>
+          <p class="text-slate-500 mb-4">Besoin d'un développement sur-mesure plutôt que d'un site ? Le sur-mesure démarre à <strong class="text-primary-500">1 500 €</strong> — <a href="/contact" class="text-primary-500 hover:underline">décrivez-moi votre besoin</a>.</p>
         </div>
       </div>
     </section>
 
     <!-- Maintenance plans -->
-    <section class="section bg-slate-50">
+    <section class="section bg-white">
       <div class="max-w-6xl mx-auto">
         <div class="reveal-fade-up mb-12">
           <h2 class="section-title text-center">Formules de suivi mensuel</h2>
-          <p class="section-subtitle text-center">Sans engagement — changez ou arrêtez quand vous voulez</p>
+          <p class="section-subtitle text-center">Engagement 12 mois — premier mois offert</p>
+          <p class="text-slate-400 text-sm text-center -mt-8 mb-12">Sans engagement possible, +20 €/mois.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -225,72 +405,6 @@ const faq = [
               </ul>
               <a href="/contact" class="btn-primary inline-block">Demander un dépannage</a>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Automatisations IA -->
-    <section class="section bg-white">
-      <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12 text-center">
-          <span class="inline-block px-4 py-1.5 bg-primary-500/10 text-primary-600 rounded-full text-sm font-semibold mb-4">
-            Nouveau
-          </span>
-          <h2 class="section-title">Automatisations IA</h2>
-          <p class="section-subtitle">Vos tâches répétitives, on les supprime</p>
-          <p class="text-slate-600 text-lg max-w-2xl mx-auto">
-            Votre formulaire répond tout seul. Vos leads sont qualifiés avant même que vous décrochiez. Vos relances partent sans que vous y pensiez.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-          {[
-            {
-              icon: '⚡',
-              title: 'Réponse automatique en 60 secondes',
-              desc: 'Un client remplit votre formulaire de contact → il reçoit une réponse personnalisée en moins d\'une minute, 24h/24, 7j/7.',
-            },
-            {
-              icon: '🎯',
-              title: 'Qualification automatique des leads',
-              desc: 'Un lead entre → il est qualifié, catégorisé et envoyé directement dans votre CRM ou votre agenda. Vous ne traitez que les vraies opportunités.',
-            },
-            {
-              icon: '📄',
-              title: 'Factures, relances & rapports',
-              desc: 'Génération automatique de devis et factures, relances de paiement planifiées, rapports hebdomadaires envoyés sans intervention.',
-            },
-            {
-              icon: '🔗',
-              title: 'Vos outils connectés entre eux',
-              desc: 'Notion, Google Sheets, Slack, Stripe, Airtable, Gmail… Tout ce que vous utilisez déjà, branché ensemble avec Make + IA.',
-            },
-          ].map((item) => (
-            <div class="glass-card p-8 stagger-item hover:border-primary-500/40 transition-all duration-300">
-              <div class="text-3xl mb-4">{item.icon}</div>
-              <h3 class="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
-              <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        <div class="glass-card p-8 border-2 border-primary-500/30 reveal-scale">
-          <div class="flex flex-col md:flex-row md:items-center gap-6">
-            <div class="flex-1">
-              <div class="inline-block px-3 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold mb-3">
-                3 paliers de prix
-              </div>
-              <h3 class="text-2xl font-bold text-slate-800 mb-2">
-                À partir de <span class="text-gradient">100€ / automatisation</span>
-              </h3>
-              <p class="text-slate-500">
-                Basique à 100€, standard à 250€, sur-mesure avec IA à partir de 500€. Workflow livré clé en main, testé et documenté.
-              </p>
-            </div>
-            <a href="/automatisations" class="btn-primary shrink-0 inline-block text-center">
-              Voir la démo →
-            </a>
           </div>
         </div>
       </div>
