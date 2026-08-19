@@ -11,32 +11,32 @@ const description =
 
 const services = [
   {
-    icon: '🌐',
-    title: 'Sites vitrines & CMS',
+    icon: '⚙️',
+    title: 'Applications métier & automatisation',
     description:
-      'Un site rapide, bien référencé sur Google et facile à mettre à jour. Parfait pour présenter votre activité et attirer des clients.',
+      "Suivi de commandes atelier, fiches de contrôle, planning d'interventions : l'outil qui manque entre votre ERP et vos tableurs. Et les tâches que vos équipes refont chaque semaine, supprimées.",
     link: '/services',
   },
   {
-    icon: '📱',
-    title: 'Applications web & mobile',
+    icon: '📄',
+    title: 'Traitement documentaire automatisé',
     description:
-      'Applications métier sur-mesure, interfaces d\'administration, API REST, apps iOS/Android avec React Native.',
+      'Bons de livraison, certificats matière, fiches techniques, factures : lus, contrôlés et classés sans ressaisie.',
+    link: '/traitement-documentaire',
+  },
+  {
+    icon: '🌐',
+    title: 'Sites & présence en ligne',
+    description:
+      'Une interface publique rapide, bien référencée sur Google, que vous mettez à jour vous-même. Pour les artisans et commerces locaux.',
     link: '/services',
   },
   {
     icon: '🔧',
     title: 'Suivi & maintenance',
     description:
-      'Votre site mis à jour, sauvegardé et optimisé chaque mois. Formules à partir de 149€/mois, sans engagement.',
+      'Votre outil et votre site mis à jour, sauvegardés et surveillés chaque mois. Formules à partir de 79€/mois.',
     link: '/services',
-  },
-  {
-    icon: '🤖',
-    title: 'Automatisations IA',
-    description:
-      'Vos tâches répétitives, on les supprime. Formulaire → réponse client en 60 s, leads qualifiés automatiquement, factures et relances en automatique.',
-    link: '/automatisations',
   },
 ]
 
@@ -81,7 +81,9 @@ const processSteps = [
 const featuredProjects = [
   {
     title: 'La Lucarne Péniche',
-    subtitle: 'Site web culturel avec CMS et panneau d\'administration',
+    subtitle: "Gestion autonome d'une programmation culturelle",
+    description:
+      "Une programmation qui change chaque semaine dépendait d'un prestataire à chaque modification. L'équipe publie désormais ses événements, actualités et photos elle-même, en quelques minutes, sans intervention technique.",
     techs: ['React 19', 'Supabase', 'Vercel', 'JavaScript'],
     link: 'https://www.lalucarnepeniche.com',
     status: 'En production',
@@ -89,7 +91,9 @@ const featuredProjects = [
   },
   {
     title: 'Arnault Janvier — Maître Verrier',
-    subtitle: 'Site vitrine multilingue FR/EN/ES pour artisan vitrailliste avec back-office CMS',
+    subtitle: 'Vitrine multilingue et galerie autonome',
+    description:
+      "Un atelier d'art invisible hors de sa région. Site en trois langues avec une galerie que l'artisan gère seul — et des demandes entrantes de clients anglophones et hispanophones qu'il ne touchait pas avant.",
     techs: ['Next.js 16', 'TypeScript', 'Supabase', 'next-intl'],
     link: 'https://www.arnault-janvier-vitrail.fr',
     status: 'En production',
@@ -97,8 +101,10 @@ const featuredProjects = [
   },
   {
     title: 'Niido',
-    subtitle: 'Marketplace mobile de services à domicile (iOS / Android)',
-    techs: ['React Native', 'Expo', 'Supabase', 'TypeScript'],
+    subtitle: 'Marketplace mobile avec validation documentaire automatisée',
+    description:
+      "Vérifier manuellement les pièces d'identité et justificatifs de chaque prestataire ne tient pas à l'échelle. L'application intègre un pipeline de lecture et de contrôle automatique des documents, avec score de confiance et reprise humaine sur les seuls cas douteux. Quatre rôles utilisateurs, espace d'administration.",
+    techs: ['React Native', 'Expo', 'Supabase', 'TypeScript', 'API Anthropic'],
     link: null,
     status: 'En développement — sortie prévue septembre 2026',
     images: { desktop: '/assets/niido-admin.png', mobile: '/assets/niido-mobile.png' },
@@ -156,7 +162,7 @@ const featuredProjects = [
         <div class="reveal-fade-up">
           <span class="block text-center text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">02 — Ce que je fais</span>
           <h2 class="section-title text-center">Ce que je fais</h2>
-          <p class="section-subtitle text-center">De la création au suivi, je m'occupe de tout</p>
+          <p class="section-subtitle text-center">Du cadrage à la mise en production, puis le suivi</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -182,17 +188,6 @@ const featuredProjects = [
       </div>
     </section>
 
-    <!-- Chatbot -->
-    <section class="section bg-slate-50">
-      <div class="max-w-2xl mx-auto">
-        <div class="reveal-fade-up">
-          <h2 class="section-title text-center">Une question ?</h2>
-          <p class="section-subtitle text-center">Mon assistant répond en direct</p>
-        </div>
-        <ChatBot client:load />
-      </div>
-    </section>
-
     <!-- Featured projects -->
     <section class="section bg-white">
       <div class="max-w-6xl mx-auto">
@@ -208,12 +203,14 @@ const featuredProjects = [
               <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
                 <div>
                   <h3 class="text-2xl font-bold text-primary-400 mb-1">{project.title}</h3>
-                  <p class="text-slate-600">{project.subtitle}</p>
+                  <p class="text-slate-600 font-medium">{project.subtitle}</p>
                 </div>
                 <span class="px-3 py-1 bg-green-500/20 text-green-700 rounded-full text-sm border border-green-500/30 shrink-0 self-start">
                   {project.status}
                 </span>
               </div>
+
+              <p class="text-slate-600 leading-relaxed mb-6">{project.description}</p>
 
               {project.images && (
                 <div class="flex flex-col md:flex-row gap-4 mb-6">
@@ -296,61 +293,14 @@ const featuredProjects = [
       </div>
     </section>
 
-    <!-- Artisans & commerces locaux -->
-    <section class="section bg-white">
-      <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12 text-center">
-          <span class="inline-block px-4 py-1.5 bg-primary-500/10 text-primary-600 rounded-full text-sm font-semibold mb-4">
-            Artisans & commerces locaux
-          </span>
-          <h2 class="section-title">Votre site doit travailler pour vous</h2>
-          <p class="section-subtitle">Pas pour votre prestataire web</p>
+    <!-- Chatbot -->
+    <section class="section bg-slate-50">
+      <div class="max-w-2xl mx-auto">
+        <div class="reveal-fade-up">
+          <h2 class="section-title text-center">Une question ?</h2>
+          <p class="section-subtitle text-center">Mon assistant répond en direct</p>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          {[
-            {
-              icon: '📍',
-              title: 'Visible sur Google Maps',
-              desc: 'Votre fiche Google Business mise à jour chaque mois : horaires, photos, actualités. Les gens vous trouvent quand ils cherchent un artisan près de chez eux.',
-            },
-            {
-              icon: '📞',
-              title: 'Un site qui donne envie d\'appeler',
-              desc: 'Rapide, mobile, avec vos réalisations en photos. Un visiteur doit comprendre ce que vous faites et vous contacter en moins de 30 secondes.',
-            },
-            {
-              icon: '🛠️',
-              title: 'Je m\'occupe de tout',
-              desc: 'Hébergement, mises à jour, pannes, modifications de contenu. Vous faites votre métier, je fais le mien. Aucune compétence technique requise.',
-            },
-          ].map((item) => (
-            <div class="glass-card p-8 stagger-item text-center">
-              <div class="text-4xl mb-4">{item.icon}</div>
-              <h3 class="text-lg font-bold text-slate-800 mb-3">{item.title}</h3>
-              <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        <div class="glass-card p-8 border-2 border-primary-500/30 reveal-scale">
-          <div class="flex flex-col md:flex-row md:items-center gap-6">
-            <div class="flex-1">
-              <div class="inline-block px-3 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold mb-3">
-                Simulateur interactif
-              </div>
-              <h3 class="text-2xl font-bold text-slate-800 mb-2">
-                Votre site à partir de <span class="text-gradient">500€</span> — composez-le en direct
-              </h3>
-              <p class="text-slate-500">
-                Cochez les options dont vous avez besoin (pages supplémentaires, formulaire, boutique, blog…) et voyez le prix se calculer en temps réel. Transparent, sans surprise.
-              </p>
-            </div>
-            <a href="/services" class="btn-primary shrink-0 inline-block text-center">
-              Simuler mon devis →
-            </a>
-          </div>
-        </div>
+        <ChatBot client:load />
       </div>
     </section>
 
@@ -415,6 +365,67 @@ const featuredProjects = [
             </a>
             <a href="/services" class="btn-secondary inline-block">
               Voir les formules
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Artisans & commerces locaux -->
+    <section class="section bg-white border-t-4 border-slate-200">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <span class="inline-block px-4 py-1.5 bg-slate-100 text-slate-600 rounded-full text-sm font-semibold mb-4 border border-slate-200">
+            Offre distincte — artisans &amp; commerces locaux
+          </span>
+          <h2 class="section-title">Votre site doit travailler pour vous</h2>
+          <p class="section-subtitle">Pas pour votre prestataire web</p>
+          <p class="text-slate-500 max-w-2xl mx-auto -mt-6">
+            Rien à voir avec les applications métier ci-dessus : une présence en ligne clé en main, à l'abonnement, pour les activités qui n'ont pas besoin d'un outil sur-mesure.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          {[
+            {
+              icon: '📍',
+              title: 'Visible sur Google Maps',
+              desc: 'Votre fiche Google Business mise à jour chaque mois : horaires, photos, actualités. Les gens vous trouvent quand ils cherchent un artisan près de chez eux.',
+            },
+            {
+              icon: '📞',
+              title: 'Un site qui donne envie d\'appeler',
+              desc: 'Rapide, mobile, avec vos réalisations en photos. Un visiteur doit comprendre ce que vous faites et vous contacter en moins de 30 secondes.',
+            },
+            {
+              icon: '🛠️',
+              title: 'Je m\'occupe de tout',
+              desc: 'Hébergement, mises à jour, pannes, modifications de contenu. Vous faites votre métier, je fais le mien. Aucune compétence technique requise.',
+            },
+          ].map((item) => (
+            <div class="glass-card p-8 stagger-item text-center">
+              <div class="text-4xl mb-4">{item.icon}</div>
+              <h3 class="text-lg font-bold text-slate-800 mb-3">{item.title}</h3>
+              <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="glass-card p-8 border-2 border-primary-500/30 reveal-scale">
+          <div class="flex flex-col md:flex-row md:items-center gap-6">
+            <div class="flex-1">
+              <div class="inline-block px-3 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold mb-3">
+                Simulateur interactif
+              </div>
+              <h3 class="text-2xl font-bold text-slate-800 mb-2">
+                <span class="text-gradient">Mise en service 490 €</span>, puis abonnement mensuel
+              </h3>
+              <p class="text-slate-500">
+                Composez votre site en direct : cochez les options dont vous avez besoin (pages supplémentaires, formulaire, boutique, blog…) et voyez le total se calculer. Engagement 12 mois, premier mois offert.
+              </p>
+            </div>
+            <a href="/services" class="btn-primary shrink-0 inline-block text-center">
+              Simuler mon devis →
             </a>
           </div>
         </div>
