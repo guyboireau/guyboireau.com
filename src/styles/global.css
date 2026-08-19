@@ -260,6 +260,34 @@
   width: max-content;
 }
 
+/* ===== PROJETS — DÉFILEMENT HORIZONTAL (desktop, activé par JS) ===== */
+
+/* Par défaut — et sans JavaScript — la liste reste verticale. */
+.projects-scroller.is-horizontal .projects-viewport {
+  position: sticky;
+  top: 4rem;
+  height: calc(100vh - 4rem);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.projects-scroller.is-horizontal .projects-track {
+  display: flex;
+  align-items: stretch;
+  gap: 2rem;
+  padding-inline: 1rem;
+  will-change: transform;
+}
+
+.projects-scroller.is-horizontal .projects-track > * {
+  flex: 0 0 min(68vw, 860px);
+  margin-top: 0 !important;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 /* ===== LENIS — DÉFILEMENT FLUIDE ===== */
 
 html.lenis,
