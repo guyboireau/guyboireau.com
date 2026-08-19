@@ -4,6 +4,11 @@ import Header from '../components/Header.astro'
 import Hero from '../components/Hero.astro'
 import Footer from '../components/Footer.astro'
 import ChatBot from '../components/ChatBot.tsx'
+import { Image } from 'astro:assets'
+import lalucarneDesktop from '../assets/lalucarne-desktop.png'
+import lalucarneMobile from '../assets/lalucarne-mobile.png'
+import niidoAdmin from '../assets/niido-admin.png'
+import niidoMobile from '../assets/niido-mobile.png'
 
 const title = 'Guy Boireau — Applications métier & automatisation | Développeur freelance Bordeaux'
 const description =
@@ -87,7 +92,7 @@ const featuredProjects = [
     techs: ['React 19', 'Supabase', 'Vercel', 'JavaScript'],
     link: 'https://www.lalucarnepeniche.com',
     status: 'En production',
-    images: { desktop: '/assets/lalucarne-desktop.png', mobile: '/assets/lalucarne-mobile.png' },
+    images: { desktop: lalucarneDesktop, mobile: lalucarneMobile },
   },
   {
     title: 'Arnault Janvier — Maître Verrier',
@@ -107,7 +112,7 @@ const featuredProjects = [
     techs: ['React Native', 'Expo', 'Supabase', 'TypeScript', 'API Anthropic'],
     link: null,
     status: 'En développement — sortie prévue septembre 2026',
-    images: { desktop: '/assets/niido-admin.png', mobile: '/assets/niido-mobile.png' },
+    images: { desktop: niidoAdmin, mobile: niidoMobile },
   },
 ]
 ---
@@ -214,15 +219,21 @@ const featuredProjects = [
 
               {project.images && (
                 <div class="flex flex-col md:flex-row gap-4 mb-6">
-                  <img
+                  <Image
                     src={project.images.desktop}
                     alt={`${project.title} desktop`}
+                    widths={[480, 960]}
+                    sizes="(max-width: 768px) 100vw, 640px"
+                    format="webp"
                     class="w-full md:w-2/3 rounded-lg border border-slate-200 shadow-lg object-cover"
                     loading="lazy"
                   />
-                  <img
+                  <Image
                     src={project.images.mobile}
                     alt={`${project.title} mobile`}
+                    widths={[320, 640]}
+                    sizes="(max-width: 768px) 100vw, 320px"
+                    format="webp"
                     class="w-full md:w-1/3 rounded-lg border border-slate-200 shadow-lg object-cover"
                     loading="lazy"
                   />
@@ -300,7 +311,7 @@ const featuredProjects = [
           <h2 class="section-title text-center">Une question ?</h2>
           <p class="section-subtitle text-center">Mon assistant répond en direct</p>
         </div>
-        <ChatBot client:load />
+        <ChatBot client:visible />
       </div>
     </section>
 

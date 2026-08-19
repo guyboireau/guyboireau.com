@@ -2,6 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
+import { Image } from 'astro:assets'
+import lalucarneDesktop from '../assets/lalucarne-desktop.png'
+import lalucarneMobile from '../assets/lalucarne-mobile.png'
+import niidoAdmin from '../assets/niido-admin.png'
+import niidoMobile from '../assets/niido-mobile.png'
 
 const title = 'Projets | Guy Boireau — Développeur Web Freelance Bordeaux'
 const description =
@@ -49,7 +54,7 @@ const featuredProjects = [
       Backend: ['Supabase', 'PostgreSQL', 'Row Level Security'],
       Déploiement: ['Vercel', 'Domaine personnalisé'],
     },
-    images: { desktop: '/assets/lalucarne-desktop.png', mobile: '/assets/lalucarne-mobile.png' },
+    images: { desktop: lalucarneDesktop, mobile: lalucarneMobile },
     link: 'https://www.lalucarnepeniche.com',
     linkLabel: 'Visiter le site',
     metrics: { type: 'Mission freelance', date: 'Janvier 2026', status: 'En production' },
@@ -77,7 +82,7 @@ const freelanceProjects = [
       Admin: ['React 19', 'Vite', 'TypeScript', 'TailwindCSS', 'Zustand'],
       Outillage: ['React Query 5', 'Zod', 'GitHub Actions', 'Sentry', 'Vitest'],
     },
-    images: { desktop: '/assets/niido-admin.png', mobile: '/assets/niido-mobile.png' },
+    images: { desktop: niidoAdmin, mobile: niidoMobile },
     link: null,
     metrics: { type: 'Mission freelance', date: '2025', status: 'En développement — sortie prévue septembre 2026' },
   },
@@ -152,15 +157,21 @@ const sideProjects = [
 
               {project.images && (
                 <div class="flex flex-col md:flex-row gap-4 mb-6">
-                  <img
+                  <Image
                     src={project.images.desktop}
                     alt={`${project.title} — desktop`}
+                    widths={[480, 960]}
+                    sizes="(max-width: 768px) 100vw, 640px"
+                    format="webp"
                     class="w-full md:w-2/3 rounded-lg border border-slate-200 shadow-lg object-cover"
                     loading="lazy"
                   />
-                  <img
+                  <Image
                     src={project.images.mobile}
                     alt={`${project.title} — mobile`}
+                    widths={[320, 640]}
+                    sizes="(max-width: 768px) 100vw, 320px"
+                    format="webp"
                     class="w-full md:w-1/3 rounded-lg border border-slate-200 shadow-lg object-cover"
                     loading="lazy"
                   />
@@ -237,18 +248,24 @@ const sideProjects = [
                 <div class="flex flex-col md:flex-row gap-4 mb-6">
                   <div class="md:w-2/3">
                     <p class="text-slate-500 text-xs uppercase tracking-wider mb-2">Dashboard Admin</p>
-                    <img
+                    <Image
                       src={project.images.desktop}
                       alt={`${project.title} — admin`}
+                      widths={[480, 960]}
+                      sizes="(max-width: 768px) 100vw, 640px"
+                      format="webp"
                       class="w-full rounded-lg border border-slate-200 shadow-lg object-cover"
                       loading="lazy"
                     />
                   </div>
                   <div class="md:w-1/3">
                     <p class="text-slate-500 text-xs uppercase tracking-wider mb-2">Application Mobile</p>
-                    <img
+                    <Image
                       src={project.images.mobile}
                       alt={`${project.title} — mobile`}
+                      widths={[320, 640]}
+                      sizes="(max-width: 768px) 100vw, 320px"
+                      format="webp"
                       class="w-full rounded-lg border border-slate-200 shadow-lg object-cover"
                       loading="lazy"
                     />
