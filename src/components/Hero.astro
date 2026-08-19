@@ -9,16 +9,16 @@ const particles = Array.from({ length: 15 }, (_, i) => ({
 }))
 ---
 
-<section class="min-h-screen animated-gradient flex items-center justify-center relative overflow-hidden py-20 px-4 sm:px-6 lg:px-8">
-  <!-- Background blobs -->
-  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+<section id="hero" class="min-h-screen animated-gradient flex items-center justify-center relative overflow-hidden py-20 px-4 sm:px-6 lg:px-8">
+  <!-- Background blobs — plan lointain -->
+  <div data-parallax="0.18" class="absolute inset-0 overflow-hidden pointer-events-none">
     <div class="absolute w-96 h-96 bg-primary-500/10 rounded-full blur-3xl -top-48 -left-48 animate-float"></div>
     <div class="absolute w-96 h-96 bg-primary-600/10 rounded-full blur-3xl -bottom-48 -right-48 animate-float" style="animation-delay:3s"></div>
     <div class="absolute w-64 h-64 bg-[#c17960]/10 rounded-full blur-2xl top-1/3 right-1/4 animate-float" style="animation-delay:5s"></div>
   </div>
 
-  <!-- Particles -->
-  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+  <!-- Particles — plan médian -->
+  <div data-parallax="0.34" class="absolute inset-0 overflow-hidden pointer-events-none">
     {particles.map((p) => (
       <div
         class="particle"
@@ -27,7 +27,7 @@ const particles = Array.from({ length: 15 }, (_, i) => ({
     ))}
   </div>
 
-  <div class="relative z-10 text-center max-w-4xl mx-auto">
+  <div data-parallax="0.46" class="relative z-10 text-center max-w-4xl mx-auto">
     <!-- Badge disponibilité -->
     <div class="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-4 py-1.5 mb-8 hero-animate hero-animate-delay-1">
       <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -78,3 +78,58 @@ const particles = Array.from({ length: 15 }, (_, i) => ({
     </div>
   </div>
 </section>
+
+<script>
+  // Parallaxe multi-plans — desktop uniquement, coupée en mouvement réduit,
+  // suspendue dès que la hero sort du viewport.
+  const hero = document.getElementById('hero')
+  const layers = Array.from(document.querySelectorAll<HTMLElement>('#hero [data-parallax]'))
+
+  if (hero && layers.length > 0) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const desktop = window.matchMedia('(min-width: 768px)')
+
+    let visible = true
+    let ticking = false
+
+    const reset = () => {
+      layers.forEach((layer) => {
+        layer.style.transform = ''
+      })
+    }
+
+    const update = () => {
+      ticking = false
+      const offset = window.scrollY
+      if (offset > window.innerHeight) return
+      layers.forEach((layer) => {
+        const factor = Number(layer.dataset.parallax ?? 0)
+        layer.style.transform = `translate3d(0, ${(offset * factor).toFixed(1)}px, 0)`
+      })
+    }
+
+    const onScroll = () => {
+      if (!visible || ticking) return
+      if (reducedMotion.matches || !desktop.matches) return
+      ticking = true
+      requestAnimationFrame(update)
+    }
+
+    new IntersectionObserver(
+      (entries) => {
+        visible = entries[0]?.isIntersecting ?? false
+      },
+      { threshold: 0 }
+    ).observe(hero)
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    const onPreferenceChange = () => {
+      if (reducedMotion.matches || !desktop.matches) reset()
+      else onScroll()
+    }
+
+    reducedMotion.addEventListener('change', onPreferenceChange)
+    desktop.addEventListener('change', onPreferenceChange)
+  }
+</script>
