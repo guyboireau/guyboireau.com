@@ -49,7 +49,7 @@ export default function ChatBot() {
           </div>
           <div>
             <p className="font-semibold text-slate-800 text-sm">Assistant de Guy</p>
-            <p className="text-xs text-green-500">En ligne</p>
+            <p className="text-xs text-green-700">En ligne</p>
           </div>
         </div>
         {messages.length > 0 && (
