@@ -188,6 +188,33 @@ const jsonLd = [
       inject()
     </script>
 
+    <!-- Défilement fluide (Lenis) — chargé dynamiquement, jamais en mouvement réduit -->
+    <script>
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+
+      const startLenis = async () => {
+        if (prefersReducedMotion.matches) return
+        const { default: Lenis } = await import('lenis')
+        const lenis = new Lenis({
+          duration: 1.05,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        })
+
+        const raf = (time: number) => {
+          lenis.raf(time)
+          requestAnimationFrame(raf)
+        }
+        requestAnimationFrame(raf)
+
+        // Coupe le défilement fluide si l'utilisateur active le mouvement réduit en cours de session
+        prefersReducedMotion.addEventListener('change', (event) => {
+          if (event.matches) lenis.destroy()
+        })
+      }
+
+      startLenis()
+    </script>
+
     <!-- Scroll Reveal -->
     <script>
       const SELECTOR = '.reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-scale, .stagger-item'
