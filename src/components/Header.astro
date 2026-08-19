@@ -1,14 +1,21 @@
 ---
 const currentPath = Astro.url.pathname
 
+const expertises = [
+  { href: '/traitement-documentaire', label: 'Traitement documentaire' },
+  { href: '/facturation-electronique', label: 'Facturation électronique' },
+  { href: '/automatisations', label: 'Automatisations IA' },
+]
+
 const navLinks = [
   { href: '/', label: 'Accueil' },
-  { href: '/a-propos', label: 'À propos' },
   { href: '/services', label: 'Services & Tarifs' },
-  { href: '/automatisations', label: 'Automatisations IA' },
   { href: '/projets', label: 'Projets' },
+  { href: '/a-propos', label: 'À propos' },
   { href: '/contact', label: 'Contact' },
 ]
+
+const isExpertise = expertises.some((link) => link.href === currentPath)
 ---
 
 <header id="site-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
@@ -29,7 +36,31 @@ const navLinks = [
       </a>
 
       <!-- Desktop nav -->
-      <nav class="hidden md:flex items-center space-x-8">
+      <nav class="hidden md:flex items-center space-x-6 lg:space-x-8">
+        <details id="expertises-menu" class="relative">
+          <summary
+            class={`list-none cursor-pointer transition-colors duration-300 font-medium flex items-center gap-1 ${
+              isExpertise ? 'text-primary-500' : 'text-slate-600 hover:text-primary-500'
+            }`}
+          >
+            Expertises
+            <span class="text-xs" aria-hidden="true">▾</span>
+          </summary>
+          <div class="absolute left-0 top-full mt-3 w-64 bg-white border border-slate-200 rounded-xl shadow-lg p-2">
+            {expertises.map((link) => (
+              <a
+                href={link.href}
+                class={`block px-3 py-2 rounded-lg text-sm transition-colors ${
+                  currentPath === link.href
+                    ? 'text-primary-500 bg-primary-50'
+                    : 'text-slate-700 hover:text-primary-500 hover:bg-slate-50'
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </details>
         {navLinks.map((link) => (
           <a
             href={link.href}
@@ -68,6 +99,20 @@ const navLinks = [
     id="mobile-menu"
     class="hidden md:hidden bg-white border-b border-slate-200 shadow-md mx-0 p-4 space-y-2"
   >
+    <p class="px-3 pt-1 pb-1 text-[10px] tracking-[0.18em] uppercase text-slate-400">Expertises</p>
+    {expertises.map((link) => (
+      <a
+        href={link.href}
+        class={`block py-2 px-3 rounded-lg transition-colors font-medium ${
+          currentPath === link.href
+            ? 'text-primary-500 bg-primary-50'
+            : 'text-slate-700 hover:text-primary-500 hover:bg-slate-50'
+        }`}
+      >
+        {link.label}
+      </a>
+    ))}
+    <p class="px-3 pt-3 pb-1 text-[10px] tracking-[0.18em] uppercase text-slate-400">Navigation</p>
     {navLinks.map((link) => (
       <a
         href={link.href}
@@ -99,6 +144,22 @@ const navLinks = [
       header?.classList.add('bg-white', 'shadow-sm', 'border-b', 'border-slate-200')
     } else {
       header?.classList.remove('bg-white', 'shadow-sm', 'border-b', 'border-slate-200')
+    }
+  })
+
+  // Referme le menu Expertises au clic extérieur ou à Échap
+  const expertisesMenu = document.getElementById('expertises-menu') as HTMLDetailsElement | null
+
+  document.addEventListener('click', (event) => {
+    if (!expertisesMenu?.open) return
+    if (!expertisesMenu.contains(event.target as Node)) {
+      expertisesMenu.open = false
+    }
+  })
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && expertisesMenu?.open) {
+      expertisesMenu.open = false
     }
   })
 

@@ -3,8 +3,11 @@ import type { ContactFormData } from '@/lib/types'
 
 const PROJECT_TYPES: Array<{ value: string; label: string }> = [
   { value: '', label: 'Type de projet' },
+  { value: 'app-metier', label: 'Application métier' },
+  { value: 'traitement-documentaire', label: 'Traitement documentaire' },
+  { value: 'facturation-electronique', label: 'Facturation électronique' },
+  { value: 'diagnostic', label: 'Diagnostic' },
   { value: 'site-vitrine', label: 'Interface publique / site' },
-  { value: 'app-web', label: 'Application web' },
   { value: 'app-mobile', label: 'Application mobile' },
   { value: 'maintenance', label: 'Maintenance / évolution' },
   { value: 'automatisation', label: 'Automatisation IA' },

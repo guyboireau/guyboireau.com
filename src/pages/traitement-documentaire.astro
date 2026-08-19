@@ -1,0 +1,299 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+
+const title = 'Traitement documentaire automatisé — extraction et contrôle de documents | Guy Boireau'
+const description =
+  "Bons de livraison, certificats matière, fiches techniques, factures : lus, contrôlés et classés sans ressaisie. Automatisation du traitement documentaire pour les PME, en complément de votre outil de gestion."
+const keywords =
+  "automatisation traitement documentaire, extraction données documents entreprise, OCR intelligent PME, automatisation saisie bordeaux, lecture automatique de documents, reconnaissance documents industriels"
+
+const problemes = [
+  {
+    icon: '⌨️',
+    title: 'La ressaisie',
+    desc: "Un document arrive, quelqu'un le lit, recopie ses données dans un logiciel, puis le range. Ce trajet est refait à chaque document, tous les jours, par des personnes qui ont mieux à faire.",
+  },
+  {
+    icon: '🔁',
+    title: 'Les erreurs de recopie',
+    desc: "Un chiffre inversé sur une quantité, une référence mal lue sur un certificat matière. L'erreur se découvre trois semaines plus tard, à la livraison ou à la facturation.",
+  },
+  {
+    icon: '🔍',
+    title: 'Les documents introuvables',
+    desc: "Le document existe, il est quelque part — boîte mail, dossier réseau, classeur. Le retrouver prend dix minutes ; le prouver à un client ou à un auditeur en prend trente.",
+  },
+  {
+    icon: '📈',
+    title: 'Le volume qui ne suit pas',
+    desc: "Le traitement manuel tient tant que les volumes restent stables. Il casse dès que l'activité augmente, et embaucher pour de la saisie n'est pas une réponse durable.",
+  },
+]
+
+const etapes = [
+  {
+    num: '01',
+    title: 'Lecture automatique',
+    desc: "Le document est lu tel qu'il arrive : scan, photo prise au téléphone dans l'atelier, PDF d'un fournisseur, pièce jointe d'un email. Les données utiles en sont extraites — références, quantités, dates, numéros de lot, montants.",
+  },
+  {
+    num: '02',
+    title: 'Contrôle de cohérence',
+    desc: "Les données lues sont confrontées à ce que vous savez déjà : la commande correspondante existe-t-elle, les quantités concordent-elles, la référence fournisseur est-elle connue, la date est-elle plausible. Une donnée lue correctement mais incohérente est aussi un problème.",
+  },
+  {
+    num: '03',
+    title: 'Seuil de confiance',
+    desc: "Chaque extraction porte un score. Au-dessus du seuil, le document est traité automatiquement, sans intervention. En dessous, il part dans une file de vérification humaine, avec le champ douteux mis en évidence. Personne ne relit ce qui est certain.",
+    highlight: true,
+  },
+  {
+    num: '04',
+    title: 'Classement et intégration',
+    desc: "Le document est archivé au bon endroit, indexé sur ses données, et les informations extraites partent dans votre système existant — ERP, outil de gestion, base interne, tableur si c'est ce que vous utilisez.",
+  },
+]
+
+const faq = [
+  {
+    q: "En quoi est-ce différent d'un OCR classique ?",
+    a: "Un OCR transforme une image en texte. Il ne sait pas qu'un nombre est une quantité, que cette quantité doit correspondre à une commande, ni qu'un document mal cadré gagnerait à être relu par un humain. Le travail utile est là : comprendre la structure, contrôler la cohérence, et savoir reconnaître ses propres limites.",
+  },
+  {
+    q: 'Et si la lecture se trompe ?',
+    a: "C'est l'hypothèse de départ, pas l'exception. L'architecture est construite pour que les cas incertains soient identifiés comme tels et repris par un humain avant d'entrer dans vos données. Le taux d'automatisation se règle : plus le seuil est haut, moins il y a d'erreurs et plus il y a de reprises manuelles. On l'ajuste sur vos documents réels.",
+  },
+  {
+    q: 'Faut-il changer notre logiciel de gestion ?',
+    a: "Non. Le traitement documentaire vient en amont et alimente ce que vous utilisez déjà. Remplacer un ERP en service est un projet d'un autre ordre — et rarement une bonne idée quand le vrai problème est la saisie.",
+  },
+  {
+    q: 'Combien de documents faut-il pour que ça vaille le coup ?',
+    a: "L'ordre de grandeur à partir duquel le calcul est favorable se situe autour de quelques dizaines de documents par semaine, dès lors que chacun demande plusieurs minutes de traitement. En dessous, un projet plus simple suffit souvent — et je vous le dirai.",
+  },
+  {
+    q: 'Nos documents sont très spécifiques à notre métier.',
+    a: "C'est le cas courant, et c'est plutôt favorable : un document métier a une structure stable et un vocabulaire fermé, ce qui rend le contrôle de cohérence plus fiable que sur un document générique. Le diagnostic préalable sert à mesurer cette variabilité sur vos propres pièces.",
+  },
+]
+---
+
+<BaseLayout {title} {description} {keywords}>
+  <script slot="jsonld" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  })} />
+  <Header />
+  <main>
+    <!-- Intro -->
+    <section class="section bg-slate-50 pt-32">
+      <div class="max-w-4xl mx-auto text-center reveal-fade-up">
+        <h1 class="section-title">Vos documents, traités automatiquement</h1>
+        <p class="section-subtitle">
+          Bons de livraison, certificats matière, fiches techniques, factures : lus, contrôlés et classés sans ressaisie.
+        </p>
+        <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+          Dans la plupart des ateliers et des sociétés de négoce, l'information utile arrive sur du papier ou dans un PDF, et repart à la main dans un logiciel. C'est ce trajet-là qui peut être outillé.
+        </p>
+      </div>
+    </section>
+
+    <!-- Le problème -->
+    <section class="section bg-white">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <span class="inline-block text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">01 — Le problème</span>
+          <h2 class="section-title">Ce que coûte la saisie manuelle</h2>
+          <p class="section-subtitle">Rarement spectaculaire, toujours quotidien</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {problemes.map((item) => (
+            <div class="glass-card p-8 stagger-item">
+              <div class="text-3xl mb-4">{item.icon}</div>
+              <h3 class="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
+              <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Comment ça marche -->
+    <section class="section bg-slate-50">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <span class="inline-block text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">02 — Comment ça marche</span>
+          <h2 class="section-title">Quatre étapes, une seule qui compte vraiment</h2>
+          <p class="section-subtitle">La troisième — c'est elle qui rend le reste utilisable</p>
+        </div>
+
+        <div class="space-y-5">
+          {etapes.map((etape) => (
+            <div class={`glass-card p-8 stagger-item ${etape.highlight ? 'border-2 border-primary-500/50 shadow-lg shadow-primary-500/10' : ''}`}>
+              <div class="flex flex-col md:flex-row gap-6">
+                <div class="shrink-0">
+                  <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-500/10 text-primary-500 font-bold">
+                    {etape.num}
+                  </div>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-xl font-bold text-slate-800 mb-3">{etape.title}</h3>
+                  <p class="text-slate-600 leading-relaxed">{etape.desc}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="glass-card p-8 mt-8 border border-primary-500/20 reveal-fade-up">
+          <p class="text-slate-600 leading-relaxed">
+            <strong class="text-slate-800">Pourquoi le seuil de confiance change tout.</strong>
+            Un système qui traite 100 % des documents automatiquement introduit silencieusement des erreurs dans vos données. Un système qui demande une validation sur chaque document ne vous fait rien gagner. L'intérêt est entre les deux : automatiser ce qui est certain, escalader ce qui ne l'est pas, et rendre visible la frontière entre les deux.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preuve -->
+    <section class="section bg-white">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <span class="inline-block text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">03 — En production</span>
+          <h2 class="section-title">Le cas Niido</h2>
+          <p class="section-subtitle">Validation documentaire sur une marketplace mobile</p>
+        </div>
+
+        <div class="glass-card p-8 md:p-10 border-2 border-primary-500/30 reveal-fade-up">
+          <p class="text-slate-600 leading-relaxed mb-6">
+            Niido met en relation des prestataires du bâtiment et des gestionnaires de biens. Chaque prestataire qui s'inscrit doit fournir des pièces — identité, assurance, justificatifs professionnels. Les vérifier une par une, à la main, ne tient pas passé les premières dizaines d'inscriptions.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
+              <h3 class="text-slate-800 font-semibold mb-2">Première approche : OCR classique</h3>
+              <p class="text-slate-500 text-sm leading-relaxed">
+                Elle fonctionnait sur des documents propres, scannés bien à plat. En conditions réelles — photos prises au téléphone, de travers, sur un coin de table, avec un reflet — le taux d'échec est devenu inacceptable. L'approche a été abandonnée.
+              </p>
+            </div>
+            <div class="bg-primary-50 rounded-xl p-6 border border-primary-500/30">
+              <h3 class="text-slate-800 font-semibold mb-2">Architecture retenue : hybride</h3>
+              <p class="text-slate-600 text-sm leading-relaxed">
+                Lecture par modèle de vision, contrôle de cohérence sur les champs extraits, score de confiance par document, et file de reprise humaine pour les seuls cas douteux. Le modérateur ne voit plus que ce qui pose réellement question.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2 mb-6">
+            {['React Native', 'Expo', 'Supabase', 'TypeScript', 'API Anthropic'].map((tech) => (
+              <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs border border-slate-200">{tech}</span>
+            ))}
+          </div>
+
+          <p class="text-slate-500 text-sm leading-relaxed">
+            L'enseignement compte plus que la stack : sur des documents produits par des humains pressés, la qualité d'entrée est le vrai problème. Une architecture qui suppose des documents propres échoue en production. Une architecture qui assume l'incertitude et la mesure, non.
+          </p>
+
+          <div class="mt-6">
+            <a href="/projets" class="text-primary-500 hover:text-primary-600 transition-colors text-sm font-medium">
+              Voir la fiche du projet →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Positionnement ERP -->
+    <section class="section bg-slate-50">
+      <div class="max-w-4xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <span class="inline-block text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">04 — Avec votre ERP</span>
+          <h2 class="section-title">En complément, jamais en remplacement</h2>
+        </div>
+
+        <div class="glass-card p-8 md:p-10 reveal-fade-up">
+          <p class="text-slate-600 leading-relaxed mb-6">
+            Si vous avez un ERP, il reste. Il gère vos stocks, vos achats, votre comptabilité, et il le fait mieux que ce que je pourrais construire. Ce n'est pas le terrain.
+          </p>
+          <p class="text-slate-600 leading-relaxed mb-6">
+            Les ERP industriels ont deux angles morts constants : <strong class="text-slate-800">la saisie terrain moderne</strong> — prendre une photo dans l'atelier, remplir une fiche sur un téléphone, travailler hors connexion — et <strong class="text-slate-800">l'extraction documentaire</strong> — lire un document entrant et en tirer des données exploitables. Ces deux manques se comblent autour de l'ERP, pas contre lui.
+          </p>
+          <p class="text-slate-500 text-sm leading-relaxed">
+            Concrètement : les données extraites entrent dans votre ERP par ses interfaces existantes, import de fichier ou API selon ce qu'il expose. Si votre éditeur facture chaque connexion, c'est un point à regarder tôt — le diagnostic le vérifie.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tarifs -->
+    <section class="section bg-white">
+      <div class="max-w-4xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <h2 class="section-title">Budget</h2>
+          <p class="section-subtitle">Au forfait, annoncé avant de commencer</p>
+        </div>
+
+        <div class="glass-card p-8 md:p-10 border-2 border-primary-500/30 reveal-scale text-center">
+          <div class="text-4xl md:text-5xl font-bold text-gradient mb-3">9 000 – 22 000 €</div>
+          <p class="text-slate-500 mb-8">Selon le périmètre : types de documents, volume, systèmes à raccorder</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left mb-8">
+            {[
+              { t: 'Ce qui fait monter le prix', d: "Plusieurs familles de documents très différentes, un ERP fermé ou sans API, des règles de contrôle nombreuses." },
+              { t: 'Ce qui le fait baisser', d: "Une seule famille de documents, une structure stable, un système d'arrivée qui expose une API propre." },
+              { t: 'Ce qui n\'est pas compris', d: "L'abonnement au service de lecture, facturé à l'usage et directement par le fournisseur — quelques dizaines d'euros par mois aux volumes courants." },
+            ].map((item) => (
+              <div class="bg-slate-50 rounded-xl p-5 border border-slate-200">
+                <h3 class="text-slate-800 font-semibold text-sm mb-2">{item.t}</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">{item.d}</p>
+              </div>
+            ))}
+          </div>
+
+          <p class="text-slate-600 mb-8 max-w-2xl mx-auto">
+            Aucun de ces chiffres n'a de sens sans avoir vu vos documents. C'est exactement ce que fait le diagnostic préalable : mesurer la variabilité réelle de vos pièces et le taux d'automatisation atteignable, avant que vous n'engagiez un projet.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/contact?subject=Traitement%20documentaire" class="btn-primary inline-block">
+              Demander un diagnostic préalable
+            </a>
+            <a href="/services" class="btn-secondary inline-block">
+              Voir le détail du diagnostic
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section bg-slate-50">
+      <div class="max-w-3xl mx-auto">
+        <div class="reveal-fade-up">
+          <h2 class="section-title text-center">Questions fréquentes</h2>
+          <p class="section-subtitle text-center">Ce qu'on me demande avant de se lancer</p>
+        </div>
+
+        <div class="space-y-4">
+          {faq.map((item) => (
+            <details class="glass-card p-6 group stagger-item cursor-pointer">
+              <summary class="text-slate-800 font-medium text-lg list-none flex items-center justify-between">
+                {item.q}
+                <span class="text-primary-400 ml-4 shrink-0 transition-transform group-open:rotate-180">▾</span>
+              </summary>
+              <p class="text-slate-500 mt-4 leading-relaxed">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
