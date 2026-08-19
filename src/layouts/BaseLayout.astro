@@ -16,7 +16,7 @@ const {
   canonical = Astro.url.href,
   ogImage = '/og-image.png',
   ogType = 'website',
-  keywords = 'développeur web bordeaux, freelance bordeaux, création site web bordeaux, développeur web freelance, react bordeaux, typescript bordeaux, site web artisan bordeaux',
+  keywords = 'application métier bordeaux, automatisation de processus entreprise, traitement documentaire automatisé, développeur indépendant bordeaux, logiciel métier PME, automatisation saisie bordeaux, développeur freelance bordeaux',
 } = Astro.props
 
 const ogImageAbsolute = new URL(ogImage, Astro.site).toString()
@@ -54,27 +54,27 @@ const jsonLd = [
     '@type': 'Person',
     '@id': 'https://guyboireau.com/#person',
     name: 'Guy Boireau',
-    jobTitle: 'Développeur Web Freelance',
+    jobTitle: 'Développeur indépendant — applications métier & automatisation',
     url: 'https://guyboireau.com',
     email: 'me@guyboireau.com',
     telephone: '+33675751439',
     image: 'https://guyboireau.com/assets/profile.png',
     address,
     sameAs,
-    knowsAbout: ['React', 'TypeScript', 'NestJS', 'React Native', 'PostgreSQL', 'Supabase', 'Astro'],
+    knowsAbout: ['Applications métier', 'Automatisation de processus', 'Traitement documentaire automatisé', 'Facturation électronique', 'React', 'TypeScript', 'NestJS', 'React Native', 'PostgreSQL', 'Supabase'],
   },
   {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
     '@id': 'https://guyboireau.com/#business',
-    name: 'Guy Boireau — Développeur Web Freelance Bordeaux',
-    alternateName: 'Guy Boireau Développeur Web',
+    name: 'Guy Boireau — Applications métier & automatisation · Bordeaux',
+    alternateName: 'Guy Boireau Développeur Indépendant',
     url: 'https://guyboireau.com',
     telephone: '+33675751439',
     email: 'me@guyboireau.com',
     logo: 'https://guyboireau.com/assets/logo.png',
     image: 'https://guyboireau.com/assets/profile.png',
-    description: 'Développeur web freelance à Bordeaux. Création de sites web, applications web et mobiles sur-mesure. Maintenance mensuelle, SEO local. Devis gratuit.',
+    description: 'Développeur indépendant à Bordeaux. Applications métier, automatisation de processus et traitement documentaire pour les structures de 5 à 30 salariés. Suivi mensuel dès 79€/mois.',
     address,
     geo: {
       '@type': 'GeoCoordinates',
@@ -94,11 +94,12 @@ const jsonLd = [
     },
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'Services de développement web',
+      name: 'Applications métier, automatisation et présence en ligne',
       itemListElement: [
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Création de site vitrine', description: 'Site web professionnel sur-mesure avec simulateur de devis interactif' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Application web & mobile', description: 'Application métier, marketplace, app iOS/Android sur devis' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Maintenance mensuelle', description: 'Hébergement, mises à jour, SEO local à partir de 79€/mois' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Applications métier & automatisation', description: 'Application métier sur-mesure, automatisation de processus, interfaces de saisie terrain, espaces de gestion' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Traitement documentaire automatisé', description: 'Lecture, contrôle et classement automatiques de documents d\'entreprise avec architecture à seuil de confiance' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Sites & présence en ligne', description: 'Interface publique, référencement local, espace de gestion autonome' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Suivi & maintenance', description: 'Hébergement, mises à jour, SEO local à partir de 79€/mois' } },
         { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dépannage informatique', description: 'Prise en main à distance, 35€/heure' } },
       ],
     },
@@ -128,14 +129,14 @@ const jsonLd = [
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content="Guy Boireau — Développeur Web Freelance" />
+    <meta property="og:site_name" content="Guy Boireau — Applications métier & automatisation" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:image" content={ogImageAbsolute} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Guy Boireau — Développeur Web Freelance Bordeaux" />
+    <meta property="og:image:alt" content="Guy Boireau — Applications métier & automatisation · Bordeaux" />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />

@@ -9,7 +9,7 @@ Auto-entrepreneur depuis novembre 2025 (SIRET : 993 605 542 00014).
 Diplômé d'un Mastère Expert en Développement Web, RNCP niveau 7, Ynov Campus Bordeaux (2025).
 3 ans d'expérience en alternance chez Bassetti Group (Mérignac) sur le logiciel industriel TEEXMA®.
 
-Sa philosophie : livrer des solutions clé-en-main avec CMS intégré, former les clients à l'autonomie,
+Sa philosophie : livrer des solutions clé-en-main avec espace de gestion intégré, transférer les compétences aux clients,
 et rester disponible après la livraison.
 
 ## Stack technique
@@ -41,15 +41,15 @@ Site web d'une péniche culturelle à Saint-Léger-des-Vignes avec CMS sur-mesur
 - Interface d'administration complète pour le client
 - Gestion dynamique des événements culturels et actualités
 - Galerie photo avec upload via Supabase Storage
-- Formation du client à l'utilisation du back-office
+- Transfert de compétences sur l'espace de gestion
 Stack : React 19, React Router 7, TypeScript, Supabase, Vite, Vercel
 
-### Arnault Janvier — Site vitrine artisan vitrailliste (livré janvier 2026)
-Site vitrine multilingue + back-office complet pour Arnault Janvier (Glassncraft Studio),
+### Arnault Janvier — Interface publique artisan vitrailliste (livré janvier 2026)
+Interface publique multilingue + espace de gestion complet pour Arnault Janvier (Glassncraft Studio),
 maître verrier à Paris.
 - Multilingue FR / EN / ES avec next-intl (hreflang, sitemap multilingue)
-- CMS sur-mesure avec gestion des photos via Supabase Storage
-- Interface d'administration pour mise à jour autonome du contenu
+- Espace de gestion sur-mesure avec gestion des photos via Supabase Storage
+- Le client met à jour son contenu en autonomie
 - Formulaire de contact avec pièces jointes, protégé par Cloudflare Turnstile
 Stack : Next.js 16, React 19, TypeScript, Tailwind CSS v4, Supabase, next-intl, Resend, Vercel
 Site : arnault-janvier-vitrail.fr
