@@ -1,4 +1,6 @@
 ---
+import HeroGrid from './HeroGrid.astro'
+
 const particles = Array.from({ length: 15 }, (_, i) => ({
   id: i,
   left: `${Math.round((i * 7 + 3) % 100)}%`,
@@ -10,6 +12,9 @@ const particles = Array.from({ length: 15 }, (_, i) => ({
 ---
 
 <section id="hero" class="min-h-screen animated-gradient flex items-center justify-center relative overflow-hidden py-20 px-4 sm:px-6 lg:px-8">
+  <!-- Maillage de points — plan de fond, chargé seulement sur desktop -->
+  <HeroGrid />
+
   <!-- Background blobs — plan lointain -->
   <div data-parallax="0.18" class="absolute inset-0 overflow-hidden pointer-events-none">
     <div class="absolute w-96 h-96 bg-primary-500/10 rounded-full blur-3xl -top-48 -left-48 animate-float"></div>

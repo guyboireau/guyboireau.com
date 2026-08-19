@@ -1,0 +1,145 @@
+---
+// Maillage de points en perspective, réactif au curseur.
+// Rendu en canvas 2D : une scène WebGL coûterait 150 à 600 Ko pour le même effet.
+---
+
+<canvas
+  id="hero-grid"
+  class="absolute inset-0 w-full h-full pointer-events-none opacity-0 transition-opacity duration-700"
+  aria-hidden="true"
+></canvas>
+
+<script>
+  const canvas = document.getElementById('hero-grid') as HTMLCanvasElement | null
+  const hero = document.getElementById('hero')
+
+  if (canvas && hero) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const desktop = window.matchMedia('(min-width: 768px)')
+    const context = canvas.getContext('2d')
+
+    // Grille en profondeur : colonnes en largeur, rangées qui s'éloignent
+    const COLUMNS = 26
+    const ROWS = 14
+    const FOCAL = 520
+    const COLOR = '160, 73, 59'
+
+    let width = 0
+    let height = 0
+    let ratio = 1
+    let frame = 0
+    let running = false
+    let visible = true
+
+    // Position du curseur, lissée pour éviter les à-coups
+    let pointerX = 0
+    let pointerY = 0
+    let easedX = 0
+    let easedY = 0
+
+    const resize = () => {
+      ratio = Math.min(window.devicePixelRatio || 1, 2)
+      width = hero.clientWidth
+      height = hero.clientHeight
+      canvas.width = Math.floor(width * ratio)
+      canvas.height = Math.floor(height * ratio)
+      context?.setTransform(ratio, 0, 0, ratio, 0, 0)
+    }
+
+    const render = (time: number) => {
+      if (!context) return
+
+      easedX += (pointerX - easedX) * 0.045
+      easedY += (pointerY - easedY) * 0.045
+
+      context.clearRect(0, 0, width, height)
+
+      const drift = time * 0.00006
+      const horizon = height * 0.62
+
+      for (let row = 0; row < ROWS; row += 1) {
+        // Profondeur de la rangée, avec un lent glissement vers l'avant
+        const depth = 1 + ((row + drift * ROWS) % ROWS) * 0.85
+        const scale = FOCAL / (FOCAL + depth * 120)
+        const y = horizon + depth * 26 * scale + easedY * 14 * scale
+
+        for (let column = 0; column < COLUMNS; column += 1) {
+          const offset = (column - (COLUMNS - 1) / 2) / COLUMNS
+          const x = width / 2 + offset * width * 1.25 * scale + easedX * 26 * scale
+          if (x < -20 || x > width + 20 || y < -20 || y > height + 20) continue
+
+          const radius = Math.max(0.4, 1.9 * scale)
+          const alpha = 0.32 * scale
+
+          context.beginPath()
+          context.arc(x, y, radius, 0, Math.PI * 2)
+          context.fillStyle = `rgba(${COLOR}, ${alpha.toFixed(3)})`
+          context.fill()
+        }
+      }
+
+    }
+
+    const loop = (time: number) => {
+      if (!running) return
+      render(time)
+      frame = requestAnimationFrame(loop)
+    }
+
+    const start = () => {
+      if (running || !context) return
+      running = true
+      canvas.classList.remove('opacity-0')
+      // Première image dessinée tout de suite : le canvas ne reste jamais vide
+      // si la boucle d'animation tarde à démarrer (onglet en arrière-plan…)
+      render(performance.now())
+      frame = requestAnimationFrame(loop)
+    }
+
+    const stop = () => {
+      running = false
+      cancelAnimationFrame(frame)
+    }
+
+    const evaluate = () => {
+      if (!desktop.matches || reducedMotion.matches) {
+        stop()
+        canvas.classList.add('opacity-0')
+        context?.clearRect(0, 0, width, height)
+        return
+      }
+      if (visible) start()
+    }
+
+    const onPointerMove = (event: PointerEvent) => {
+      const rect = hero.getBoundingClientRect()
+      pointerX = ((event.clientX - rect.left) / rect.width - 0.5) * 2
+      pointerY = ((event.clientY - rect.top) / rect.height - 0.5) * 2
+    }
+
+    resize()
+    evaluate()
+
+    // Le rendu se met en pause dès que la hero quitte le viewport
+    new IntersectionObserver(
+      (entries) => {
+        visible = entries[0]?.isIntersecting ?? false
+        if (visible) evaluate()
+        else stop()
+      },
+      { threshold: 0 }
+    ).observe(hero)
+
+    window.addEventListener('resize', () => {
+      resize()
+      evaluate()
+    })
+    hero.addEventListener('pointermove', onPointerMove, { passive: true })
+    desktop.addEventListener('change', evaluate)
+    reducedMotion.addEventListener('change', evaluate)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop()
+      else evaluate()
+    })
+  }
+</script>
