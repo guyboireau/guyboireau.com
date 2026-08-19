@@ -232,6 +232,52 @@ const jsonLd = [
       startLenis()
     </script>
 
+    <!-- Curseur personnalisé — souris fine uniquement, jamais au tactile -->
+    <script>
+      const finePointer = window.matchMedia('(pointer: fine)')
+      const cursorReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+
+      if (finePointer.matches && !cursorReducedMotion.matches) {
+        const cursor = document.createElement('div')
+        cursor.className = 'custom-cursor'
+        cursor.setAttribute('aria-hidden', 'true')
+        document.body.appendChild(cursor)
+
+        const INTERACTIVE = 'a, button, summary, input, select, textarea, label, [role="button"]'
+        let pending = false
+        let x = 0
+        let y = 0
+
+        const place = () => {
+          pending = false
+          cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`
+        }
+
+        document.addEventListener(
+          'pointermove',
+          (event) => {
+            if (event.pointerType !== 'mouse') return
+            x = event.clientX
+            y = event.clientY
+            cursor.classList.add('is-visible')
+            if (!pending) {
+              pending = true
+              requestAnimationFrame(place)
+            }
+          },
+          { passive: true }
+        )
+
+        document.addEventListener('pointerover', (event) => {
+          const target = event.target as Element | null
+          cursor.classList.toggle('is-hovering', Boolean(target?.closest(INTERACTIVE)))
+        })
+
+        document.addEventListener('pointerleave', () => cursor.classList.remove('is-visible'))
+        window.addEventListener('blur', () => cursor.classList.remove('is-visible'))
+      }
+    </script>
+
     <!-- Scroll Reveal -->
     <script>
       const SELECTOR = '.reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-scale, .stagger-item'

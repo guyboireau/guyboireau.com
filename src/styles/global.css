@@ -288,6 +288,40 @@
   overscroll-behavior: contain;
 }
 
+/* ===== CURSEUR PERSONNALISÉ (souris fine, activé par JS) ===== */
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  border: 1.5px solid rgba(160, 73, 59, 0.55);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    width 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    margin 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.22s ease;
+  will-change: transform;
+}
+
+.custom-cursor.is-visible {
+  opacity: 1;
+}
+
+.custom-cursor.is-hovering {
+  width: 46px;
+  height: 46px;
+  margin: -23px 0 0 -23px;
+  background-color: rgba(160, 73, 59, 0.08);
+}
+
 /* ===== LENIS — DÉFILEMENT FLUIDE ===== */
 
 html.lenis,
@@ -331,5 +365,9 @@ html.lenis body {
 
   .link-underline {
     transition: none !important;
+  }
+
+  .custom-cursor {
+    display: none !important;
   }
 }
