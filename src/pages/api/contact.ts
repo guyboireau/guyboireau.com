@@ -51,6 +51,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     // Sauvegarde Supabase
     const supabase = getSupabaseServer()
     if (supabase) {
+      // @ts-expect-error portfolio_contacts absent des types générés — table créée manuellement
       const { error: dbError } = await supabase.from('portfolio_contacts').insert({
         name,
         email,
