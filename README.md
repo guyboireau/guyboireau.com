@@ -25,7 +25,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 - **Formulaire de contact** — Validation Zod, persistance Supabase et envoi d'email via Resend
 - **SEO avancé** — JSON-LD (Person / LocalBusiness), sitemap auto-généré, balises Open Graph, métadonnées géographiques
 - **Animations CSS** — Animations légères avec prise en charge de `prefers-reduced-motion`
-- **Analytics** — Vercel Analytics
+- **Analytics** — Vercel Analytics + Google Tag Manager (`GTM-K2J6DN5X`, injecté dans `BaseLayout.astro`)
 
 ---
 
@@ -95,9 +95,12 @@ Créer un fichier `.env` à la racine :
 | `PUBLIC_SUPABASE_URL` | Publique | oui | URL du projet Supabase |
 | `PUBLIC_SUPABASE_ANON_KEY` | Publique | oui | Clé anonyme Supabase |
 | `ANTHROPIC_API_KEY` | Privée | oui | Clé API Anthropic (Claude) |
-| `RESEND_API_KEY` | Privée | **non** | Clé API Resend (envoi d'emails) |
+| `RESEND_API_KEY` | Privée | oui | Clé API Resend (envoi d'emails) |
 
-> ⚠️ `.env.example` est incomplet : il ne contient que les 3 premières variables. `RESEND_API_KEY` y est absente alors que `src/pages/api/contact.ts` la lit — sans elle, l'insertion Supabase fonctionne mais l'envoi d'email échoue (`[contact] RESEND_API_KEY manquante`). Copier `.env.example` ne suffit donc pas : ajouter `RESEND_API_KEY` à la main.
+> `cp .env.example .env` suffit désormais : les quatre variables réellement lues par le
+> code y figurent. Sans `RESEND_API_KEY`, `src/pages/api/contact.ts` journalise
+> `[contact] RESEND_API_KEY manquante` et répond en 500 — l'insertion Supabase a bien eu
+> lieu, mais aucun email n'est parti.
 
 ---
 
