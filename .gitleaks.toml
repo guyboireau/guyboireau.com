@@ -1,0 +1,21 @@
+# Configuration gitleaks — scan de secrets en CI.
+# Créée lors de l'audit de sécurité du 2026-09-07.
+#
+# ⚠️  Chaque entrée de l'allowlist correspond à une détection RÉELLE de gitleaks
+#     qui a été inspectée manuellement et confirmée comme faux positif.
+#     N'élargis JAMAIS cette liste sans avoir ouvert et vérifié la valeur concernée.
+#     Un secret réel doit être révoqué et purgé, pas ajouté ici.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Faux positifs vérifiés (audit 2026-09-07)"
+regexes = [
+  # Placeholders de documentation : YOUR_ANON_KEY, YOUR_PROJECT, YOUR_SERVICE_KEY,
+  # VotreTokenSecret… Ce sont des chaînes littérales dans des exemples curl / .env.
+  '''(?i)\b(your|votre)[_a-z0-9]*(key|token|secret|project|password|service)[_a-z0-9]*''',
+  # En-tête JWT standard tronqué dans la doc : base64 de {"alg":"HS256","typ":"JWT"}
+  # suivi de "..." — ce n'est pas une clé, juste le début visible de n'importe quel JWT.
+  '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.\.\.''',
+]
