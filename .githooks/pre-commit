@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+#
+# Détecte les secrets dans les fichiers indexés, AVANT qu'ils n'entrent dans un
+# commit. Créé lors de l'audit de sécurité du 2026-09-07.
+#
+# Pourquoi ce hook en plus du job CI : la CI s'exécute APRÈS le push. Quand elle
+# passe au rouge, le secret est déjà sur GitHub — présent dans l'historique, dans
+# les clones, potentiellement dans les logs. Le révoquer devient obligatoire.
+# Ce hook est la seule barrière qui agit pendant qu'il est encore temps.
+#
+# Installé automatiquement par le script `prepare` du package.json
+# (`git config core.hooksPath .githooks`) — aucune dépendance npm ajoutée.
+#
+# Contourner ponctuellement : git commit --no-verify
+
+set -eu
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+    printf '\033[33m⚠️  gitleaks absent : commit NON vérifié pour les secrets.\033[0m\n' >&2
+    printf '   Installer :  brew install gitleaks   (ou https://github.com/gitleaks/gitleaks/releases)\n' >&2
+    printf '   Le job CI "gitleaks" reste le garde-fou, mais il ne se déclenche qu%s\n' "'après le push." >&2
+    exit 0
+fi
+
+# --redact : ne jamais afficher la valeur du secret dans le terminal, elle
+# finirait dans le scrollback ou dans un rapport de bug collé quelque part.
+if ! gitleaks protect --staged --redact --no-banner; then
+    printf '\n\033[31m✖ Commit bloqué : un secret a été détecté dans les fichiers indexés.\033[0m\n' >&2
+    printf '\n' >&2
+    printf '  1. Retire la valeur du code et lis-la depuis une variable d%s\n' "'environnement." >&2
+    printf '  2. Si la valeur a DÉJÀ été poussée un jour, considère-la compromise :\n' >&2
+    printf '     révoque-la à la source (Supabase, Stripe…) avant toute autre chose.\n' >&2
+    printf '  3. Faux positif ? Ajoute un motif ciblé dans .gitleaks.toml — jamais un\n' >&2
+    printf '     chemin entier, et jamais un vrai secret.\n' >&2
+    printf '\n' >&2
+    printf '  Contournement d%s git commit --no-verify\n' "'urgence :" >&2
+    exit 1
+fi
