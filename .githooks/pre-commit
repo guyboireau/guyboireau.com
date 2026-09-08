@@ -1,0 +1,39 @@
+#!/bin/sh
+# ═══════════════════════════════════════════════════════════════
+# Hook pre-commit — bloque un commit contenant un secret
+# ═══════════════════════════════════════════════════════════════
+#
+# Installation (une fois par clone) :
+#     git config core.hooksPath .githooks
+#
+# Installer gitleaks :
+#     macOS   : brew install gitleaks
+#     Linux   : https://github.com/gitleaks/gitleaks/releases
+#
+# Ce hook est un filet local, pas la source de vérité : le workflow
+# `.github/workflows/secret-scan.yml` refait le contrôle en CI.
+
+set -u
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+    echo "⚠️  gitleaks n'est pas installé — contrôle des secrets ignoré."
+    echo "    macOS : brew install gitleaks"
+    echo "    Autre : https://github.com/gitleaks/gitleaks/releases"
+    exit 0
+fi
+
+if ! gitleaks git . --staged --redact --no-banner; then
+    echo ""
+    echo "⛔ Commit bloqué : un secret potentiel a été détecté."
+    echo ""
+    echo "   → Retirez la valeur du code et passez par une variable"
+    echo "     d'environnement (.env, non suivi par git)."
+    echo "   → Si la clé a déjà existé en clair, considérez-la compromise"
+    echo "     et faites-la tourner chez le fournisseur."
+    echo "   → Faux positif ? Ajoutez l'empreinte (Fingerprint) affichée"
+    echo "     ci-dessus dans .gitleaksignore, avec un commentaire."
+    echo ""
+    exit 1
+fi
+
+exit 0
