@@ -1,21 +1,32 @@
-# Configuration gitleaks — scan de secrets en CI.
-# Créée lors de l'audit de sécurité du 2026-09-07.
+# ═══════════════════════════════════════════════════════════════
+# Configuration Gitleaks — détection de secrets
+# ═══════════════════════════════════════════════════════════════
 #
-# ⚠️  Chaque entrée de l'allowlist correspond à une détection RÉELLE de gitleaks
-#     qui a été inspectée manuellement et confirmée comme faux positif.
-#     N'élargis JAMAIS cette liste sans avoir ouvert et vérifié la valeur concernée.
-#     Un secret réel doit être révoqué et purgé, pas ajouté ici.
+# Étend le jeu de règles par défaut de gitleaks et ajoute une règle
+# dédiée à la clé Supabase `service_role`, qui contourne TOUTES les
+# policies RLS et ne doit jamais quitter le serveur.
+#
+# Les faux positifs vérifiés manuellement lors de l'audit de sécurité
+# sont listés dans `.gitleaksignore` sous forme d'empreintes précises
+# (commit + fichier + règle + ligne). Aucune exclusion globale de
+# fichier n'est utilisée : un NOUVEAU secret introduit dans un fichier
+# déjà audité reste détecté.
+#
+# Utilisation locale :
+#   gitleaks git .            # audit de l'historique complet
+#   gitleaks git . --staged   # contrôle avant commit (voir .githooks/)
+
+title = "Configuration gitleaks"
 
 [extend]
 useDefault = true
 
-[allowlist]
-description = "Faux positifs vérifiés (audit 2026-09-07)"
-regexes = [
-  # Placeholders de documentation : YOUR_ANON_KEY, YOUR_PROJECT, YOUR_SERVICE_KEY,
-  # VotreTokenSecret… Ce sont des chaînes littérales dans des exemples curl / .env.
-  '''(?i)\b(your|votre)[_a-z0-9]*(key|token|secret|project|password|service)[_a-z0-9]*''',
-  # En-tête JWT standard tronqué dans la doc : base64 de {"alg":"HS256","typ":"JWT"}
-  # suivi de "..." — ce n'est pas une clé, juste le début visible de n'importe quel JWT.
-  '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.\.\.''',
-]
+[[rules]]
+id = "supabase-service-role-key"
+description = "Clé Supabase service_role (contourne toutes les policies RLS)"
+# Un JWT Supabase dont le payload contient `"role":"service_role"`.
+# Le payload est encodé en base64url : selon sa position dans le JSON,
+# la chaîne recherchée peut tomber sur 3 alignements différents, d'où
+# les 3 fragments alternatifs ci-dessous.
+regex = '''\beyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]*(?:cm9sZSI6InNlcnZpY2Vfcm9s|bGUiOiJzZXJ2aWNlX3JvbGUi|b2xlIjoic2VydmljZV9yb2xl)[A-Za-z0-9_-]*\.[A-Za-z0-9_-]{20,}'''
+keywords = ["eyj"]
