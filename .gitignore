@@ -34,3 +34,34 @@ agentdb.rvf
 agentdb.rvf.lock
 SECURITY_AUDIT.md
 SECURITY_REVIEW_POST_FIX.md
+
+# ═══════════════════════════════════════════════════════════════
+# 🔐 SECRETS — filet de sécurité (audit sécurité 2026-09)
+# Aucun de ces fichiers ne doit jamais être commité.
+# ═══════════════════════════════════════════════════════════════
+# Clés privées & certificats
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.ppk
+*.asc
+*.gpg
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+id_ecdsa
+id_ecdsa.*
+
+# Fichiers de credentials
+credentials.json
+credentials.*.json
+service-account*.json
+secrets.json
+secrets.yml
+secrets.yaml
+.netrc
+.pypirc
