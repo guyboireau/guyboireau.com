@@ -1,6 +1,7 @@
 export const prerender = false
 
 import type { APIRoute } from 'astro'
+import { randomUUID } from 'node:crypto'
 import { Resend } from 'resend'
 import { z } from 'zod'
 import { getSupabaseServer } from '@/lib/supabase.server'
@@ -24,6 +25,9 @@ function escapeHtml(unsafe: string): string {
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ip = clientAddress ?? 'unknown'
+  // Corrèle les lignes de log entre elles et avec l'email reçu, sans y mettre
+  // de donnée personnelle (nom / email / message du prospect).
+  const requestId = randomUUID()
   if (await contactRateLimiter(ip)) {
     return new Response(JSON.stringify({ error: 'Trop de requêtes. Réessaie dans une minute.' }), {
       status: 429,
@@ -48,15 +52,39 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     }
     const { name, email, project_type, message } = parsed.data
 
-    // Sauvegarde Supabase
+    // Sauvegarde Supabase. L'échec n'interrompt pas la requête — l'email reste
+    // le canal principal — mais il doit être visible dans les logs, sinon la
+    // perte du prospect en base passe totalement inaperçue.
     const supabase = getSupabaseServer()
-    if (supabase) {
+    if (!supabase) {
+      console.error(
+        '[contact] persistance ignorée : client Supabase indisponible',
+        JSON.stringify({
+          requestId,
+          reason: 'missing_env',
+          hasUrl: Boolean(process.env.PUBLIC_SUPABASE_URL),
+          hasAnonKey: Boolean(process.env.PUBLIC_SUPABASE_ANON_KEY),
+        })
+      )
+    } else {
       const { error: dbError } = await supabase.from('portfolio_contacts').insert({
         name,
         email,
         message: `[${project_type || 'Non précisé'}] ${message}`,
       })
-      if (dbError) console.error('[contact] Supabase error:', dbError)
+      if (dbError) {
+        // `details` est volontairement exclu : Postgres y recopie la ligne
+        // rejetée ("Failing row contains ..."), donc les données du prospect.
+        console.error(
+          '[contact] échec insertion portfolio_contacts',
+          JSON.stringify({
+            requestId,
+            code: dbError.code,
+            message: dbError.message,
+            hint: dbError.hint,
+          })
+        )
+      }
     }
 
     // Envoi email via Resend
@@ -105,16 +133,21 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     })
 
     if (error) {
-      console.error('[contact] Resend error:', error)
+      console.error('[contact] Resend error:', JSON.stringify({ requestId, error }))
       throw new Error("Erreur lors de l'envoi de l'email")
     }
+
+    console.info(
+      '[contact] message traité',
+      JSON.stringify({ requestId, resendId: _data?.id ?? null })
+    )
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     })
   } catch (err) {
-    console.error('[contact] Error:', err)
+    console.error('[contact] Error:', requestId, err)
     return new Response(JSON.stringify({ error: "Une erreur est survenue lors de l'envoi du message." }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },

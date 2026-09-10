@@ -11,10 +11,12 @@ vi.mock('resend', () => ({
   }),
 }))
 
+const insertResult: { error: unknown } = { error: null }
+
 vi.mock('@supabase/supabase-js', () => ({
   createClient: vi.fn().mockImplementation(() => ({
     from: vi.fn().mockReturnValue({
-      insert: vi.fn().mockResolvedValue({ error: null }),
+      insert: vi.fn().mockImplementation(() => Promise.resolve(insertResult)),
     }),
   })),
 }))
@@ -33,6 +35,7 @@ function createContactRequest(body: object, clientAddress = '127.0.0.1') {
 describe('/api/contact', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    insertResult.error = null
   })
 
   it('retourne 400 si les données sont invalides', async () => {
@@ -97,6 +100,41 @@ describe('/api/contact', () => {
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(body.success).toBe(true)
+  })
+
+  it('journalise l’échec d’insertion en base sans casser la réponse', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+    insertResult.error = {
+      code: '42501',
+      message: 'new row violates row-level security policy',
+      details: 'Failing row contains (Jean Dupont, jean@example.com, ...)',
+      hint: null,
+    }
+
+    const ctx = createContactRequest({
+      name: 'Jean Dupont',
+      email: 'jean@example.com',
+      message: 'Bonjour, je souhaite un devis pour un site vitrine.',
+    }, '8.8.8.8')
+
+    const response = await POST(ctx)
+    expect(response.status).toBe(200)
+
+    const call = consoleError.mock.calls.find(
+      ([label]) => label === '[contact] échec insertion portfolio_contacts'
+    )
+    if (!call) throw new Error("aucun log d'échec d'insertion émis")
+
+    const serialized = call[1] as string
+    const payload = JSON.parse(serialized)
+    expect(payload.code).toBe('42501')
+    expect(payload.message).toContain('row-level security')
+    expect(payload.requestId).toMatch(/^[0-9a-f-]{36}$/)
+    // Aucune donnée personnelle du prospect ne doit fuiter dans les logs.
+    expect(serialized).not.toContain('jean@example.com')
+    expect(serialized).not.toContain('Jean Dupont')
+
+    consoleError.mockRestore()
   })
 
   it('échappe les caractères HTML dans le contenu', async () => {
