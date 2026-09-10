@@ -45,11 +45,11 @@ export default function ChatBot() {
               alt="Guy Boireau"
               className="w-9 h-9 rounded-full border border-slate-200 object-contain bg-white"
             />
-            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></span>
+            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-forest-400 rounded-full border-2 border-white"></span>
           </div>
           <div>
             <p className="font-semibold text-slate-800 text-sm">Assistant de Guy</p>
-            <p className="text-xs text-green-700">En ligne</p>
+            <p className="text-xs text-forest-600">En ligne</p>
           </div>
         </div>
         {messages.length > 0 && (
@@ -111,9 +111,9 @@ export default function ChatBot() {
                   )}
                   {streaming && i === messages.length - 1 && msg.role === 'assistant' && msg.content === '' && (
                     <span className="inline-flex gap-1 mt-1">
-                      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                      <span className="typing-dot w-1.5 h-1.5 bg-primary-400 rounded-full" style={{ animationDelay: '0ms' }}></span>
+                      <span className="typing-dot w-1.5 h-1.5 bg-primary-400 rounded-full" style={{ animationDelay: '150ms' }}></span>
+                      <span className="typing-dot w-1.5 h-1.5 bg-primary-400 rounded-full" style={{ animationDelay: '300ms' }}></span>
                     </span>
                   )}
                   {streaming && i === messages.length - 1 && msg.role === 'assistant' && msg.content !== '' && (
@@ -149,6 +149,20 @@ export default function ChatBot() {
           </svg>
         </button>
       </form>
+
+      {/*
+        Information au point de collecte (RGPD art. 13) : la mention dans les
+        mentions légales ne suffit pas si l'utilisateur ne la lit jamais. Le
+        contenu saisi ici part chez un fournisseur d'IA établi aux États-Unis,
+        il faut le dire là où l'on tape.
+      */}
+      <p className="px-4 pb-3 -mt-1 text-[11px] leading-snug text-slate-400 bg-white">
+        Vos messages sont transmis à Anthropic (États-Unis) pour générer la réponse.
+        N'y saisissez pas d'information confidentielle.{' '}
+        <a href="/mentions-legales" className="underline hover:text-slate-600">
+          En savoir plus
+        </a>
+      </p>
     </div>
   )
 }

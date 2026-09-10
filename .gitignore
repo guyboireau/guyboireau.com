@@ -31,3 +31,10 @@ agentdb.rvf
 agentdb.rvf.lock
 SECURITY_AUDIT.md
 SECURITY_REVIEW_POST_FIX.md
+
+# Outillage local des agents (aucun intérêt partagé, et ça change à chaque run)
+.claude/
+.impeccable/
+agentdb.rvf
+agentdb.rvf.lock
+ruvector.db

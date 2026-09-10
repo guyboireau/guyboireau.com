@@ -1,0 +1,45 @@
+---
+/**
+ * Jeu d'icônes ligne « Atelier » — tracé unique, stroke 1.6, currentColor.
+ * Remplace les emojis (tell générique) par un système d'icônes dessiné et cohérent.
+ * Usage : <Icon name="cog" class="w-7 h-7 text-primary-500" />
+ */
+interface Props {
+  name: string
+  class?: string
+}
+const { name, class: className = 'w-6 h-6' } = Astro.props
+
+// Chaque entrée = le contenu interne d'un <svg> 24×24, viewBox 0 0 24 24.
+const paths: Record<string, string> = {
+  // Services
+  cog: '<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/>',
+  document: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.4 3.8 5.6 3.8 9s-1.3 6.6-3.8 9c-2.5-2.4-3.8-5.6-3.8-9S9.5 5.4 12 3z"/>',
+  wrench: '<path d="M15 6.5a4.3 4.3 0 0 0-5.6 5.2L4 17.1 6.9 20l5.4-5.4a4.3 4.3 0 0 0 5.2-5.6l-2.7 2.7-2.2-.6-.6-2.2z"/>',
+  // Problèmes
+  calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="m20.5 20.5-4.2-4.2"/>',
+  repeat: '<path d="M4 9a5 5 0 0 1 5-5h8l-2.4-2.4M20 15a5 5 0 0 1-5 5H7l2.4 2.4"/>',
+  unplug: '<path d="M12 3v4M7 7h10v3a5 5 0 0 1-10 0z" /><path d="M12 15v6"/>',
+  // Locaux / autres
+  pin: '<path d="M12 21s7-5.2 7-11a7 7 0 0 0-14 0c0 5.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/>',
+  phone: '<path d="M6.5 3.5h3l1.5 4-2 1.4a11 11 0 0 0 4.6 4.6l1.4-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5z"/>',
+  tool: '<path d="M15 6.5a4.3 4.3 0 0 0-5.6 5.2L4 17.1 6.9 20l5.4-5.4a4.3 4.3 0 0 0 5.2-5.6l-2.7 2.7-2.2-.6-.6-2.2z"/>',
+  monitor: '<rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/>',
+}
+
+const inner = paths[name] ?? paths.cog
+---
+
+<svg
+  class={className}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  set:html={inner}
+/>

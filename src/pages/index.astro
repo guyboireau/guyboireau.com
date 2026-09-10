@@ -4,6 +4,7 @@ import Header from '../components/Header.astro'
 import Hero from '../components/Hero.astro'
 import Footer from '../components/Footer.astro'
 import ChatBot from '../components/ChatBot.tsx'
+import Icon from '../components/Icon.astro'
 import { Image } from 'astro:assets'
 import lalucarneDesktop from '../assets/lalucarne-desktop.png'
 import lalucarneMobile from '../assets/lalucarne-mobile.png'
@@ -16,28 +17,28 @@ const description =
 
 const services = [
   {
-    icon: '⚙️',
+    iconName: 'cog',
     title: 'Applications métier & automatisation',
     description:
       "Suivi de commandes atelier, fiches de contrôle, planning d'interventions : l'outil qui manque entre votre ERP et vos tableurs. Et les tâches que vos équipes refont chaque semaine, supprimées.",
     link: '/services',
   },
   {
-    icon: '📄',
+    iconName: 'document',
     title: 'Traitement documentaire automatisé',
     description:
       'Bons de livraison, certificats matière, fiches techniques, factures : lus, contrôlés et classés sans ressaisie.',
     link: '/traitement-documentaire',
   },
   {
-    icon: '🌐',
+    iconName: 'globe',
     title: 'Sites & présence en ligne',
     description:
       'Une interface publique rapide, bien référencée sur Google, que vous mettez à jour vous-même. Pour les artisans et commerces locaux.',
     link: '/services',
   },
   {
-    icon: '🔧',
+    iconName: 'wrench',
     title: 'Suivi & maintenance',
     description:
       'Votre outil et votre site mis à jour, sauvegardés et surveillés chaque mois. Formules à partir de 79€/mois.',
@@ -54,10 +55,10 @@ const trustMetrics = [
 ]
 
 const problems = [
-  { icon: '📅', text: "Votre site date de plusieurs années — ou vous n'en avez pas du tout." },
-  { icon: '🔍', text: "Vos clients ne vous trouvent pas sur Google quand ils cherchent un pro près de chez eux." },
-  { icon: '🔁', text: "Vous refaites les mêmes tâches manuelles chaque semaine : devis, relances, prise de rendez-vous." },
-  { icon: '😤', text: "Votre dernier prestataire a disparu après la livraison — et le site, personne ne s'en occupe." },
+  { iconName: 'calendar', text: "Votre site date de plusieurs années — ou vous n'en avez pas du tout." },
+  { iconName: 'search', text: "Vos clients ne vous trouvent pas sur Google quand ils cherchent un pro près de chez eux." },
+  { iconName: 'repeat', text: "Vous refaites les mêmes tâches manuelles chaque semaine : devis, relances, prise de rendez-vous." },
+  { iconName: 'unplug', text: "Votre dernier prestataire a disparu après la livraison — et le site, personne ne s'en occupe." },
 ]
 
 const processSteps = [
@@ -123,7 +124,7 @@ const featuredProjects = [
     <Hero />
 
     <!-- Trust bar -->
-    <div class="border-y border-slate-200 bg-slate-50 py-3 overflow-hidden">
+    <div class="border-y border-[color:var(--gb-cream)] surface-cream-deep py-3 overflow-hidden">
       <div class="flex items-center gap-0 trust-marquee">
         {[...trustMetrics, ...trustMetrics].map((metric) => (
           <span class="flex items-center gap-6 px-6 whitespace-nowrap text-sm font-medium text-slate-600 shrink-0">
@@ -138,7 +139,6 @@ const featuredProjects = [
     <section class="section bg-white">
       <div class="max-w-4xl mx-auto">
         <div class="reveal-fade-up mb-12 text-center">
-          <span class="inline-block text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">01 — Le problème</span>
           <h2 class="section-title">Vous vous reconnaissez ?</h2>
           <p class="section-subtitle">La plupart de mes clients sont arrivés avec une de ces situations.</p>
         </div>
@@ -146,7 +146,7 @@ const featuredProjects = [
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
           {problems.map((problem) => (
             <div class="flex items-start gap-4 glass-card p-6 stagger-item">
-              <span class="text-2xl shrink-0 mt-0.5">{problem.icon}</span>
+              <Icon name={problem.iconName} class="w-6 h-6 shrink-0 mt-0.5 text-primary-500" />
               <p class="text-slate-600 leading-relaxed">{problem.text}</p>
             </div>
           ))}
@@ -162,10 +162,9 @@ const featuredProjects = [
     </section>
 
     <!-- Services overview -->
-    <section class="section bg-slate-50">
+    <section class="section surface-cream">
       <div class="max-w-6xl mx-auto">
         <div class="reveal-fade-up">
-          <span class="block text-center text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">02 — Ce que je fais</span>
           <h2 class="section-title text-center">Ce que je fais</h2>
           <p class="section-subtitle text-center">Du cadrage à la mise en production, puis le suivi</p>
         </div>
@@ -173,7 +172,7 @@ const featuredProjects = [
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service) => (
             <a href={service.link} class="glass-card lift p-8 hover:border-primary-500/40 group stagger-item block">
-              <div class="text-4xl mb-4">{service.icon}</div>
+              <Icon name={service.iconName} class="w-9 h-9 mb-4 text-primary-500 group-hover:text-primary-400 transition-colors" />
               <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-primary-400 transition-colors">
                 {service.title}
               </h3>
@@ -197,7 +196,6 @@ const featuredProjects = [
     <section class="section bg-white">
       <div class="max-w-6xl mx-auto">
         <div class="reveal-fade-up">
-          <span class="block text-center text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">03 — Résultats</span>
           <h2 class="section-title text-center">Projets récents</h2>
           <p class="section-subtitle text-center">Ce que j'ai livré pour mes clients</p>
         </div>
@@ -212,7 +210,7 @@ const featuredProjects = [
                   <h3 class="text-2xl font-bold text-primary-400 mb-1">{project.title}</h3>
                   <p class="text-slate-600 font-medium">{project.subtitle}</p>
                 </div>
-                <span class="px-3 py-1 bg-green-500/20 text-green-700 rounded-full text-sm border border-green-500/30 shrink-0 self-start">
+                <span class="status-live px-3 py-1 text-sm shrink-0 self-start"><span class="status-live-dot"></span>
                   {project.status}
                 </span>
               </div>
@@ -275,10 +273,9 @@ const featuredProjects = [
     </section>
 
     <!-- Processus -->
-    <section class="section bg-slate-50">
+    <section class="section surface-cream">
       <div class="max-w-5xl mx-auto">
         <div class="reveal-fade-up mb-12 text-center">
-          <span class="block text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">04 — Comment ça se passe</span>
           <h2 class="section-title">Simple. Transparent. Sans surprise.</h2>
           <p class="section-subtitle">Du premier message à la mise en ligne, voici exactement ce qui se passe.</p>
         </div>
@@ -309,7 +306,7 @@ const featuredProjects = [
     </section>
 
     <!-- Chatbot -->
-    <section class="section bg-slate-50">
+    <section class="section surface-cream">
       <div class="max-w-2xl mx-auto">
         <div class="reveal-fade-up">
           <h2 class="section-title text-center">Une question ?</h2>
@@ -364,12 +361,12 @@ const featuredProjects = [
     </section>
 
     <!-- Availability banner -->
-    <section class="section bg-slate-50">
+    <section class="section surface-cream">
       <div class="max-w-4xl mx-auto text-center">
-        <div class="glass-card p-10 border-2 border-green-500/30 reveal-scale">
+        <div class="glass-card p-10 border-2 border-forest-100 reveal-scale">
           <div class="inline-flex items-center gap-3 mb-6">
-            <span class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></span>
-            <span class="text-green-600 text-xl font-semibold">Disponible pour de nouveaux projets</span>
+            <span class="w-3 h-3 bg-forest-400 rounded-full animate-pulse"></span>
+            <span class="text-forest-600 text-xl font-semibold">Disponible pour de nouveaux projets</span>
           </div>
           <p class="text-slate-600 text-lg mb-8">
             Vous avez un projet en tête ? Je réponds sous 24h.
@@ -390,9 +387,6 @@ const featuredProjects = [
     <section class="section bg-white border-t-4 border-slate-200">
       <div class="max-w-5xl mx-auto">
         <div class="reveal-fade-up mb-12 text-center">
-          <span class="inline-block px-4 py-1.5 bg-slate-100 text-slate-600 rounded-full text-sm font-semibold mb-4 border border-slate-200">
-            Offre distincte — artisans &amp; commerces locaux
-          </span>
           <h2 class="section-title">Votre site doit travailler pour vous</h2>
           <p class="section-subtitle">Pas pour votre prestataire web</p>
           <p class="text-slate-500 max-w-2xl mx-auto -mt-6">
@@ -403,23 +397,23 @@ const featuredProjects = [
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           {[
             {
-              icon: '📍',
+              iconName: 'pin',
               title: 'Visible sur Google Maps',
               desc: 'Votre fiche Google Business mise à jour chaque mois : horaires, photos, actualités. Les gens vous trouvent quand ils cherchent un artisan près de chez eux.',
             },
             {
-              icon: '📞',
+              iconName: 'phone',
               title: 'Un site qui donne envie d\'appeler',
               desc: 'Rapide, mobile, avec vos réalisations en photos. Un visiteur doit comprendre ce que vous faites et vous contacter en moins de 30 secondes.',
             },
             {
-              icon: '🛠️',
+              iconName: 'tool',
               title: 'Je m\'occupe de tout',
               desc: 'Hébergement, mises à jour, pannes, modifications de contenu. Vous faites votre métier, je fais le mien. Aucune compétence technique requise.',
             },
           ].map((item) => (
             <div class="glass-card p-8 stagger-item text-center">
-              <div class="text-4xl mb-4">{item.icon}</div>
+              <Icon name={item.iconName} class="w-9 h-9 mb-4 mx-auto text-primary-500" />
               <h3 class="text-lg font-bold text-slate-800 mb-3">{item.title}</h3>
               <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
             </div>
@@ -429,11 +423,8 @@ const featuredProjects = [
         <div class="glass-card p-8 border-2 border-primary-500/30 reveal-scale">
           <div class="flex flex-col md:flex-row md:items-center gap-6">
             <div class="flex-1">
-              <div class="inline-block px-3 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold mb-3">
-                Simulateur interactif
-              </div>
               <h3 class="text-2xl font-bold text-slate-800 mb-2">
-                <span class="text-gradient">Mise en service 490 €</span>, puis abonnement mensuel
+                <span class="text-primary-600">Mise en service 490 €</span>, puis abonnement mensuel
               </h3>
               <p class="text-slate-500">
                 Composez votre site en direct : cochez les options dont vous avez besoin (pages supplémentaires, formulaire, boutique, blog…) et voyez le total se calculer. Engagement 12 mois, premier mois offert.
@@ -448,11 +439,11 @@ const featuredProjects = [
     </section>
 
     <!-- Dépannage informatique -->
-    <section class="section bg-slate-50">
+    <section class="section surface-cream">
       <div class="max-w-4xl mx-auto">
         <div class="glass-card p-8 md:p-12 reveal-fade-up">
           <div class="flex flex-col md:flex-row gap-8 items-center">
-            <div class="text-6xl shrink-0">🖥️</div>
+            <Icon name="monitor" class="w-16 h-16 shrink-0 text-primary-500" />
             <div>
               <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-3">
                 Besoin d'aide avec votre ordinateur ?
