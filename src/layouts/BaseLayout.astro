@@ -168,17 +168,14 @@ const jsonLd = [
     <!-- Slot pour JSON-LD supplémentaire par page -->
     <slot name="jsonld" />
 
-    <!-- Google Tag Manager -->
-    <script is:inline>
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K2J6DN5X');
-    </script>
+    <!-- Google Tag Manager retiré le 2026-09-01.
+         GTM se chargeait au premier octet, sans bannière ni Consent Mode :
+         un traceur non exempté déposé avant tout consentement (art. 82 LIL).
+         Sur un portfolio, Vercel Analytics suffit — il ne dépose pas de
+         cookie et n'identifie pas le visiteur, donc aucune bannière n'est
+         requise. Ne pas réintroduire GTM sans recueil de consentement. -->
   </head>
   <body>
-    <!-- GTM noscript -->
-    <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2J6DN5X" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-
     <slot />
 
     <!-- Vercel Analytics -->

@@ -14,21 +14,27 @@
 
 /** @type {Record<string, string>} */
 export const securityHeaders = {
-  // Tout ce que la page charge vient de la même origine — polices comprises —
-  // sauf Google Tag Manager, déclaré dans `BaseLayout.astro`. Vercel Analytics
-  // passe par `/_vercel/insights/*`, donc par `'self'`.
+  // Tout ce que la page charge vient désormais de la même origine, polices
+  // comprises. Vercel Analytics passe par `/_vercel/insights/*`, donc par
+  // `'self'`. Google Tag Manager a été retiré : ses cinq autorisations
+  // (script-src, img-src, deux dans connect-src, frame-src) le sont aussi —
+  // une autorisation CSP qui survit au tiers qu'elle servait est une surface
+  // ouverte pour rien.
   //
-  // `'unsafe-inline'` sur script-src est requis par l'amorce GTM, qui est un
-  // script en ligne. `'unsafe-eval'` reste absent.
+  // `'unsafe-inline'` reste sur script-src, et ce n'est plus à cause de GTM :
+  // Astro émet ses propres scripts en ligne (hydratation des îlots, JSON-LD).
+  // Mesuré sur le build du 2026-09-10 : 4 à 7 blocs en ligne par page livrée.
+  // Le retirer casserait le site. S'en débarrasser demande des nonces ou des
+  // hachages — un travail à part, pas un effet de bord de ce correctif.
+  // `'unsafe-eval'` reste absent.
   'Content-Security-Policy': [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
+    "script-src 'self' 'unsafe-inline'",
     "style-src 'self' 'unsafe-inline'",
     "font-src 'self'",
-    "img-src 'self' data: https://*.supabase.co https://www.googletagmanager.com https://www.google-analytics.com",
-    "connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
-    // GTM installe un <iframe> de repli sans JavaScript.
-    "frame-src https://www.googletagmanager.com",
+    "img-src 'self' data: https://*.supabase.co",
+    "connect-src 'self' https://*.supabase.co",
+    "frame-src 'none'",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
