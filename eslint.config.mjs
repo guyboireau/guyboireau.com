@@ -82,6 +82,14 @@ export default [
     },
   },
   {
+    // Fichiers de configuration à la racine : exécutés par Node au build,
+    // `process.env` y est légitime (astro.config*.mjs lit VERCEL).
+    files: ['*.mjs', '*.ts'],
+    languageOptions: {
+      globals: { ...globals.node },
+    },
+  },
+  {
     ignores: ['dist/', '.astro/', 'node_modules/', '.claude/', '.vercel/'],
   },
 ]
