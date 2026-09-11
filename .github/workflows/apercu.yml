@@ -1,0 +1,28 @@
+name: Aperçu
+
+# Le VPS construit un aperçu de chaque PR sur pr-<n>.apercu.guyboireau.com
+# (webhook, voir ~/Dev/vps-ovh/deploiement/). L'URL est déterministe : ce
+# workflow se contente de la poster en commentaire, avec le jeton natif du
+# dépôt — aucun secret à déposer nulle part.
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches: [main]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  lien:
+    # Une PR venue d'un fork n'a pas d'aperçu (le serveur la refuse) et son
+    # jeton n'a de toute façon pas le droit de commenter.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Poster le lien de l'aperçu
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body "🔍 **Aperçu :** https://pr-${PR}.apercu.guyboireau.com — mot de passe de la console. Prêt ~1 min après chaque push. Fusionner déploie en production, fermer supprime l'aperçu."
