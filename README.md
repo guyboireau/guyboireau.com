@@ -25,7 +25,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 - **Formulaire de contact** — Validation Zod, persistance Supabase et envoi d'email via Resend
 - **SEO avancé** — JSON-LD (Person / LocalBusiness), sitemap auto-généré, balises Open Graph, métadonnées géographiques
 - **Animations CSS** — Animations légères avec prise en charge de `prefers-reduced-motion`
-- **Analytics** — Vercel Analytics + Google Tag Manager (`GTM-K2J6DN5X`, injecté dans `BaseLayout.astro`)
+- **Analytics** — Vercel Analytics uniquement (sans cookie ni identifiant). Google Tag Manager a été retiré le 2026-09-01 : il se chargeait au premier octet, sans bannière ni Consent Mode. Ne pas le réintroduire sans recueil de consentement préalable.
 
 ---
 
