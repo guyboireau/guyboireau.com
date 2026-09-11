@@ -178,10 +178,10 @@ const jsonLd = [
   <body>
     <slot />
 
-    <!-- Vercel Analytics -->
+    <!-- Vercel Analytics — seulement quand Vercel sert la page (cf. astro.config) -->
     <script>
       import { inject } from '@vercel/analytics'
-      inject()
+      if (__ON_VERCEL__) inject()
     </script>
 
     <!-- Scroll Reveal -->
