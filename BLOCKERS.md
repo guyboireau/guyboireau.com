@@ -62,9 +62,11 @@ l'explique.
 Cause non établie. Deux candidates, aucune vérifiée :
 1. une PR créée via un jeton d'application GitHub ne déclenche pas les workflows
    `pull_request` (garde-fou anti-récursion de GitHub) ;
-2. un arrêt au niveau du compte Actions — c'est avéré côté `NiidoOrg` depuis le
-   2026-09-10 (jobs créés, 0 ms facturé), et la dernière exécution verte de ce
-   dépôt date du 2026-09-11 06:52, soit 12 minutes avant #38.
+2. un arrêt au niveau du compte Actions — le quota de `NiidoOrg` est épuisé depuis
+   le 2026-09-10 (confirmé par Guy le 2026-09-14), et la dernière exécution verte de
+   ce dépôt date du 2026-09-11 06:52, soit 12 minutes avant #38. À noter toutefois
+   que ce dépôt-ci appartient au compte personnel, dont le quota est distinct de
+   celui de l'organisation — ce qui affaiblit cette piste sans l'exclure.
 
 Le risque n'est pas #38 elle-même (cf. B03) mais le motif : une PR qui n'affiche
 qu'un aperçu Vercel vert **ressemble** à une PR validée. C'est exactement ce qui
