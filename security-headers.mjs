@@ -14,32 +14,21 @@
 
 /** @type {Record<string, string>} */
 export const securityHeaders = {
-  // Tout ce que la page charge vient désormais de la même origine, polices
-  // comprises. Vercel Analytics passe par `/_vercel/insights/*`, donc par
-  // `'self'`. Google Tag Manager a été retiré : ses cinq autorisations
-  // (script-src, img-src, deux dans connect-src, frame-src) le sont aussi —
-  // une autorisation CSP qui survit au tiers qu'elle servait est une surface
-  // ouverte pour rien.
+  // Depuis le 2026-09-15, la politique complète — default-src, script-src,
+  // style-src, img/connect/font, frame-src, object-src, base-uri, form-action —
+  // est dans chaque page : une <meta http-equiv> générée par Astro
+  // (security.csp, directives dans csp.mjs) avec les empreintes sha256 de
+  // chaque script et style en ligne (hydratation des îlots React, scripts et
+  // styles de composants). Plus de 'unsafe-inline' : les empreintes sont
+  // recalculées à chaque build, et `npm run test:csp` échoue si un script ou
+  // un style en ligne est resté sans la sienne.
   //
-  // `'unsafe-inline'` reste sur script-src, et ce n'est plus à cause de GTM :
-  // Astro émet ses propres scripts en ligne (hydratation des îlots, JSON-LD).
-  // Mesuré sur le build du 2026-09-10 : 4 à 7 blocs en ligne par page livrée.
-  // Le retirer casserait le site. S'en débarrasser demande des nonces ou des
-  // hachages — un travail à part, pas un effet de bord de ce correctif.
-  // `'unsafe-eval'` reste absent.
-  'Content-Security-Policy': [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline'",
-    "style-src 'self' 'unsafe-inline'",
-    "font-src 'self'",
-    "img-src 'self' data: https://*.supabase.co",
-    "connect-src 'self' https://*.supabase.co",
-    "frame-src 'none'",
-    "object-src 'none'",
-    "base-uri 'self'",
-    "form-action 'self'",
-    'upgrade-insecure-requests',
-  ].join('; '),
+  // Ici ne reste que ce qu'une meta ne peut pas porter : frame-ancestors. Ne
+  // pas remettre default-src ni script-src dans cet en-tête : en-tête et meta
+  // s'appliquent tous les deux, et un default-src 'self' ici bloquerait les
+  // scripts en ligne malgré leurs empreintes. Même règle pour le snippet Caddy
+  // du VPS (vps-ovh/deploiement).
+  'Content-Security-Policy': "frame-ancestors 'none'",
   'X-Frame-Options': 'DENY',
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'strict-origin-when-cross-origin',

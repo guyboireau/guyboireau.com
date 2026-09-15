@@ -82,9 +82,9 @@ export default [
     },
   },
   {
-    // Fichiers de configuration à la racine : exécutés par Node au build,
-    // `process.env` y est légitime (astro.config*.mjs lit VERCEL).
-    files: ['*.mjs', '*.ts'],
+    // Fichiers de configuration à la racine et scripts de build : exécutés par
+    // Node, `process.env` y est légitime (astro.config*.mjs lit VERCEL).
+    files: ['*.mjs', '*.ts', 'scripts/*.mjs'],
     languageOptions: {
       globals: { ...globals.node },
     },
