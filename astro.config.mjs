@@ -2,11 +2,13 @@ import { defineConfig } from 'astro/config'
 import react from '@astrojs/react'
 import tailwindcss from '@tailwindcss/vite'
 import sitemap from '@astrojs/sitemap'
+import { csp } from './csp.mjs'
 import vercel from '@astrojs/vercel'
 import { vercelSecurityHeaders } from './security-headers.mjs'
 
 export default defineConfig({
   site: 'https://guyboireau.com',
+  security: { csp },
   adapter: vercel(),
   integrations: [
     react(),

@@ -1,29 +1,23 @@
 ---
-const particles = Array.from({ length: 15 }, (_, i) => ({
-  id: i,
-  left: `${Math.round((i * 7 + 3) % 100)}%`,
-  size: `${Math.round(2 + (i % 4))}px`,
-  duration: `${8 + (i % 7)}s`,
-  delay: `${(i * 1.3) % 10}s`,
-  opacity: 0.15 + (i % 5) * 0.08,
-}))
+// Quinze particules. Leurs positions et rythmes sont dans le bloc <style> en
+// bas du composant (règles :nth-child), pas en attribut style : la CSP du
+// site n'autorise aucun style en ligne, et un <style> de composant reçoit
+// son empreinte sha256 au build (security.csp).
+const particles = Array.from({ length: 15 }, (_, i) => i)
 ---
 
 <section class="min-h-screen animated-gradient flex items-center justify-center relative overflow-hidden py-20 px-4 sm:px-6 lg:px-8">
   <!-- Background blobs -->
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
     <div class="absolute w-96 h-96 bg-primary-500/10 rounded-full blur-3xl -top-48 -left-48 animate-float"></div>
-    <div class="absolute w-96 h-96 bg-primary-600/10 rounded-full blur-3xl -bottom-48 -right-48 animate-float" style="animation-delay:3s"></div>
-    <div class="absolute w-64 h-64 bg-[#c17960]/10 rounded-full blur-2xl top-1/3 right-1/4 animate-float" style="animation-delay:5s"></div>
+    <div class="absolute w-96 h-96 bg-primary-600/10 rounded-full blur-3xl -bottom-48 -right-48 animate-float blob-delay-3"></div>
+    <div class="absolute w-64 h-64 bg-[#c17960]/10 rounded-full blur-2xl top-1/3 right-1/4 animate-float blob-delay-5"></div>
   </div>
 
   <!-- Particles -->
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
-    {particles.map((p) => (
-      <div
-        class="particle"
-        style={`left:${p.left};bottom:-10px;width:${p.size};height:${p.size};animation-duration:${p.duration};animation-delay:${p.delay};opacity:${p.opacity}`}
-      />
+    {particles.map(() => (
+      <div class="particle" />
     ))}
   </div>
 
@@ -78,3 +72,26 @@ const particles = Array.from({ length: 15 }, (_, i) => ({
     </div>
   </div>
 </section>
+
+<style>
+  .blob-delay-3 { animation-delay: 3s; }
+  .blob-delay-5 { animation-delay: 5s; }
+  /* Mêmes valeurs que l'ancienne formule (i*7+3)%100, 2+i%4, 8+i%7, i*1.3%10,
+     0.15+(i%5)*0.08 — figées ici pour tenir sans attribut style. */
+  .particle { bottom: -10px; }
+  .particle:nth-child(1) { left: 3%; width: 2px; height: 2px; animation-duration: 8s; animation-delay: 0s; opacity: 0.15; }
+  .particle:nth-child(2) { left: 10%; width: 3px; height: 3px; animation-duration: 9s; animation-delay: 1.3s; opacity: 0.23; }
+  .particle:nth-child(3) { left: 17%; width: 4px; height: 4px; animation-duration: 10s; animation-delay: 2.6s; opacity: 0.31; }
+  .particle:nth-child(4) { left: 24%; width: 5px; height: 5px; animation-duration: 11s; animation-delay: 3.9s; opacity: 0.39; }
+  .particle:nth-child(5) { left: 31%; width: 2px; height: 2px; animation-duration: 12s; animation-delay: 5.2s; opacity: 0.47; }
+  .particle:nth-child(6) { left: 38%; width: 3px; height: 3px; animation-duration: 13s; animation-delay: 6.5s; opacity: 0.15; }
+  .particle:nth-child(7) { left: 45%; width: 4px; height: 4px; animation-duration: 14s; animation-delay: 7.8s; opacity: 0.23; }
+  .particle:nth-child(8) { left: 52%; width: 5px; height: 5px; animation-duration: 8s; animation-delay: 9.1s; opacity: 0.31; }
+  .particle:nth-child(9) { left: 59%; width: 2px; height: 2px; animation-duration: 9s; animation-delay: 0.4s; opacity: 0.39; }
+  .particle:nth-child(10) { left: 66%; width: 3px; height: 3px; animation-duration: 10s; animation-delay: 1.7s; opacity: 0.47; }
+  .particle:nth-child(11) { left: 73%; width: 4px; height: 4px; animation-duration: 11s; animation-delay: 3s; opacity: 0.15; }
+  .particle:nth-child(12) { left: 80%; width: 5px; height: 5px; animation-duration: 12s; animation-delay: 4.3s; opacity: 0.23; }
+  .particle:nth-child(13) { left: 87%; width: 2px; height: 2px; animation-duration: 13s; animation-delay: 5.6s; opacity: 0.31; }
+  .particle:nth-child(14) { left: 94%; width: 3px; height: 3px; animation-duration: 14s; animation-delay: 6.9s; opacity: 0.39; }
+  .particle:nth-child(15) { left: 1%; width: 4px; height: 4px; animation-duration: 8s; animation-delay: 8.2s; opacity: 0.47; }
+</style>

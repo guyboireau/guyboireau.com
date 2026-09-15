@@ -10,6 +10,7 @@
     "check": "astro check",
     "lint": "astro check && eslint .",
     "test": "vitest run",
+    "test:csp": "node scripts/csp-check.mjs .vercel/output/static/",
     "test:watch": "vitest",
     "prepare": "git config core.hooksPath .githooks || true"
   },
