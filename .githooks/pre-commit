@@ -16,10 +16,28 @@
 set -u
 
 if ! command -v gitleaks >/dev/null 2>&1; then
-    echo "⚠️  gitleaks n'est pas installé — contrôle des secrets ignoré."
-    echo "    macOS : brew install gitleaks"
-    echo "    Autre : https://github.com/gitleaks/gitleaks/releases"
-    exit 0
+    # Ce contrôle est un GATE, pas une suggestion : il refuse le commit quand
+    # il ne peut pas être exécuté. Auparavant l'absence de gitleaks faisait
+    # `exit 0`, donc le hook disparaissait précisément sur les machines qui
+    # n'ont pas l'outil — vérifié le 2026-09-16 : un JWT service_role passait
+    # sans le moindre blocage. La CI rattrapait ce cas, mais elle ne rattrape
+    # rien depuis l'arrêt des Actions le 2026-09-10 : le filet local est alors
+    # la seule protection qui reste.
+    echo "⛔ Commit bloqué : gitleaks n'est pas installé."
+    echo ""
+    echo "   Installation :"
+    echo "     macOS   : brew install gitleaks"
+    echo "     Linux   : https://github.com/gitleaks/gitleaks/releases"
+    echo "     Go      : go install github.com/gitleaks/gitleaks/v8@latest"
+    echo ""
+    echo "   Contournement ponctuel et assumé (aucun contrôle ne sera fait) :"
+    echo "     ALLOW_MISSING_GITLEAKS=1 git commit ..."
+    echo ""
+    if [ "${ALLOW_MISSING_GITLEAKS:-}" = "1" ]; then
+        echo "⚠️  ALLOW_MISSING_GITLEAKS=1 — contrôle des secrets ignoré."
+        exit 0
+    fi
+    exit 1
 fi
 
 if ! gitleaks git . --staged --redact --no-banner; then
