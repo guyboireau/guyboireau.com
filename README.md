@@ -69,7 +69,14 @@ npm run preview  # Prévisualisation du build
 npm run check    # Vérification TypeScript (astro check)
 npm run lint     # Lint ESLint + type check
 npm run test     # Tests unitaires avec Vitest
+npm run test:csp # Empreintes CSP du HTML produit — exige un `npm run build` préalable
 ```
+
+> `test:csp` (`scripts/csp-check.mjs`) lit `.vercel/output/static/` : il vérifie que chaque
+> page porte sa `<meta http-equiv="Content-Security-Policy">` et que tout script ou style
+> en ligne y a son empreinte sha256. Sans lui, un script en ligne sans empreinte serait
+> bloqué en silence par le navigateur — la page paraîtrait saine, la fonctionnalité serait
+> morte.
 
 ---
 
@@ -117,6 +124,7 @@ Le workflow GitHub Actions (`.github/workflows/ci.yml`) s'exécute à chaque pus
 7. **Tests** (`npm run test -- --coverage`)
 8. **Upload du rapport de couverture**
 9. **Build** (`npm run build`)
+10. **CSP** (`npm run test:csp`) — après le build, sur le HTML produit
 
 ---
 
