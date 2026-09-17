@@ -22,7 +22,6 @@
     "@astrojs/vercel": "^11.0.2",
     "@supabase/supabase-js": "^2.105.0",
     "@tailwindcss/vite": "^4",
-    "@vercel/analytics": "^2.0.1",
     "astro": "^7.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -15,12 +15,19 @@
  * s'appliquent tous les deux, et un default-src 'self' en en-tête bloquerait
  * les scripts en ligne malgré leurs empreintes.
  */
+// Umami (stats.guyboireau.com) : le script de mesure et son appel de collecte.
+// Auto-hébergé sur le VPS, sans cookie ni identifiant : aucune bannière requise.
+const UMAMI = 'https://stats.guyboireau.com'
+
 export const csp = {
+  // Remplace les sources par défaut de script-src : 'self' doit être redit.
+  // Les empreintes sha256 des scripts en ligne restent ajoutées par Astro.
+  scriptDirective: { resources: ["'self'", UMAMI] },
   directives: [
     "default-src 'self'",
     "font-src 'self'",
     "img-src 'self' data: https://*.supabase.co",
-    "connect-src 'self' https://*.supabase.co",
+    `connect-src 'self' https://*.supabase.co ${UMAMI}`,
     "frame-src 'none'",
     "object-src 'none'",
     "base-uri 'self'",

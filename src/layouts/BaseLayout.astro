@@ -171,18 +171,17 @@ const jsonLd = [
     <!-- Google Tag Manager retiré le 2026-09-01.
          GTM se chargeait au premier octet, sans bannière ni Consent Mode :
          un traceur non exempté déposé avant tout consentement (art. 82 LIL).
-         Sur un portfolio, Vercel Analytics suffit — il ne dépose pas de
-         cookie et n'identifie pas le visiteur, donc aucune bannière n'est
-         requise. Ne pas réintroduire GTM sans recueil de consentement. -->
+         Sur un portfolio, une mesure sans cookie (Umami, ci-dessous) suffit :
+         elle n'identifie pas le visiteur, donc aucune bannière n'est requise.
+         Ne pas réintroduire GTM sans recueil de consentement. -->
   </head>
   <body>
     <slot />
 
-    <!-- Vercel Analytics — seulement quand Vercel sert la page (cf. astro.config) -->
-    <script>
-      import { inject } from '@vercel/analytics'
-      if (__ON_VERCEL__) inject()
-    </script>
+    <!-- Umami, auto-hébergé sur le VPS (stats.guyboireau.com). Sans cookie, sans
+         identifiant : pas de bannière. Remplace Vercel Analytics depuis la sortie
+         de Vercel (2026-09-17). L'identifiant de site est public par nature. -->
+    <script is:inline defer src="https://stats.guyboireau.com/stats.js" data-website-id="533f0180-52f1-43b3-971d-8ce5521fceb8"></script>
 
     <!-- Scroll Reveal -->
     <script>
