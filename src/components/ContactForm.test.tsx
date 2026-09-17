@@ -104,4 +104,156 @@ describe('ContactForm', () => {
       expect(screen.getByRole('button', { name: /Envoi en cours/i })).toBeDisabled()
     })
   })
+
+  /**
+   * Les branches non couvertes du composant : la construction de la charge
+   * utile et la remontée des erreurs de validation du serveur.
+   *
+   * Ce n'est pas du détail. Ce formulaire est le seul moyen qu'a un prospect
+   * de joindre Guy : un champ perdu en route, ou une erreur de validation qui
+   * ne s'affiche pas, c'est un contact qui ne se fait pas — sans rien dans
+   * aucun journal pour le dire.
+   */
+  describe('envoi', () => {
+    const remplir = () => {
+      fireEvent.change(screen.getByLabelText(/Nom/i), { target: { name: 'name', value: '  Jean Dupont  ' } })
+      fireEvent.change(screen.getByLabelText(/Email/i), { target: { name: 'email', value: '  jean@example.com  ' } })
+      fireEvent.change(screen.getByLabelText(/Message/i), { target: { name: 'message', value: '  Bonjour, un projet.  ' } })
+    }
+
+    const soumettre = () =>
+      fireEvent.submit(screen.getByRole('button', { name: /Envoyer le message/i }).closest('form')!)
+
+    it('les espaces autour des champs sont retirés avant l’envoi', async () => {
+      // Un nom ou un e-mail avec des espaces de bord finit tel quel en base et
+      // dans le mail. Sur l'e-mail, c'est une réponse impossible à envoyer.
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) })
+      global.fetch = fetchMock as unknown as typeof fetch
+
+      render(<ContactForm />)
+      remplir()
+      soumettre()
+
+      await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+      const corps = JSON.parse(fetchMock.mock.calls[0][1].body)
+      expect(corps.name).toBe('Jean Dupont')
+      expect(corps.email).toBe('jean@example.com')
+      expect(corps.message).toBe('Bonjour, un projet.')
+    })
+
+    it('un type de projet non choisi n’est pas envoyé du tout', async () => {
+      // `...(formData.project_type ? { project_type } : {})`. Envoyer une
+      // chaîne vide ferait apparaître « Type de projet : » suivi de rien dans
+      // le mail reçu.
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) })
+      global.fetch = fetchMock as unknown as typeof fetch
+
+      render(<ContactForm />)
+      remplir()
+      soumettre()
+
+      await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).not.toHaveProperty('project_type')
+    })
+
+    it('un type de projet choisi est transmis', async () => {
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) })
+      global.fetch = fetchMock as unknown as typeof fetch
+
+      render(<ContactForm />)
+      remplir()
+      fireEvent.change(screen.getByLabelText(/Type de projet/i), {
+        target: { name: 'project_type', value: 'site-vitrine' },
+      })
+      soumettre()
+
+      await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body).project_type).toBe('site-vitrine')
+    })
+
+    it('les erreurs de validation du serveur s’affichent sur les champs', async () => {
+      // La route renvoie `{ details: { email: ['Email invalide'] } }` sur un
+      // 400. Sans cette remontée, le visiteur voit un message d'échec générique
+      // sans savoir QUEL champ corriger — et réessaie à l'identique.
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 400,
+        json: async () => ({ details: { email: ['Email invalide'] } }),
+      }) as unknown as typeof fetch
+
+      render(<ContactForm />)
+      remplir()
+      soumettre()
+
+      await waitFor(() => expect(screen.getByText(/Email invalide/i)).toBeInTheDocument())
+    })
+
+    it('un 400 sans details n’empêche pas l’affichage de l’échec', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 400,
+        json: async () => ({}),
+      }) as unknown as typeof fetch
+
+      render(<ContactForm />)
+      remplir()
+      soumettre()
+
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: /Envoyer le message/i })).not.toBeDisabled()
+      )
+    })
+
+    it('une réponse d’erreur au corps illisible ne fait pas planter le composant', async () => {
+      // `.json().catch(() => null)` : une passerelle qui renvoie du HTML sur un
+      // 502 ferait sinon lever le parsing, et l'exception sortirait du
+      // try/catch prévu pour l'échec réseau.
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 502,
+        json: async () => {
+          throw new SyntaxError('Unexpected token <')
+        },
+      }) as unknown as typeof fetch
+
+      render(<ContactForm />)
+      remplir()
+      soumettre()
+
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: /Envoyer le message/i })).not.toBeDisabled()
+      )
+    })
+
+    it('un envoi réussi vide le formulaire', async () => {
+      // Sans la réinitialisation, le visiteur qui veut envoyer un second
+      // message réexpédie le premier sans s'en rendre compte.
+      global.fetch = vi
+        .fn()
+        .mockResolvedValue({ ok: true, json: async () => ({}) }) as unknown as typeof fetch
+
+      render(<ContactForm />)
+      remplir()
+      soumettre()
+
+      await waitFor(() =>
+        expect((screen.getByLabelText(/Nom/i) as HTMLInputElement).value).toBe('')
+      )
+      expect((screen.getByLabelText(/Message/i) as HTMLTextAreaElement).value).toBe('')
+    })
+
+    it('un rejet réseau rend la main au visiteur', async () => {
+      global.fetch = vi
+        .fn()
+        .mockRejectedValue(new Error('Failed to fetch')) as unknown as typeof fetch
+
+      render(<ContactForm />)
+      remplir()
+      soumettre()
+
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: /Envoyer le message/i })).not.toBeDisabled()
+      )
+    })
+  })
 })
