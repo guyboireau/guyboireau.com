@@ -27,10 +27,10 @@ export default defineConfig({
       // sous le réel du jour (81,93 / 67,83 / 68,57 / 86,23) pour faire cliquet
       // sans rougir au premier refactor. À remonter quand la couverture monte.
       thresholds: {
-        statements: 78,
-        branches: 63,
-        functions: 64,
-        lines: 82,
+        statements: 95,
+        branches: 85,
+        functions: 88,
+        lines: 97,
       },
     },
   },
