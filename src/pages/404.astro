@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+
+// Astro sert ce fichier pour toute URL inconnue, en statique comme en SSR.
+// Sans lui, le visiteur reçoit la page par défaut de l'hébergeur : hors charte,
+// en anglais, et sans aucun chemin de retour vers le site.
+const title = 'Page introuvable | Guy Boireau'
+const description = "Cette page n'existe pas ou a été déplacée."
+---
+
+<BaseLayout {title} {description}>
+  <Header />
+  <main>
+    <section class="section bg-slate-50 pt-32 min-h-screen">
+      <div class="max-w-3xl mx-auto text-center">
+        <p class="text-7xl md:text-8xl font-bold text-gradient mb-4">404</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Page introuvable</h1>
+        <p class="text-slate-600 leading-relaxed mb-10">
+          Cette page n'existe pas, ou elle a été déplacée. Si vous êtes arrivé ici depuis un lien
+          de ce site, <a href="/contact" class="text-primary-400 hover:text-primary-600">dites-le moi</a> —
+          je le corrigerai.
+        </p>
+
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/" class="btn-primary inline-block">Retour à l'accueil</a>
+          <a href="/projets" class="btn-secondary inline-block">Voir les projets</a>
+          <a href="/services" class="btn-secondary inline-block">Les services</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

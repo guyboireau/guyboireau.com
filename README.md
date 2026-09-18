@@ -15,7 +15,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 | React | 19.x |
 | Tailwind CSS | 4.x |
 | TypeScript | strict |
-| Déploiement | Vercel |
+| Déploiement | VPS OVH (Node standalone + Caddy) — `astro.config.vps.mjs`. Vercel ne porte plus que le nom de domaine, le temps du transfert. |
 
 ---
 
@@ -25,8 +25,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 - **Formulaire de contact** — Validation Zod, persistance Supabase et envoi d'email via Resend
 - **SEO avancé** — JSON-LD (Person / LocalBusiness), sitemap auto-généré, balises Open Graph, métadonnées géographiques
 - **Animations CSS** — Animations légères avec prise en charge de `prefers-reduced-motion`
-- **Analytics** — Vercel Analytics uniquement (sans cookie ni identifiant). Google Tag Manager a été retiré le 2026-09-01 : il se chargeait au premier octet, sans bannière ni Consent Mode. Ne pas le réintroduire sans recueil de consentement préalable.
-
+- **Analytics** — Umami auto-hébergé sur le VPS (`stats.guyboireau.com`) depuis le 2026-09-17, en remplacement de Vercel Analytics. Sans cookie ni identifiant persistant : aucune bannière requise, mais la mesure **est déclarée** dans les mentions légales (art. 13 RGPD). Google Tag Manager a été retiré le 2026-09-01 : il se chargeait au premier octet, sans bannière ni Consent Mode.
 ---
 
 ## Pages
