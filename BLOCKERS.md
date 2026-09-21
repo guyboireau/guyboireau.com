@@ -83,6 +83,29 @@ curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
 #   claude/gracious-lamport-ho8m20 (PR 38).
 ```
 
+**Avancement (2026-09-21) — le compte personnel, lui, exécute bien ses workflows.**
+
+La PR #43, ouverte le 2026-09-17 sur une branche `claude/*` de ce dépôt, a reçu
+**les deux** workflows, tous deux verts :
+
+```sh
+# checks de la PR 43 (tête cbb3601) — relevé le 2026-09-21
+#   ci                        success   2026-09-17T08:27:43Z
+#   🔐 Détection de secrets   success   2026-09-17T08:27:42Z
+#   Vercel Preview Comments   success
+```
+
+Cela **écarte la piste 2 pour ce dépôt** : les Actions du compte personnel
+fonctionnaient normalement six jours après l'épuisement du quota de `NiidoOrg`,
+ce que le registre ne faisait que supposer (« quota distinct — ce qui affaiblit
+cette piste sans l'exclure »). C'est désormais établi.
+
+La piste 1 n'est pas confirmée pour autant : #43 est elle aussi sur une branche
+`claude/*` et a bien déclenché les workflows. Le cas #38 reste donc **sans cause
+établie** — mais il est isolé, pas systémique. Le constat reste ouvert au titre
+du motif qu'il décrit : une PR n'affichant qu'un aperçu Vercel vert ressemble à
+une PR validée.
+
 ---
 
 ## B03 — PR #38 « astro 7.3.2 » : vulnérabilité déjà corrigée, et la PR faisait régresser le déploiement VPS
