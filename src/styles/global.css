@@ -341,6 +341,20 @@ html.lenis body {
   overflow: hidden;
 }
 
+/* ===== SANS JAVASCRIPT (TD-008) =====
+   Le contenu s'affiche en position finale quand les scripts sont coupés.
+   Règle ici plutôt que dans un <noscript><style> : un style en ligne n'a pas
+   d'empreinte dans la CSP du site et serait bloqué par le navigateur. */
+
+@media (scripting: none) {
+  .reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-scale, .stagger-item, .hero-animate {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 /* ===== REDUCED MOTION ===== */
 
 @media (prefers-reduced-motion: reduce) {

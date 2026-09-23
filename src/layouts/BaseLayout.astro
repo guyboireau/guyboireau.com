@@ -166,23 +166,6 @@ const jsonLd = [
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-    <!-- Sans JavaScript, le contenu s'affiche en position finale (TD-008) -->
-    <noscript>
-      <style>
-        .reveal-fade-up,
-        .reveal-fade-left,
-        .reveal-fade-right,
-        .reveal-scale,
-        .stagger-item,
-        .hero-animate {
-          opacity: 1 !important;
-          transform: none !important;
-          animation: none !important;
-          transition: none !important;
-        }
-      </style>
-    </noscript>
-
     <!-- Slot pour JSON-LD supplémentaire par page -->
     <slot name="jsonld" />
 
