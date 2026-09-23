@@ -25,7 +25,7 @@ Autres : Extensions Chrome (Manifest V3), C#/WPF, Delphi, GraphQL, Kotlin
 
 ## Projets réalisés
 
-### Niido — Marketplace immobilier & bâtiment (2025, en développement — sortie prévue septembre 2026)
+### Niido — Marketplace immobilier & bâtiment (2025, en bêta privée auprès de testeurs — pas encore publiée sur les stores)
 Application mobile B2B/B2C iOS et Android de mise en relation entre prestataires du bâtiment
 et gestionnaires de biens (gîtes, hôtels, particuliers).
 - 4 types d'utilisateurs avec parcours dédiés
