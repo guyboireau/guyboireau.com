@@ -7,6 +7,7 @@ import lalucarneDesktop from '../assets/lalucarne-desktop.png'
 import lalucarneMobile from '../assets/lalucarne-mobile.png'
 import niidoAdmin from '../assets/niido-admin.png'
 import niidoMobile from '../assets/niido-mobile.png'
+import arnaultDesktop from '../assets/arnault-desktop.webp'
 
 const title = 'Projets | Guy Boireau — Développeur Web Freelance Bordeaux'
 const description =
@@ -32,7 +33,7 @@ const featuredProjects = [
       i18n: ['next-intl', 'FR / EN / ES'],
       Qualité: ['React Hook Form', 'Zod', 'Resend', 'Vercel'],
     },
-    images: null,
+    images: { desktop: arnaultDesktop },
     link: 'https://www.arnault-janvier-vitrail.fr',
     linkLabel: 'Visiter le site',
     metrics: { type: 'Mission freelance', date: 'Janvier 2026', status: 'En production' },
@@ -160,12 +161,13 @@ const sideProjects = [
                   <Image
                     src={project.images.desktop}
                     alt={`${project.title} — desktop`}
-                    widths={[480, 960]}
-                    sizes="(max-width: 768px) 100vw, 640px"
+                    widths={project.images.mobile ? [480, 960] : [480, 960, 1440]}
+                    sizes={project.images.mobile ? '(max-width: 768px) 100vw, 640px' : '(max-width: 768px) 100vw, 960px'}
                     format="webp"
-                    class="w-full md:w-2/3 rounded-lg border border-slate-200 shadow-lg object-cover"
+                    class={`w-full ${project.images.mobile ? 'md:w-2/3' : ''} rounded-lg border border-slate-200 shadow-lg object-cover`}
                     loading="lazy"
                   />
+                  {project.images.mobile && (
                   <Image
                     src={project.images.mobile}
                     alt={`${project.title} — mobile`}
@@ -175,6 +177,7 @@ const sideProjects = [
                     class="w-full md:w-1/3 rounded-lg border border-slate-200 shadow-lg object-cover"
                     loading="lazy"
                   />
+                  )}
                 </div>
               )}
 
