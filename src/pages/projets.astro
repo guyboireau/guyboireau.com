@@ -2,6 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
+import { Image } from 'astro:assets'
+import lalucarneDesktop from '../assets/lalucarne-desktop.png'
+import lalucarneMobile from '../assets/lalucarne-mobile.png'
+import niidoAdmin from '../assets/niido-admin.png'
+import niidoMobile from '../assets/niido-mobile.png'
 
 const title = 'Projets | Guy Boireau — Développeur Web Freelance Bordeaux'
 const description =
@@ -10,11 +15,11 @@ const description =
 const featuredProjects = [
   {
     title: 'Arnault Janvier — Maître Verrier',
-    subtitle: 'Site vitrine multilingue FR/EN/ES avec CMS et back-office pour artisan vitrailliste',
+    subtitle: 'Vitrine multilingue et galerie autonome',
     description:
-      'Site vitrine professionnel pour Arnault Janvier, artisan vitrailliste (Glassncraft Studio) basé à Paris, avec un second atelier à Moulins. Plateforme multilingue (français, anglais, espagnol) avec galerie de réalisations, formulaire de contact, back-office d\'administration et optimisation SEO international.',
+      "Un atelier d'art invisible hors de sa région. Site en trois langues (français, anglais, espagnol) avec une galerie que l'artisan gère seul — et des demandes entrantes de clients anglophones et hispanophones qu'il ne touchait pas avant. Artisan vitrailliste (Glassncraft Studio) basé à Paris, avec un second atelier à Moulins.",
     highlights: [
-      'Arnault gère sa galerie et ses projets en toute autonomie depuis son back-office',
+      'Arnault gère sa galerie et ses projets en toute autonomie depuis son espace de gestion',
       'Visible dans 3 langues : clients français, anglais et hispanophones',
       'Formulaire de contact protégé par Cloudflare Turnstile, avec pièces jointes',
       'Galerie organisée par section : création sur mesure, restauration, art contemporain',
@@ -34,9 +39,9 @@ const featuredProjects = [
   },
   {
     title: 'La Lucarne Péniche',
-    subtitle: 'Site web culturel avec CMS et panneau d\'administration',
+    subtitle: "Gestion autonome d'une programmation culturelle",
     description:
-      'Site web officiel de La Lucarne, péniche culturelle et bistrot fluvial à Saint-Léger-des-Vignes. Plateforme moderne avec gestion complète des événements, actualités, galerie photo et interface d\'administration pour une gestion autonome du contenu.',
+      "Une programmation qui change chaque semaine dépendait d'un prestataire à chaque modification. L'équipe de cette péniche culturelle de Saint-Léger-des-Vignes publie désormais ses événements, actualités et photos elle-même, en quelques minutes, sans intervention technique.",
     highlights: [
       'Site livré en 3 semaines, dans les délais convenus',
       'Le client gère son contenu seul : événements, articles, photos',
@@ -49,7 +54,7 @@ const featuredProjects = [
       Backend: ['Supabase', 'PostgreSQL', 'Row Level Security'],
       Déploiement: ['Vercel', 'Domaine personnalisé'],
     },
-    images: { desktop: '/assets/lalucarne-desktop.png', mobile: '/assets/lalucarne-mobile.png' },
+    images: { desktop: lalucarneDesktop, mobile: lalucarneMobile },
     link: 'https://www.lalucarnepeniche.com',
     linkLabel: 'Visiter le site',
     metrics: { type: 'Mission freelance', date: 'Janvier 2026', status: 'En production' },
@@ -59,10 +64,11 @@ const featuredProjects = [
 const freelanceProjects = [
   {
     title: 'Niido — Marketplace de services à domicile',
-    subtitle: 'Application mobile React Native (iOS/Android) + Dashboard admin React',
+    subtitle: 'Marketplace mobile avec validation documentaire automatisée',
     description:
-      'Application mobile iOS/Android mettant en relation des particuliers et des professionnels du service à domicile. Gestion de 250+ logements locatifs, paiements, messagerie temps réel.',
+      "Vérifier manuellement les pièces d'identité et justificatifs de chaque prestataire ne tient pas à l'échelle. L'application intègre un pipeline de lecture et de contrôle automatique des documents, avec score de confiance et reprise humaine sur les seuls cas douteux. Quatre rôles utilisateurs, espace d'administration, gestion de 250+ logements locatifs.",
     highlights: [
+      'Pièces justificatives lues et contrôlées automatiquement, reprise humaine sur les seuls cas douteux',
       'Particuliers trouvent un pro qualifié en moins de 2 minutes',
       'Professionnels reçoivent leurs missions directement sur mobile',
       'Conciergerie : gestion de 250 logements locatifs depuis un seul tableau de bord',
@@ -71,11 +77,12 @@ const freelanceProjects = [
     ],
     techStack: {
       Mobile: ['React Native 0.74', 'Expo SDK 54', 'TypeScript', 'React Navigation v6'],
+      IA: ['API Anthropic', 'Lecture de documents', 'Score de confiance'],
       Backend: ['Supabase', 'PostgreSQL', 'RLS', 'Edge Functions'],
       Admin: ['React 19', 'Vite', 'TypeScript', 'TailwindCSS', 'Zustand'],
       Outillage: ['React Query 5', 'Zod', 'GitHub Actions', 'Sentry', 'Vitest'],
     },
-    images: { desktop: '/assets/niido-admin.png', mobile: '/assets/niido-mobile.png' },
+    images: { desktop: niidoAdmin, mobile: niidoMobile },
     link: null,
     metrics: { type: 'Mission freelance', date: '2025', status: 'En bêta privée — pas encore sur les stores' },
   },
@@ -150,15 +157,21 @@ const sideProjects = [
 
               {project.images && (
                 <div class="flex flex-col md:flex-row gap-4 mb-6">
-                  <img
+                  <Image
                     src={project.images.desktop}
                     alt={`${project.title} — desktop`}
+                    widths={[480, 960]}
+                    sizes="(max-width: 768px) 100vw, 640px"
+                    format="webp"
                     class="w-full md:w-2/3 rounded-lg border border-slate-200 shadow-lg object-cover"
                     loading="lazy"
                   />
-                  <img
+                  <Image
                     src={project.images.mobile}
                     alt={`${project.title} — mobile`}
+                    widths={[320, 640]}
+                    sizes="(max-width: 768px) 100vw, 320px"
+                    format="webp"
                     class="w-full md:w-1/3 rounded-lg border border-slate-200 shadow-lg object-cover"
                     loading="lazy"
                   />
@@ -235,18 +248,24 @@ const sideProjects = [
                 <div class="flex flex-col md:flex-row gap-4 mb-6">
                   <div class="md:w-2/3">
                     <p class="text-slate-500 text-xs uppercase tracking-wider mb-2">Dashboard Admin</p>
-                    <img
+                    <Image
                       src={project.images.desktop}
                       alt={`${project.title} — admin`}
+                      widths={[480, 960]}
+                      sizes="(max-width: 768px) 100vw, 640px"
+                      format="webp"
                       class="w-full rounded-lg border border-slate-200 shadow-lg object-cover"
                       loading="lazy"
                     />
                   </div>
                   <div class="md:w-1/3">
                     <p class="text-slate-500 text-xs uppercase tracking-wider mb-2">Application Mobile</p>
-                    <img
+                    <Image
                       src={project.images.mobile}
                       alt={`${project.title} — mobile`}
+                      widths={[320, 640]}
+                      sizes="(max-width: 768px) 100vw, 320px"
+                      format="webp"
                       class="w-full rounded-lg border border-slate-200 shadow-lg object-cover"
                       loading="lazy"
                     />
@@ -295,7 +314,7 @@ const sideProjects = [
           <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
             <div>
               <h3 class="text-2xl font-bold text-primary-400 mb-1">Agent Freelance</h3>
-              <p class="text-slate-600">Back-office IA pour freelances — analyse de briefs, devis automatique, RAG</p>
+              <p class="text-slate-600">Espace de gestion IA pour freelances — analyse de briefs, devis automatique, RAG</p>
             </div>
             <div class="flex flex-wrap gap-2 shrink-0">
               <span class="px-3 py-1 bg-primary-500/20 text-primary-600 rounded-full text-sm border border-primary-500/30">Projet IA</span>
@@ -305,7 +324,7 @@ const sideProjects = [
           </div>
 
           <p class="text-slate-600 mb-6">
-            Agent IA qui automatise le back-office d'un freelance : il analyse un brief entrant, génère un devis structuré, répond aux questions courantes via une base de connaissances personnelle (RAG), et suit les projets en cours. Conçu pour tourner sans supervision.
+            Agent IA qui automatise la gestion administrative d'un freelance : il analyse un brief entrant, génère un devis structuré, répond aux questions courantes via une base de connaissances personnelle (RAG), et suit les projets en cours. Conçu pour tourner sans supervision.
           </p>
 
           <div class="mb-6">
@@ -354,7 +373,7 @@ const sideProjects = [
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sideProjects.map((project) => (
-            <div class="glass-card p-6 hover:scale-105 transition-transform duration-300 group stagger-item">
+            <div class="glass-card lift p-6 group stagger-item">
               <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-primary-400 transition-colors">
                 {project.title}
               </h3>
