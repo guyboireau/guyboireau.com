@@ -52,6 +52,35 @@ const useCases = [
     gain: '5h de gestion administrative supprimées',
   },
 ]
+
+// Automatisations réellement en service, sur mes propres systèmes.
+const enProduction = [
+  {
+    icon: '📡',
+    title: 'Surveillance de sites',
+    desc: "Quatre sites interrogés en continu : page qui répond, certificat valide, nom de domaine qui n'arrive pas à échéance. Une notification part sur mon téléphone au seul changement d'état — un site qui va bien n'envoie rien, donc l'alerte garde du sens.",
+    stack: 'Node, sans aucune dépendance externe',
+  },
+  {
+    icon: '🩺',
+    title: "Contrôle d'infrastructure planifié",
+    desc: "Un contrôle automatique passe sur l'infrastructure et m'envoie son compte rendu par email. C'est ce qui permet de voir venir une saturation de disque ou un service arrêté avant qu'il ne fasse tomber quelque chose.",
+    stack: 'Tâche planifiée, rapport par email',
+  },
+  {
+    icon: '📈',
+    title: 'Rapports de positionnement',
+    desc: "Chaque début de mois, les données de la Search Console de chaque site sont récupérées et transformées en rapport lisible : requêtes qui amènent des visiteurs, positions gagnées ou perdues. Plus personne n'ouvre une interface pour compiler ça à la main.",
+    stack: 'Search Console + génération automatique',
+  },
+  {
+    icon: '✉️',
+    title: 'Tri du courrier entrant',
+    desc: "Les emails entrants sont lus, classés et résumés automatiquement chaque matin. Le temps passé à trier une boîte de réception est du temps qui ne revient pas.",
+    stack: 'Agent quotidien',
+  },
+]
+
 ---
 
 <BaseLayout {title} {description}>
@@ -181,6 +210,36 @@ const useCases = [
             </div>
           ))}
         </div>
+      </div>
+    </section>
+
+    <!-- Déjà en service -->
+    <section class="section bg-white">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal-fade-up mb-12 text-center">
+          <span class="inline-block px-4 py-1.5 bg-primary-500/10 text-primary-600 rounded-full text-sm font-semibold mb-4">
+            Pas une démonstration
+          </span>
+          <h2 class="section-title">Ce qui tourne déjà chez moi</h2>
+          <p class="section-subtitle">Les automatisations que je vends, je les fais d'abord tourner pour moi</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {enProduction.map((item) => (
+            <div class="glass-card lift p-8 stagger-item">
+              <div class="text-3xl mb-4">{item.icon}</div>
+              <h3 class="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
+              <p class="text-slate-500 text-sm leading-relaxed mb-4">{item.desc}</p>
+              <span class="inline-block px-2 py-1 bg-slate-100 text-slate-500 rounded text-xs border border-slate-200">
+                {item.stack}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <p class="text-slate-500 text-sm mt-8 text-center reveal-fade-up max-w-2xl mx-auto">
+          Aucune de ces automatisations n'a demandé un gros projet : chacune fait une seule chose, tourne sans surveillance et se remplace en une journée si le besoin change. C'est le format que je propose aussi aux clients.
+        </p>
       </div>
     </section>
 
