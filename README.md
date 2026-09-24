@@ -11,11 +11,11 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 | Technologie | Version |
 |-------------|---------|
-| Astro | 6.x |
+| Astro | 7.x |
 | React | 19.x |
 | Tailwind CSS | 4.x |
 | TypeScript | strict |
-| Déploiement | VPS OVH (Node standalone + Caddy) — `astro.config.vps.mjs`. Vercel ne porte plus que le nom de domaine, le temps du transfert. |
+| Déploiement | VPS OVH (Node standalone + Caddy) — `astro.config.vps.mjs`, reconstruit à chaque push sur `main` par le pipeline `deploiement@guyboireau`. Voir « Hébergement ». |
 
 ---
 
@@ -39,6 +39,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 | Projets | `/projets` | Portfolio des réalisations |
 | Contact | `/contact` | Formulaire et coordonnées |
 | Mentions légales | `/mentions-legales` | Informations légales |
+| Page introuvable | `/404` | Page 404 du site |
 
 ---
 
@@ -53,7 +54,13 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 Les deux endpoints utilisent un rate limiter en mémoire (Map côté serveur Astro), défini dans `src/lib/rate-limit.ts`, avec une **fenêtre fixe** par IP : à la première requête, `resetAt` est fixé à `now + windowMs` ; une fois la fenêtre expirée, le compteur repart à 1. Chaque endpoint a son propre compteur (`chatRateLimiter`, `contactRateLimiter`).
 
-> ⚠️ Ce rate limiter est réinitialisé à chaque cold start et n'est pas partagé entre les instances serverless — il ne protège réellement que sur une même instance. Voir les limitations documentées en tête de `src/lib/rate-limit.ts`.
+> ⚠️ En production (VPS), un seul processus Node sert le site : le compteur est commun à
+> toutes les requêtes et repart de zéro à chaque redémarrage, donc à chaque déploiement.
+> Surtout, l'IP vue par les deux routes est celle de Caddy : Astro 7 ne lit
+> `X-Forwarded-For` que si `security.allowedDomains` est configuré, ce que
+> `astro.config.vps.mjs` ne fait pas. **Tous les visiteurs partagent donc le même quota**
+> (10 messages de chat et 5 envois de contact par minute pour tout le site). Le
+> commentaire en tête de `src/lib/rate-limit.ts` décrit encore le cas Vercel serverless.
 
 Le client Supabase server (`src/lib/supabase.server.ts`) est utilisé par `/api/contact`. Il instancie un `createClient(url, anonKey)` simple, **sans gestion de cookies ni de session** : les requêtes partent avec la clé anonyme et restent donc soumises aux Row Level Security policies.
 
@@ -76,6 +83,11 @@ npm run test:csp # Empreintes CSP du HTML produit — exige un `npm run build` p
 > en ligne y a son empreinte sha256. Sans lui, un script en ligne sans empreinte serait
 > bloqué en silence par le navigateur — la page paraîtrait saine, la fonctionnalité serait
 > morte.
+>
+> `npm run build` utilise `astro.config.mjs` (adaptateur Vercel) : c'est ce build que la CI
+> vérifie. La production est construite avec `astro.config.vps.mjs` (adaptateur Node). Pour
+> contrôler ce build-là : `npx astro build --config astro.config.vps.mjs`, puis
+> `node scripts/csp-check.mjs` (dossier par défaut : `dist/client/`).
 
 ---
 
@@ -85,10 +97,14 @@ Le projet utilise deux clients Supabase, tous deux basés sur un `createClient(u
 
 | Client | Fichier | Usage |
 |--------|---------|-------|
-| Browser | `src/lib/supabase.ts` | `getSupabase()` — lit `import.meta.env`. Utilisé par `PricingGrid.tsx` (lecture de `pricing_tiers`) et `src/lib/contact.ts` (insertion dans `contacts`) |
+| Browser | `src/lib/supabase.ts` | `getSupabase()` — lit `import.meta.env`. Appelé seulement par `src/components/PricingGrid.tsx` (lecture de `pricing_tiers`) et `src/lib/contact.ts` (insertion dans `contacts`), **deux fichiers importés nulle part** : ce client ne sert pas sur le site en ligne |
 | Server | `src/lib/supabase.server.ts` | `getSupabaseServer()` — lit `process.env` pour éviter d'inliner la clé dans le bundle SSR. Utilisé par `/api/contact` (insertion dans `portfolio_contacts`) |
 
 Le projet ne contient aucun code d'authentification : les deux clients ne servent qu'à lire et écrire de la donnée.
+
+La seule écriture réelle en base est celle de `/api/contact` dans `portfolio_contacts`
+(`supabase/migrations/20260901120000_portfolio_contacts.sql`). Aucune migration du dépôt
+ne crée `pricing_tiers` ni `contacts`.
 
 ---
 
@@ -112,7 +128,7 @@ Créer un fichier `.env` à la racine :
 
 ## CI / CD
 
-Le workflow GitHub Actions (`.github/workflows/ci.yml`) s'exécute à chaque push et à chaque pull request sur `main` et `develop` :
+Le workflow GitHub Actions (`.github/workflows/ci.yml`) s'exécute à chaque push et à chaque pull request sur `main`, sauf si seuls des `*.md`, `docs/**`, `LICENSE` ou `.gitignore` changent :
 
 1. Checkout du code
 2. Setup Node.js 22 avec cache `npm`
@@ -122,8 +138,25 @@ Le workflow GitHub Actions (`.github/workflows/ci.yml`) s'exécute à chaque pus
 6. **Type check** (`npm run check`)
 7. **Tests** (`npm run test -- --coverage`)
 8. **Upload du rapport de couverture**
-9. **Build** (`npm run build`)
+9. **Build** (`npm run build`, version Vercel : voir la note sous « Scripts »)
 10. **CSP** (`npm run test:csp`) — après le build, sur le HTML produit
+
+---
+
+## Hébergement
+
+- **Production** : `guyboireau.com` (et `www`, redirigé en 301) est servi par Caddy sur le
+  VPS OVH, devant le service Node `guyboireau.service`. Un push sur `main` déclenche, par
+  webhook GitHub, le pipeline `deploiement@guyboireau` : `npm ci`, build avec
+  `astro.config.vps.mjs` dans une nouvelle release, bascule, contrôle de santé. Procédure
+  complète : dépôt `vps-ovh`, `README.md`, section « guyboireau.com sur le VPS ».
+- **Aperçus** : chaque PR ouverte sur `main` a son site, `https://pr-<n>.apercu.guyboireau.com`
+  (workflow `apercu.yml`, accès protégé par mot de passe).
+- **Vercel** : le projet Vercel existe toujours et **redéploie la production à chaque push**
+  (dernier : `9f7392f`, le 2026-09-23), plus un aperçu par branche ;
+  `guyboireau-com.vercel.app` répond toujours. Il ne sert plus le domaine. Le nom de
+  domaine et sa zone DNS restent chez Vercel jusqu'au transfert vers OVH, prévu au
+  moment du renouvellement (décembre 2026).
 
 ---
 
