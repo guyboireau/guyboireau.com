@@ -257,6 +257,16 @@ const jsonLd = [
       }
     </script>
 
+    <!-- Années d'expérience : le HTML porte la valeur du build, le navigateur la recalcule -->
+    <script>
+      import { anneesExperience } from '../data/experience'
+
+      const annees = String(anneesExperience())
+      document.querySelectorAll('[data-annees-experience]').forEach((el) => {
+        if (el.textContent !== annees) el.textContent = annees
+      })
+    </script>
+
     <!-- Scroll Reveal -->
     <script>
       const SELECTOR = '.reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-scale, .stagger-item'
