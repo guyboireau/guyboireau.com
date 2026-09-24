@@ -1,4 +1,5 @@
 ---
+import { anneesExperience } from '../data/experience'
 import HeroGrid from './HeroGrid.astro'
 
 // Quinze particules. Leurs positions et rythmes sont dans le bloc <style> en
@@ -61,7 +62,7 @@ const particles = Array.from({ length: 15 }, (_, i) => i)
     <!-- Social proof -->
     <div class="flex flex-wrap justify-center gap-6 mt-12 hero-animate hero-animate-delay-4">
       <div class="text-center">
-        <div class="text-2xl font-bold text-primary-500">3</div>
+        <div class="text-2xl font-bold text-primary-500" data-annees-experience>{anneesExperience()}</div>
         <div class="text-xs text-slate-500">ans d'expérience</div>
       </div>
       <div class="w-px h-10 bg-slate-300"></div>

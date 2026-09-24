@@ -4,6 +4,7 @@ import Header from '../components/Header.astro'
 import Hero from '../components/Hero.astro'
 import Footer from '../components/Footer.astro'
 import ChatBot from '../components/ChatBot.tsx'
+import { anneesExperience } from '../data/experience'
 import { Image } from 'astro:assets'
 import lalucarneDesktop from '../assets/lalucarne-desktop.png'
 import lalucarneMobile from '../assets/lalucarne-mobile.png'
@@ -46,7 +47,7 @@ const services = [
 ]
 
 const trustMetrics = [
-  '3 ans d\'expérience',
+  'experience',
   '10+ projets livrés',
   'Réponse sous 24h',
   'Bordeaux & toute la France',
@@ -127,7 +128,9 @@ const featuredProjects = [
       <div class="flex items-center gap-0 trust-marquee">
         {[...trustMetrics, ...trustMetrics].map((metric) => (
           <span class="flex items-center gap-6 px-6 whitespace-nowrap text-sm font-medium text-slate-600 shrink-0">
-            {metric}
+            {metric === 'experience'
+              ? <span><span data-annees-experience>{anneesExperience()}</span> ans d'expérience</span>
+              : metric}
             <span class="text-primary-400 text-base" aria-hidden="true">◆</span>
           </span>
         ))}
