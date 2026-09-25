@@ -1,0 +1,29 @@
+# Guy Boireau — applications métier et automatisation, Bordeaux
+
+> Guy Boireau est développeur indépendant à Bordeaux. Il exerce en entrepreneur individuel sous le nom « Guy Boireau EI ». Il conçoit des applications métier, des automatisations de processus et du traitement documentaire automatisé pour les structures de 5 à 30 salariés, puis héberge et suit les applications qu'il livre. Il intervient à Bordeaux et à distance dans toute la France.
+
+- Éditeur : Guy Boireau EI, entrepreneur individuel (micro-entreprise), SIREN 993 605 542, 17 rue Beck, 33800 Bordeaux.
+- Contact : me@guyboireau.com, 06 75 75 14 39, ou le formulaire https://guyboireau.com/contact/
+- Prix nets, TVA non applicable (art. 293 B du CGI). Les prix du site sont des prix de base ou des fourchettes : seul le devis signé engage.
+- La page d'accueil propose un assistant d'intelligence artificielle (Claude, d'Anthropic) ; ses réponses sont indicatives.
+
+## Offres
+
+- [Services et tarifs](https://guyboireau.com/services/): diagnostic « Où votre temps se perd » (1 400 €, deux jours), premier lot en production (6 000 à 10 000 €), sites et présence en ligne (mise en service 490 €), formules de suivi mensuel (79, 149 ou 299 € par mois), dépannage informatique à distance (35 € de l'heure)
+- [Traitement documentaire automatisé](https://guyboireau.com/traitement-documentaire/): lecture, contrôle et classement automatiques de documents d'entreprise, avec seuil de confiance et reprise humaine ; 9 000 à 22 000 € au forfait
+- [Facturation électronique](https://guyboireau.com/facturation-electronique/): diagnostic de conformité (900 €), connecteur vers une plateforme agréée (3 500 à 8 000 €), accompagnement complet (6 000 à 12 000 €)
+- [Automatisations IA](https://guyboireau.com/automatisations/): automatisations livrées clés en main, de 100 € (basique) à 500 € et plus (sur-mesure)
+- [Hébergement et exploitation](https://guyboireau.com/hebergement-exploitation/): hébergement sur un serveur privé virtuel OVHcloud en France, supervision, mises à jour et sauvegardes, compris dans les formules de suivi
+
+## Pages principales
+
+- [Accueil](https://guyboireau.com/): présentation et assistant IA
+- [Projets](https://guyboireau.com/projets/): réalisations — La Lucarne Péniche, Arnault Janvier (maître verrier), Niido
+- [À propos](https://guyboireau.com/a-propos/): parcours, formation et compétences
+- [Contact](https://guyboireau.com/contact/): formulaire et coordonnées
+
+## Informations légales
+
+- [Mentions légales](https://guyboireau.com/mentions-legales/)
+- [Politique de confidentialité](https://guyboireau.com/confidentialite/)
+- [Conditions générales de vente](https://guyboireau.com/cgv/)

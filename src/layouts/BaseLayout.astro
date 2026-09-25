@@ -24,6 +24,8 @@ export interface Props {
   ogImage?: string
   ogType?: string
   keywords?: string
+  /** Page à ne pas indexer (404) : robots noindex, pas d'URL canonique. */
+  noindex?: boolean
 }
 
 const {
@@ -32,6 +34,7 @@ const {
   canonical = Astro.url.href,
   ogImage = '/og-image.png',
   ogType = 'website',
+  noindex = false,
   keywords = 'application métier bordeaux, automatisation de processus entreprise, traitement documentaire automatisé, développeur indépendant bordeaux, logiciel métier PME, automatisation saisie bordeaux, développeur freelance bordeaux',
 } = Astro.props
 
@@ -127,7 +130,7 @@ const jsonLd = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
     <meta name="author" content="Guy Boireau" />
     <meta name="theme-color" content="#a0493b" />
     <meta name="keywords" content={keywords} />
@@ -138,7 +141,7 @@ const jsonLd = [
     <meta name="ICBM" content="44.8378, -0.5792" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {!noindex && <link rel="canonical" href={canonical} />}
 
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />

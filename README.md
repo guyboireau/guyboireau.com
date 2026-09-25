@@ -38,8 +38,14 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 | Automatisations | `/automatisations` | Solutions IA et automatisation |
 | Projets | `/projets` | Portfolio des réalisations |
 | Contact | `/contact` | Formulaire et coordonnées |
-| Mentions légales | `/mentions-legales` | Informations légales |
-| Page introuvable | `/404` | Page 404 du site |
+| Mentions légales | `/mentions-legales` | Éditeur (Guy Boireau EI), directeur de la publication, hébergeur |
+| Confidentialité | `/confidentialite` | Traitements de données, droits, cookies, bouton d'opposition à Umami |
+| CGV | `/cgv` | Conditions générales de vente et de prestation, médiation (`#mediation`), formulaire de rétractation |
+| Page introuvable | `/404` | Page 404 du site (`noindex`) |
+
+`public/llms.txt` résume le site pour les agents d'IA (format llmstxt.org) ; `public/robots.txt`
+autorise tous les robots. Les pages légales contiennent des `[À COMPLÉTER]` surlignés : à
+remplir avant la mise en production.
 
 ---
 
