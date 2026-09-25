@@ -1,0 +1,451 @@
+---
+import PageLegale from '../components/PageLegale.astro'
+
+const title = 'Conditions générales de vente | Guy Boireau EI'
+const description =
+  'Conditions générales de vente et de prestation de services de Guy Boireau EI : devis, prix, paiement, abonnements, rétractation, garanties, médiation de la consommation.'
+
+const sommaire = [
+  { id: 'prestataire', titre: 'Prestataire' },
+  { id: 'champ-application', titre: 'Champ d’application' },
+  { id: 'prestations', titre: 'Prestations' },
+  { id: 'devis', titre: 'Devis' },
+  { id: 'formation-contrat', titre: 'Formation du contrat' },
+  { id: 'prix', titre: 'Prix' },
+  { id: 'paiement', titre: 'Acompte et paiement' },
+  { id: 'delais', titre: 'Délais, collaboration et recette' },
+  { id: 'garantie-correction', titre: 'Garantie contractuelle de correction' },
+  { id: 'propriete-intellectuelle', titre: 'Propriété intellectuelle' },
+  { id: 'abonnements', titre: 'Hébergement, exploitation et suivi par abonnement' },
+  { id: 'donnees-personnelles', titre: 'Données personnelles' },
+  { id: 'responsabilite', titre: 'Responsabilité' },
+  { id: 'retractation', titre: 'Droit de rétractation (consommateurs)' },
+  { id: 'garantie-legale', titre: 'Garantie légale de conformité (consommateurs)' },
+  { id: 'reclamations', titre: 'Réclamations' },
+  { id: 'mediation', titre: 'Médiation de la consommation' },
+  { id: 'professionnels', titre: 'Dispositions propres aux professionnels' },
+  { id: 'droit-applicable', titre: 'Droit applicable et tribunaux' },
+  { id: 'formulaire-retractation', titre: 'Annexe : formulaire de rétractation' },
+]
+---
+
+<PageLegale {title} {description} titre="Conditions générales de vente et de prestation de services" miseAJour="2026-09-25" {sommaire}>
+  <p>
+    Ces conditions s’appliquent aux prestations de Guy Boireau EI. Elles sont acceptées à la signature du devis,
+    qui y renvoie.
+  </p>
+
+  <h2 id="prestataire">1. Prestataire</h2>
+  <p>Les prestations sont réalisées par Guy Boireau EI (entrepreneur individuel), sous le régime de la micro-entreprise :</p>
+  <ul>
+    <li>adresse : 17 rue Beck, 33800 Bordeaux ;</li>
+    <li>e-mail : <a href="mailto:me@guyboireau.com">me@guyboireau.com</a> — téléphone : <a href="tel:+33675751439">06 75 75 14 39</a> ;</li>
+    <li>SIREN 993 605 542 — SIRET 993 605 542 00014 — code APE 62.01Z (programmation informatique) ;</li>
+    <li>dispensé d’immatriculation au registre du commerce et des sociétés (RCS) et au répertoire des métiers (RM) ;</li>
+    <li>TVA non applicable, art. 293 B du CGI ;</li>
+    <li>
+      assurance de responsabilité civile professionnelle :
+      <span class="a-completer">[À COMPLÉTER : assureur, coordonnées et couverture géographique, si une assurance est souscrite]</span>.
+    </li>
+  </ul>
+  <p>Ci-après, « le prestataire » désigne Guy Boireau EI et « le client » la personne qui signe le devis.</p>
+
+  <h2 id="champ-application">2. Champ d’application</h2>
+  <p>2.1 Ces conditions s’appliquent à toutes les prestations du prestataire, qu’elles soient commandées par :</p>
+  <ul>
+    <li>un <strong>professionnel</strong> : une entreprise, une association ou toute personne qui agit pour les besoins de son activité professionnelle ;</li>
+    <li>un <strong>consommateur</strong> : une personne physique qui agit à des fins qui n’entrent pas dans le cadre de son activité professionnelle ;</li>
+    <li>un <strong>non-professionnel</strong> : une personne morale qui n’agit pas à des fins professionnelles.</li>
+  </ul>
+  <p>
+    2.2 Quand les règles diffèrent, l’article le précise. Les articles 14, 15 et 17 concernent les consommateurs.
+    Les articles 11.3, 11.4 et 13.4 concernent aussi les non-professionnels. L’article 18 ne concerne que les
+    professionnels.
+  </p>
+  <p>
+    2.3 Les prestations ne sont pas vendues en ligne. Le site présente les offres et leurs prix ; chaque
+    prestation fait l’objet d’un devis, qui renvoie aux présentes conditions.
+  </p>
+  <p>
+    2.4 Entre professionnels, ces conditions constituent le socle de la négociation commerciale (article L441-1
+    du Code de commerce). Le devis signé peut y déroger ; il prévaut alors sur elles. Les conditions générales
+    d’achat du client ne s’appliquent que si le prestataire les a acceptées par écrit.
+  </p>
+  <p>2.5 Les conditions applicables sont celles en vigueur à la date de signature du devis.</p>
+
+  <h2 id="prestations">3. Prestations</h2>
+  <p>Le prestataire propose notamment :</p>
+  <ul>
+    <li>le diagnostic « Où votre temps se perd » : deux jours d’intervention et un document écrit de 10 à 15 pages ;</li>
+    <li>les applications métier, à commencer par un premier lot en production : cadrage, développement, mise en production et transfert de compétences sur un processus ;</li>
+    <li>le traitement documentaire automatisé : lecture, contrôle et classement automatiques de documents d’entreprise ;</li>
+    <li>la facturation électronique : diagnostic de conformité, connecteur vers une plateforme agréée, accompagnement complet ;</li>
+    <li>les automatisations, livrées clés en main (paliers Basique, Standard et Sur-mesure) ;</li>
+    <li>les sites et la présence en ligne : mise en service d’un site, options à la création, prestations ponctuelles ;</li>
+    <li>l’hébergement, l’exploitation et le suivi par abonnement (formules Présence, Essentiel et Croissance, ou abonnement à la carte) ;</li>
+    <li>le dépannage informatique à distance, pour les professionnels et les particuliers.</li>
+  </ul>
+  <p>
+    Le contenu de chaque prestation, ses livrables et ses délais sont fixés par le devis. Les prix affichés sur le
+    site sont des prix de base ou des fourchettes : le prix définitif, qui dépend du périmètre, est celui du devis
+    signé.
+  </p>
+
+  <h2 id="devis">4. Devis</h2>
+  <p>
+    Le devis décrit la prestation et ses livrables, le prix, les modalités de paiement, les délais d’exécution et
+    la durée de validité de l’offre. Pour un consommateur, il reprend aussi les informations sur le droit de
+    rétractation (article 14) et le formulaire de rétractation (annexe).
+  </p>
+  <p><span class="a-completer">[À COMPLÉTER : devis gratuit ? durée de validité]</span></p>
+
+  <h2 id="formation-contrat">5. Formation du contrat</h2>
+  <p>
+    5.1 Le contrat est formé par la signature électronique du devis par le client, sur la plateforme de signature
+    du prestataire (DocuSeal, sign.guyboireau.com). Le devis renvoie aux présentes conditions ; en le signant, le
+    client déclare les avoir lues et acceptées.
+  </p>
+  <p>5.2 Les étapes sont les suivantes :</p>
+  <ol>
+    <li>le client décrit son besoin, par le formulaire de contact, par e-mail ou par téléphone ;</li>
+    <li>le prestataire lui adresse un devis, avec un lien de signature ;</li>
+    <li>le client relit le devis et les présentes conditions ; avant de signer, il peut demander toute correction ou modification ;</li>
+    <li>le client signe électroniquement le devis ;</li>
+    <li>le prestataire lui transmet un exemplaire du devis signé et des présentes conditions, sur un support durable (fichier PDF).</li>
+  </ol>
+  <p>5.3 Le contrat est conclu en français.</p>
+  <p>
+    5.4 Pour un contrat conclu avec un consommateur d’un montant égal ou supérieur à 120 €, le prestataire
+    conserve l’écrit qui le constate pendant dix ans et en garantit l’accès au client, sur simple demande
+    (articles L213-1, D213-1 et D213-2 du Code de la consommation).
+  </p>
+
+  <h2 id="prix">6. Prix</h2>
+  <p>
+    6.1 Les prix sont exprimés en euros, nets : TVA non applicable, art. 293 B du CGI. Le client paie le prix
+    indiqué au devis, sans TVA en plus.
+  </p>
+  <p>
+    6.2 Le prix du devis signé est ferme pour la prestation décrite. Une demande qui sort du périmètre du devis
+    fait l’objet d’un nouveau devis ou, si le client l’accepte, d’une facturation au temps passé au tarif annoncé
+    (modification hors abonnement : 60 € de l’heure).
+  </p>
+  <p>6.3 Les éventuels frais de déplacement sont indiqués au devis.</p>
+  <p>
+    6.4 Sauf mention contraire du devis, les services tiers nécessaires à certaines prestations — service de
+    lecture automatique de documents, plateforme agréée de facturation électronique, outil d’automatisation, etc. —
+    sont souscrits et payés par le client directement auprès de leurs fournisseurs.
+  </p>
+  <p>
+    6.5 Le dépannage informatique est facturé 35 € de l’heure, au temps réellement passé.
+    <span class="a-completer">[À COMPLÉTER : unité de facturation et durée minimale éventuelle ; le « diagnostic gratuit avant intervention » annoncé sur le site est-il exclu du temps facturé ?]</span>
+  </p>
+
+  <h2 id="paiement">7. Acompte et paiement</h2>
+  <p>
+    7.1 <span class="a-completer">[À COMPLÉTER : pourcentage d’acompte à la signature, échéancier (solde à la livraison ?) et délai de paiement]</span>
+  </p>
+  <p>
+    7.2 Le paiement se fait par virement bancaire.
+    <span class="a-completer">[À COMPLÉTER : autres moyens de paiement acceptés — les données structurées du site mentionnent aussi le chèque]</span>
+  </p>
+  <p>
+    7.3 Les abonnements sont facturés
+    <span class="a-completer">[À COMPLÉTER : périodicité et échéance, par exemple chaque mois, d’avance]</span>.
+  </p>
+  <p>
+    7.4 Consommateur : en cas de retard de paiement, des intérêts au taux légal peuvent être demandés après une
+    mise en demeure (article 1231-6 du Code civil).
+  </p>
+  <p>7.5 Professionnel : voir l’article 18.</p>
+
+  <h2 id="delais">8. Délais, collaboration et recette</h2>
+  <p>
+    8.1 Les délais d’exécution sont indiqués au devis. Ils courent à compter de
+    <span class="a-completer">[À COMPLÉTER : point de départ — signature du devis, réception de l’acompte, réception des contenus ?]</span>.
+  </p>
+  <p>
+    8.2 Le client fournit en temps utile les informations, contenus, accès et validations nécessaires. Un retard
+    de sa part décale d’autant les délais.
+  </p>
+  <p>
+    8.3 Consommateur : à défaut de date ou de délai convenu, la prestation est fournie sans retard injustifié et au
+    plus tard trente jours après la conclusion du contrat (article L216-1 du Code de la consommation). Si la date
+    ou le délai n’est pas respecté, vous pouvez résoudre le contrat par écrit, après avoir enjoint au prestataire
+    de s’exécuter dans un délai supplémentaire raisonnable resté sans effet (article L216-6).
+  </p>
+  <p>
+    8.4 Recette : à chaque livraison, le client vérifie la conformité au devis et signale par écrit les anomalies
+    constatées dans un délai de <span class="a-completer">[À COMPLÉTER : délai de recette]</span>. Les anomalies
+    signalées sont corrigées avant la mise en production. La mise en production vaut acceptation de la livraison,
+    sous réserve des anomalies signalées. Pour un consommateur, la recette ne réduit en rien la garantie légale de
+    conformité (article 15).
+  </p>
+
+  <h2 id="garantie-correction">9. Garantie contractuelle de correction</h2>
+  <p>
+    9.1 Pendant <span class="a-completer">[À COMPLÉTER : durée — le site annonce « 30 jours » (page d’accueil) et « un mois » (page Services)]</span>
+    après la mise en production, le prestataire corrige gratuitement les anomalies des développements qu’il a
+    livrés, c’est-à-dire tout fonctionnement non conforme au devis.
+  </p>
+  <p>
+    9.2 Ne sont pas couvertes : les demandes d’évolution ; les anomalies causées par une modification faite par le
+    client ou par un tiers ; celles qui proviennent d’un service tiers ou d’une utilisation non prévue au devis.
+  </p>
+  <p>
+    9.3 Les automatisations comprennent une période d’assistance propre à chaque palier (15, 30 ou 60 jours),
+    précisée au devis.
+  </p>
+  <p>
+    9.4 Pour un consommateur, cette garantie s’ajoute à la garantie légale de conformité (article 15) ; elle ne la
+    remplace pas.
+  </p>
+
+  <h2 id="propriete-intellectuelle">10. Propriété intellectuelle</h2>
+  <p>
+    10.1 Les droits d’exploitation sur les développements réalisés spécifiquement pour le client lui sont cédés à
+    compter du paiement complet du prix. Étendue de la cession :
+    <span class="a-completer">[À COMPLÉTER : droits cédés (reproduction, représentation, adaptation, modification…), supports, territoire et durée — chaque droit cédé doit être mentionné (article L131-3 du Code de la propriété intellectuelle)]</span>.
+    Avant le paiement complet, aucun droit n’est cédé ; le client peut toutefois utiliser les livrables pour les
+    besoins de la recette.
+  </p>
+  <p>
+    10.2 Les outils, composants et savoir-faire dont le prestataire disposait avant la prestation, ou qu’il
+    réutilise d’un projet à l’autre, restent sa propriété. Le client reçoit le droit non exclusif de les utiliser
+    tels qu’intégrés au livrable, dans les mêmes limites que la cession.
+  </p>
+  <p>10.3 Les composants libres (open source) intégrés aux livrables restent soumis à leur propre licence.</p>
+  <p>
+    10.4 Les textes, images, marques et données fournis par le client restent sa propriété. Il garantit disposer
+    des droits nécessaires à leur utilisation.
+  </p>
+
+  <h2 id="abonnements">11. Hébergement, exploitation et suivi par abonnement</h2>
+  <p>
+    11.1 Contenu. Selon la formule choisie (Présence, Essentiel, Croissance ou abonnement à la carte),
+    l’abonnement comprend notamment l’hébergement sur un serveur privé virtuel loué à OVH SAS et situé en France,
+    le nom de domaine, les mises à jour de sécurité, les sauvegardes, la surveillance, le support et les
+    modifications prévues. Le détail figure au devis.
+  </p>
+  <p>
+    11.2 Durée. L’abonnement est conclu avec un engagement de 12 mois ; le premier mois est offert. La même
+    formule existe sans engagement, pour 20 € de plus par mois. Pendant l’engagement, le client peut changer de
+    formule.
+    <span class="a-completer">[À COMPLÉTER : à l’issue de l’engagement, reconduction tacite (pour quelle durée ?) ou poursuite au mois ; préavis de résiliation ; conséquences d’une résiliation pendant l’engagement]</span>
+  </p>
+  <p>
+    11.3 Reconduction tacite (consommateurs et non-professionnels). Si le contrat se reconduit tacitement, le
+    prestataire vous informe par écrit, par lettre nominative ou par courrier électronique dédié, au plus tôt trois
+    mois et au plus tard un mois avant la fin de la période qui permet de refuser la reconduction, de la
+    possibilité de ne pas reconduire le contrat. Cette information indique, dans un encadré apparent, la date
+    limite de non-reconduction. À défaut, vous pouvez mettre fin gratuitement au contrat à tout moment à compter
+    de la date de reconduction ; les sommes versées pour la période qui suit la résiliation vous sont remboursées
+    dans un délai de trente jours (articles L215-1 et L215-3 du Code de la consommation).
+  </p>
+  <p>
+    11.4 Résiliation. Le client peut notifier la résiliation par e-mail à
+    <a href="mailto:me@guyboireau.com">me@guyboireau.com</a> ou par courrier.
+    <span class="a-completer">[À COMPLÉTER : lien vers la fonctionnalité de résiliation en ligne exigée pour les consommateurs et non-professionnels (article L215-1-1 du Code de la consommation), à mettre en place]</span>
+  </p>
+  <p>
+    11.5 Disponibilité. Le prestataire met en œuvre les moyens décrits au devis — surveillance, alertes, mises à
+    jour, sauvegardes — pour assurer la disponibilité du service. Il ne garantit pas une disponibilité
+    permanente : une panne de l’infrastructure d’OVH, par exemple, interrompt le service le temps de sa remise en
+    service.
+  </p>
+  <p>
+    11.6 Nom de domaine.
+    <span class="a-completer">[À COMPLÉTER : au nom de qui le nom de domaine est enregistré, et comment il est transféré en fin de contrat]</span>
+  </p>
+  <p>
+    11.7 Fin de l’abonnement.
+    <span class="a-completer">[À COMPLÉTER : éléments remis au client (code source, export de la base, fichiers, code de transfert du domaine), délai de remise, date de suppression des données du serveur]</span>
+  </p>
+
+  <h2 id="donnees-personnelles">12. Données personnelles</h2>
+  <p>
+    12.1 Lorsque la prestation conduit le prestataire à traiter des données personnelles pour le compte du
+    client — hébergement, maintenance, automatisations, traitement documentaire —, il agit en qualité de
+    sous-traitant au sens de l’article 28 du RGPD. Les obligations de chacun sont fixées par une annexe
+    « Protection des données personnelles » jointe au contrat.
+  </p>
+  <p>
+    12.2 Les données du client lui-même (coordonnées, informations de facturation) sont traitées par le
+    prestataire pour conclure et exécuter le contrat et pour respecter ses obligations comptables et fiscales.
+    Elles sont conservées pendant la durée du contrat, puis pendant les durées imposées par la loi, notamment six
+    ans pour les pièces justificatives fiscales (article L102 B du Livre des procédures fiscales). Le client
+    dispose des droits décrits dans la <a href="/confidentialite#droits">politique de confidentialité</a>.
+  </p>
+
+  <h2 id="responsabilite">13. Responsabilité</h2>
+  <p>
+    13.1 Le prestataire exécute ses prestations avec soin, selon les règles de l’art. Sauf engagement de résultat
+    prévu au devis ou par la loi, il est tenu d’une obligation de moyens.
+  </p>
+  <p>
+    13.2 Il n’est pas responsable du fonctionnement des services tiers que le client souscrit directement
+    (plateforme agréée, service de lecture de documents, outil d’automatisation…), ni des conséquences
+    d’informations inexactes ou incomplètes fournies par le client.
+  </p>
+  <p>
+    13.3 Entre professionnels, la responsabilité du prestataire est limitée aux dommages directs et prévisibles
+    et plafonnée à <span class="a-completer">[À COMPLÉTER : plafond, par exemple le montant payé au titre de la prestation en cause]</span>.
+    Ce plafond ne s’applique ni en cas de faute lourde ou dolosive, ni aux dommages corporels.
+  </p>
+  <p>
+    13.4 Envers un consommateur ou un non-professionnel, aucune stipulation de ces conditions ne supprime ni ne
+    réduit son droit à réparation en cas de manquement du prestataire à l’une de ses obligations (article R212-1,
+    6° du Code de la consommation).
+  </p>
+  <p>
+    13.5 Aucune partie n’est responsable d’un manquement dû à un cas de force majeure, au sens de l’article 1218
+    du Code civil.
+  </p>
+
+  <h2 id="retractation">14. Droit de rétractation (consommateurs)</h2>
+  <p>
+    14.1 Délai. Le contrat étant conclu à distance, vous disposez de quatorze jours pour vous rétracter, sans
+    avoir à vous justifier ni à payer de pénalité. Le délai court à compter du jour de la conclusion du contrat,
+    c’est-à-dire de la signature du devis (article L221-18 du Code de la consommation).
+  </p>
+  <p>
+    14.2 Exercice. Avant l’expiration du délai, informez le prestataire de votre décision par une déclaration
+    dénuée d’ambiguïté, par e-mail à <a href="mailto:me@guyboireau.com">me@guyboireau.com</a> ou par courrier à
+    Guy Boireau EI, 17 rue Beck, 33800 Bordeaux. Vous pouvez utiliser le
+    <a href="#formulaire-retractation">formulaire de rétractation</a> reproduit en annexe, sans y être obligé.
+  </p>
+  <p>
+    14.3 Exécution pendant le délai. La prestation ne commence avant la fin du délai de rétractation que si vous
+    en faites la demande expresse. Si vous vous rétractez ensuite, vous payez un montant proportionnel à ce qui
+    vous a été fourni jusqu’à la communication de votre décision (article L221-25).
+  </p>
+  <p>
+    14.4 Perte du droit. Vous ne pouvez plus vous rétracter lorsque la prestation a été pleinement exécutée avant
+    la fin du délai, si son exécution a commencé avec votre accord préalable et exprès et après que vous avez
+    expressément reconnu perdre votre droit de rétractation une fois la prestation pleinement exécutée (article
+    L221-28, 1°).
+  </p>
+  <p>
+    14.5 Exception. Le droit de rétractation ne s’applique pas non plus aux travaux d’entretien ou de réparation
+    à réaliser en urgence à votre domicile et que vous avez expressément sollicités, dans la limite des pièces de
+    rechange et des travaux strictement nécessaires pour répondre à l’urgence (article L221-28, 8°).
+  </p>
+  <p>
+    14.6 Remboursement. En cas de rétractation, le prestataire vous rembourse les sommes versées, déduction faite
+    le cas échéant du montant prévu au 14.3, sans retard injustifié et au plus tard quatorze jours après avoir été
+    informé de votre décision. Le remboursement se fait par le même moyen de paiement que celui que vous avez
+    utilisé, sauf accord exprès de votre part pour un autre moyen, et sans frais pour vous (article L221-24).
+  </p>
+
+  <h2 id="garantie-legale">15. Garantie légale de conformité (consommateurs)</h2>
+  <p>
+    Lorsque le prestataire fournit à un consommateur un contenu ou un service numérique — par exemple un site, une
+    application, une automatisation ou un hébergement —, il répond des défauts de conformité dans les conditions
+    des articles L224-25-12 et suivants du Code de la consommation. En résumé :
+  </p>
+  <ul>
+    <li>le contenu ou le service doit être conforme au contrat (description, fonctionnalités, compatibilité, mises à jour) et aux critères fixés par la loi ;</li>
+    <li>
+      fourniture unique (par exemple un site ou une automatisation livrés une fois) : le prestataire répond des
+      défauts qui apparaissent dans les deux ans suivant la fourniture ; ceux qui apparaissent dans l’année sont
+      présumés exister dès la fourniture, sauf preuve contraire ;
+    </li>
+    <li>
+      fourniture continue (hébergement ou suivi par abonnement) : il répond des défauts qui apparaissent pendant
+      toute la durée du contrat, et c’est à lui de prouver que le service était conforme ;
+    </li>
+    <li>
+      vous avez droit à la mise en conformité, sans frais, dans un délai raisonnable et sans inconvénient majeur ;
+      si elle est impossible, refusée ou n’aboutit pas, vous pouvez obtenir une réduction du prix ou, si le défaut
+      n’est pas mineur, la résolution du contrat ;
+    </li>
+    <li>le prestataire vous fournit les mises à jour nécessaires au maintien de la conformité.</li>
+  </ul>
+  <p>
+    Pour faire jouer la garantie, écrivez à <a href="mailto:me@guyboireau.com">me@guyboireau.com</a>. Ce résumé
+    ne remplace pas le texte de la loi. Pour les autres prestations, comme le dépannage informatique, ce sont les
+    règles générales du droit des contrats qui s’appliquent.
+  </p>
+
+  <h2 id="reclamations">16. Réclamations</h2>
+  <p>
+    Toute réclamation s’adresse par écrit, par e-mail à <a href="mailto:me@guyboireau.com">me@guyboireau.com</a>
+    ou par courrier à Guy Boireau EI, 17 rue Beck, 33800 Bordeaux, en précisant la prestation concernée et le
+    problème rencontré.
+  </p>
+
+  <h2 id="mediation">17. Médiation de la consommation</h2>
+  <p>
+    Un consommateur peut recourir gratuitement à un médiateur de la consommation en vue de la résolution amiable
+    d’un litige avec le prestataire (article L612-1 du Code de la consommation). Le médiateur dont relève Guy
+    Boireau EI est :
+  </p>
+  <p><span class="a-completer">[MÉDIATEUR À CHOISIR : nom, adresse, site internet]</span></p>
+  <p>Pour que votre demande soit examinée (article L612-2) :</p>
+  <ul>
+    <li>vous devez d’abord avoir tenté de résoudre le litige directement avec le prestataire, par une réclamation écrite (article 16) ;</li>
+    <li>vous saisissez le médiateur dans un délai d’un an à compter de cette réclamation écrite ;</li>
+    <li>le litige ne doit pas avoir déjà été examiné, ou être en cours d’examen, par un autre médiateur ou par un tribunal ;</li>
+    <li>la demande ne doit pas être manifestement infondée ou abusive.</li>
+  </ul>
+  <p>La médiation est facultative : vous restez libre de saisir le tribunal compétent.</p>
+
+  <h2 id="professionnels">18. Dispositions propres aux professionnels</h2>
+  <p>
+    18.1 Les factures sont payables à
+    <span class="a-completer">[À COMPLÉTER : délai, 30 jours par défaut]</span> à compter de leur réception.
+  </p>
+  <p>
+    18.2 Tout retard de paiement entraîne de plein droit, dès le jour suivant la date d’échéance et sans qu’un
+    rappel soit nécessaire, des pénalités de retard calculées au taux d’intérêt appliqué par la Banque centrale
+    européenne à son opération de refinancement la plus récente, majoré de 10 points de pourcentage (article
+    L441-10 du Code de commerce), ainsi qu’une indemnité forfaitaire pour frais de recouvrement de 40 € (articles
+    L441-10 et D441-5 du Code de commerce). Si les frais de recouvrement exposés dépassent ce montant, une
+    indemnité complémentaire peut être demandée sur justification.
+  </p>
+  <p>18.3 Aucun escompte n’est accordé en cas de paiement anticipé.</p>
+  <p>
+    18.4 Un professionnel ne bénéficie pas du droit de rétractation, sauf dans le cas prévu à l’article L221-3 du
+    Code de la consommation : contrat conclu hors établissement, dont l’objet n’entre pas dans le champ de son
+    activité principale, avec un professionnel qui emploie cinq salariés au plus.
+  </p>
+  <p>
+    18.5 Tout litige entre professionnels relatif au contrat relève des tribunaux de Bordeaux, lorsque la loi
+    permet une telle clause (article 48 du Code de procédure civile) ; à défaut, les règles de compétence de droit
+    commun s’appliquent.
+  </p>
+
+  <h2 id="droit-applicable">19. Droit applicable et tribunaux</h2>
+  <p>
+    Ces conditions et les contrats qu’elles régissent sont soumis au droit français. Un consommateur qui réside
+    dans un autre État de l’Union européenne conserve la protection des dispositions impératives de la loi de son
+    pays de résidence.
+  </p>
+  <p>
+    Un consommateur peut saisir, à son choix, outre l’une des juridictions territorialement compétentes en vertu
+    du Code de procédure civile, la juridiction du lieu où il demeurait au moment de la conclusion du contrat ou de
+    la survenance du fait dommageable (article R631-3 du Code de la consommation).
+  </p>
+
+  <h2 id="formulaire-retractation">Annexe : formulaire de rétractation</h2>
+  <p>Modèle de formulaire de rétractation (annexe à l’article R221-1 du Code de la consommation).</p>
+  <div class="rounded-xl border border-slate-300 bg-slate-50 p-5 md:p-6">
+    <p class="italic">
+      (Veuillez compléter et renvoyer le présent formulaire uniquement si vous souhaitez vous rétracter du
+      contrat.)
+    </p>
+    <p>
+      À l’attention de Guy Boireau EI, 17 rue Beck, 33800 Bordeaux, me@guyboireau.com :
+    </p>
+    <p>
+      Je/nous (*) vous notifie/notifions (*) par la présente ma/notre (*) rétractation du contrat portant sur la
+      vente du bien (*)/pour la prestation de services (*) ci-dessous :
+    </p>
+    <p>Commandé le (*)/reçu le (*) :</p>
+    <p>Nom du (des) consommateur(s) :</p>
+    <p>Adresse du (des) consommateur(s) :</p>
+    <p>Signature du (des) consommateur(s) (uniquement en cas de notification du présent formulaire sur papier) :</p>
+    <p>Date :</p>
+    <p class="mb-0">(*) Rayez la mention inutile.</p>
+  </div>
+</PageLegale>
