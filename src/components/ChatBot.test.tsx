@@ -11,20 +11,58 @@ describe('ChatBot', () => {
     vi.restoreAllMocks()
   })
 
-  it('affiche l’en-tête du chatbot', () => {
+  it('se présente comme un assistant IA, pas comme Guy « en ligne »', () => {
     render(<ChatBot />)
 
-    expect(screen.getByText(/Assistant de Guy/i)).toBeInTheDocument()
-    expect(screen.getByText(/En ligne/i)).toBeInTheDocument()
+    expect(screen.getByText('Assistant IA')).toBeInTheDocument()
+    expect(screen.getByText(/pas Guy en personne/i)).toBeInTheDocument()
+    expect(screen.queryByText(/En ligne/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Assistant de Guy/i)).not.toBeInTheDocument()
   })
 
-  it('affiche les suggestions au démarrage', () => {
+  it('affiche les suggestions au démarrage, formulées à propos de Guy', () => {
     render(<ChatBot />)
 
-    expect(screen.getByText(/Quelle est ta stack technique ?/i)).toBeInTheDocument()
-    expect(screen.getByText(/Tu es disponible pour un projet ?/i)).toBeInTheDocument()
-    expect(screen.getByText(/Quels projets as-tu réalisés ?/i)).toBeInTheDocument()
-    expect(screen.getByText(/Quels sont tes tarifs ?/i)).toBeInTheDocument()
+    expect(screen.getByText('Quelle est la stack technique de Guy ?')).toBeInTheDocument()
+    expect(screen.getByText('Guy est-il disponible pour un projet ?')).toBeInTheDocument()
+    expect(screen.getByText('Quels projets Guy a-t-il réalisés ?')).toBeInTheDocument()
+    expect(screen.getByText('Quels sont les tarifs de Guy ?')).toBeInTheDocument()
+  })
+
+  /**
+   * Règlement européen sur l'IA, article 50 §1 : la personne doit savoir
+   * qu'elle interagit avec un système d'IA, au plus tard au premier échange.
+   * La mention est donc visible AVANT toute saisie, et reliée au champ.
+   */
+  describe('transparence avant la saisie', () => {
+    it('la mention dit : IA, Anthropic, pas de données sensibles, réponses indicatives, pas un devis', () => {
+      render(<ChatBot />)
+      const mention = document.getElementById('chat-avertissement')!
+
+      expect(mention).toBeVisible()
+      expect(mention).toHaveTextContent(/assistant d'intelligence artificielle \(Claude, d'Anthropic\), pas avec Guy/)
+      expect(mention).toHaveTextContent(/transmis à Anthropic/)
+      expect(mention).toHaveTextContent(/n'y saisissez pas de données sensibles/)
+      expect(mention).toHaveTextContent(/peuvent contenir des erreurs/)
+      expect(mention).toHaveTextContent(/ne\s+valent pas devis/)
+    })
+
+    it('la mention renvoie à la politique de confidentialité', () => {
+      render(<ChatBot />)
+      expect(screen.getByRole('link', { name: /En savoir plus sur vos données/i })).toHaveAttribute(
+        'href',
+        '/confidentialite#assistant-ia'
+      )
+    })
+
+    it('le champ de saisie a un libellé et la mention pour description', () => {
+      render(<ChatBot />)
+      const champ = screen.getByLabelText(/Votre question à l'assistant IA/i)
+
+      expect(champ).toHaveAttribute('id', 'chat-question')
+      expect(champ).toHaveAccessibleDescription(/assistant d'intelligence artificielle/)
+      expect(champ).toHaveAttribute('maxLength', '4000')
+    })
   })
 
   it('envoie un message utilisateur et affiche la réponse en streaming', async () => {
@@ -46,7 +84,7 @@ describe('ChatBot', () => {
 
     render(<ChatBot />)
 
-    const input = screen.getByPlaceholderText(/Une question sur mes services/i)
+    const input = screen.getByPlaceholderText(/Votre question sur les services de Guy/i)
     fireEvent.change(input, { target: { value: 'Quelle est ta stack ?' } })
 
     const submitButton = screen.getByLabelText(/Envoyer/i)
@@ -86,7 +124,7 @@ describe('ChatBot', () => {
 
     render(<ChatBot />)
 
-    const input = screen.getByPlaceholderText(/Une question sur mes services/i)
+    const input = screen.getByPlaceholderText(/Votre question sur les services de Guy/i)
     fireEvent.change(input, { target: { value: 'Test' } })
     fireEvent.click(screen.getByLabelText(/Envoyer/i))
 
@@ -242,6 +280,126 @@ describe('ChatBot', () => {
       await waitFor(() =>
         expect(screen.getByText(/une erreur est survenue/i)).toBeInTheDocument()
       )
+      expect(screen.getByRole('alert')).toHaveTextContent(/une erreur est survenue/i)
+    })
+  })
+
+  /**
+   * Lecteurs d'écran : la réponse arrive par fragments. Les annoncer un par un
+   * serait inaudible ; la zone polie annonce le début puis la réponse entière.
+   */
+  describe('annonces', () => {
+    const annonce = () => screen.getByRole('status')
+
+    it('la réponse complète est annoncée, sans la ponctuation Markdown', async () => {
+      const encodeur = new TextEncoder()
+      const fragments = ['data: {"text":"Guy propose **trois** formules."}\n\n', 'data: [DONE]\n\n']
+      let i = 0
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({
+          ok: true,
+          status: 200,
+          body: {
+            getReader: () => ({
+              read: async () =>
+                i < fragments.length
+                  ? { done: false, value: encodeur.encode(fragments[i++]) }
+                  : { done: true, value: undefined },
+            }),
+          },
+        })
+      )
+
+      render(<ChatBot />)
+      expect(annonce()).toHaveTextContent('')
+
+      fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Vos formules ?' } })
+      fireEvent.submit(screen.getByRole('textbox').closest('form')!)
+
+      await waitFor(() =>
+        expect(annonce()).toHaveTextContent("Réponse de l'assistant IA : Guy propose trois formules.")
+      )
+    })
+
+    it('le début de la rédaction est annoncé', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockImplementation(() => new Promise(() => {})))
+
+      render(<ChatBot />)
+      fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Bonjour' } })
+      fireEvent.submit(screen.getByRole('textbox').closest('form')!)
+
+      await waitFor(() => expect(annonce()).toHaveTextContent(/rédige sa réponse/))
+    })
+
+    it('un échec n’annonce pas de réponse fantôme', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Failed to fetch')))
+
+      render(<ChatBot />)
+      fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Bonjour' } })
+      fireEvent.submit(screen.getByRole('textbox').closest('form')!)
+
+      await waitFor(() => expect(screen.getByRole('alert')).toBeInTheDocument())
+      expect(annonce()).toHaveTextContent('')
+    })
+
+    it('chaque bulle dit qui parle, pour les lecteurs d’écran', async () => {
+      const encodeur = new TextEncoder()
+      let lu = false
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({
+          ok: true,
+          status: 200,
+          body: {
+            getReader: () => ({
+              read: async () => {
+                if (lu) return { done: true, value: undefined }
+                lu = true
+                return { done: false, value: encodeur.encode('data: {"text":"Bonjour"}\n\n') }
+              },
+            }),
+          },
+        })
+      )
+
+      render(<ChatBot />)
+      fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Salut' } })
+      fireEvent.submit(screen.getByRole('textbox').closest('form')!)
+
+      await waitFor(() => expect(screen.getByText("Assistant IA :")).toBeInTheDocument())
+      expect(screen.getByText('Vous :')).toBeInTheDocument()
+    })
+
+    it('réinitialiser vide la conversation et l’annonce', async () => {
+      const encodeur = new TextEncoder()
+      let lu = false
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({
+          ok: true,
+          status: 200,
+          body: {
+            getReader: () => ({
+              read: async () => {
+                if (lu) return { done: true, value: undefined }
+                lu = true
+                return { done: false, value: encodeur.encode('data: {"text":"Bonjour"}\n\n') }
+              },
+            }),
+          },
+        })
+      )
+
+      render(<ChatBot />)
+      fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Salut' } })
+      fireEvent.submit(screen.getByRole('textbox').closest('form')!)
+      await waitFor(() => expect(annonce()).toHaveTextContent(/Bonjour/))
+
+      fireEvent.click(screen.getByRole('button', { name: /Réinitialiser la conversation/i }))
+
+      expect(annonce()).toHaveTextContent('')
+      expect(screen.getByText('Quelle est la stack technique de Guy ?')).toBeInTheDocument()
     })
   })
 })
