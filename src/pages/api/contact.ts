@@ -8,11 +8,22 @@ import { getSupabaseServer } from '@/lib/supabase.server'
 import { contactRateLimiter } from '@/lib/rate-limit'
 import { adresseVisiteur } from '@/lib/client-ip'
 
+// Messages en français : ils sont affichés sous le champ concerné par le
+// formulaire (aria-describedby), ils doivent dire au visiteur quoi corriger.
 const contactSchema = z.object({
-  name: z.string().min(2).max(100),
-  email: z.string().email().max(320),
+  name: z
+    .string()
+    .min(2, 'Le nom doit contenir au moins 2 caractères.')
+    .max(100, 'Le nom ne doit pas dépasser 100 caractères.'),
+  email: z
+    .string()
+    .email('Adresse e-mail invalide.')
+    .max(320, "L'adresse e-mail ne doit pas dépasser 320 caractères."),
   project_type: z.string().max(100).optional(),
-  message: z.string().min(10).max(5000),
+  message: z
+    .string()
+    .min(10, 'Le message doit contenir au moins 10 caractères.')
+    .max(5000, 'Le message ne doit pas dépasser 5 000 caractères.'),
 })
 
 function escapeHtml(unsafe: string): string {

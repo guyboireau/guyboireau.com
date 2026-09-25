@@ -48,6 +48,17 @@ describe('/api/contact', () => {
     expect(body.details).toBeDefined()
   })
 
+  it('les erreurs de validation sont en français, champ par champ', async () => {
+    // Le formulaire les affiche sous le champ concerné : elles doivent dire
+    // au visiteur quoi corriger, dans sa langue.
+    const response = await POST(createContactRequest({ name: 'A', email: 'invalid', message: 'court' }, '9.9.9.1'))
+    const { details } = await response.json()
+
+    expect(details.name).toEqual(['Le nom doit contenir au moins 2 caractères.'])
+    expect(details.email).toEqual(['Adresse e-mail invalide.'])
+    expect(details.message).toEqual(['Le message doit contenir au moins 10 caractères.'])
+  })
+
   it('retourne 429 en cas de rate limiting', async () => {
     const ip = '1.2.3.4'
     // 6 requêtes pour dépasser la limite de 5
