@@ -55,12 +55,33 @@ describe('PricingSimulator', () => {
     expect(screen.getByRole('checkbox', { name: /Mise en service/ })).toBeDisabled()
   })
 
+  it('les boutons − et + ont un nom, et le groupe son libellé', () => {
+    // Un bouton qui ne contient qu'un signe est lu « moins » ou « plus » sans
+    // dire de quoi. Le nombre affiché est annoncé quand il change.
+    render(<PricingSimulator />)
+    fireEvent.click(screen.getByRole('checkbox', { name: /Page supplémentaire/ }))
+    fireEvent.click(screen.getByRole('checkbox', { name: /Modification hors abonnement/ }))
+
+    expect(screen.getByRole('group', { name: 'Nombre de pages :' })).toBeInTheDocument()
+    expect(screen.getByRole('group', { name: "Nombre d'heures :" })).toBeInTheDocument()
+    for (const nom of ['Retirer une page', 'Ajouter une page', 'Retirer une heure', 'Ajouter une heure']) {
+      expect(screen.getByRole('button', { name: nom })).toHaveAttribute('type', 'button')
+    }
+    const pages = within(screen.getByRole('group', { name: 'Nombre de pages :' }))
+    expect(pages.getByRole('status')).toHaveTextContent('1')
+  })
+
+  it('le total est dans une zone annoncée', () => {
+    render(<PricingSimulator />)
+    expect(total().closest('[aria-live]')).toHaveAttribute('aria-live', 'polite')
+  })
+
   it('le nombre de pages supplémentaires multiplie leur prix, sans descendre sous 1', () => {
     render(<PricingSimulator />)
     fireEvent.click(screen.getByRole('checkbox', { name: /Page supplémentaire/ }))
 
-    const bloc = screen.getByText('Nombre de pages :').parentElement as HTMLElement
-    const [moins, plus] = within(bloc).getAllByRole('button')
+    const moins = screen.getByRole('button', { name: 'Retirer une page' })
+    const plus = screen.getByRole('button', { name: 'Ajouter une page' })
 
     fireEvent.click(plus)
     fireEvent.click(plus)
@@ -76,8 +97,8 @@ describe('PricingSimulator', () => {
     render(<PricingSimulator />)
     fireEvent.click(screen.getByRole('checkbox', { name: /Modification hors abonnement/ }))
 
-    const bloc = screen.getByText("Nombre d'heures :").parentElement as HTMLElement
-    const [moins, plus] = within(bloc).getAllByRole('button')
+    const moins = screen.getByRole('button', { name: 'Retirer une heure' })
+    const plus = screen.getByRole('button', { name: 'Ajouter une heure' })
 
     fireEvent.click(plus)
     expect(montant(total().textContent ?? '')).toContain('610€') // 490 + 2 × 60

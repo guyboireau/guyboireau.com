@@ -163,7 +163,7 @@ const faq = [
     })),
   })} />
   <Header />
-  <main>
+  <main id="contenu" tabindex="-1" class="focus:outline-none">
     <!-- Intro -->
     <section class="section bg-slate-50 pt-32">
       <div class="max-w-4xl mx-auto text-center reveal-fade-up">
@@ -222,7 +222,7 @@ const faq = [
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           {implications.map((item) => (
             <div class="glass-card lift p-8 stagger-item">
-              <div class="text-3xl mb-4">{item.icon}</div>
+              <div class="text-3xl mb-4" aria-hidden="true">{item.icon}</div>
               <h3 class="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
               <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
             </div>
@@ -242,7 +242,7 @@ const faq = [
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {etapes.map((etape) => (
             <div class="glass-card p-7 stagger-item relative overflow-hidden group">
-              <div class="text-6xl font-black text-primary-500/10 absolute -top-2 -right-2 leading-none select-none">
+              <div class="text-6xl font-black text-primary-500/10 absolute -top-2 -right-2 leading-none select-none" aria-hidden="true">
                 {etape.num}
               </div>
               <div class="relative z-10">
@@ -277,18 +277,18 @@ const faq = [
               <div class="mb-6">
                 <h3 class="text-xl font-bold text-slate-800 mb-2">{offre.title}</h3>
                 <div class="text-3xl font-bold text-gradient mb-1">{offre.price}</div>
-                <p class="text-slate-400 text-xs mb-3">{offre.duration}</p>
+                <p class="text-slate-600 text-xs mb-3">{offre.duration}</p>
                 <p class="text-slate-500 text-sm">{offre.desc}</p>
               </div>
               <ul class="space-y-3 flex-grow mb-8">
                 {offre.items.map((item) => (
                   <li class="flex items-start gap-2 text-slate-600 text-sm">
-                    <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                    <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">✓</span>{item}
                   </li>
                 ))}
               </ul>
               <a href="/contact?subject=Facturation%20électronique" class={offre.highlighted ? 'btn-primary text-center block' : 'btn-secondary text-center block'}>
-                En parler
+                En parler<span class="sr-only"> : {offre.title}</span>
               </a>
             </div>
           ))}
@@ -314,7 +314,7 @@ const faq = [
             <details class="glass-card p-6 group stagger-item cursor-pointer">
               <summary class="text-slate-800 font-medium text-lg list-none flex items-center justify-between">
                 {item.q}
-                <span class="text-primary-400 ml-4 shrink-0 transition-transform group-open:rotate-180">▾</span>
+                <span class="text-primary-400 ml-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true">▾</span>
               </summary>
               <p class="text-slate-500 mt-4 leading-relaxed">{item.a}</p>
             </details>

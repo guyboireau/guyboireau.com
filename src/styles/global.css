@@ -319,6 +319,11 @@
   width: max-content;
 }
 
+/* Bouton pause/lecture (WCAG 2.2.2) : caché tant que le script ne l'a pas activé. */
+.trust-marquee.is-paused {
+  animation-play-state: paused;
+}
+
 /* ===== PROJETS — DÉFILEMENT HORIZONTAL (desktop, activé par JS) ===== */
 
 /* Par défaut — et sans JavaScript — la liste reste verticale. */
@@ -412,6 +417,17 @@ html.lenis body {
     animation: none !important;
     transition: none !important;
   }
+
+  /* Sans script, pas de bouton pause : le bandeau ne défile pas. */
+  .trust-marquee {
+    animation: none !important;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .trust-marquee [data-doublon] {
+    display: none;
+  }
 }
 
 /* ===== REDUCED MOTION ===== */
@@ -427,8 +443,32 @@ html.lenis body {
     opacity: 1 !important;
   }
   .particle { display: none !important; }
-  .trust-marquee { animation: none !important; }
   html.lenis { scroll-behavior: auto; }
+
+  /* Animations infinies : arrêtées. Le bandeau de confiance ne défile plus et
+     s'affiche en entier, sans ses doublons ni son bouton pause devenu inutile. */
+  .trust-marquee {
+    animation: none !important;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .trust-marquee [data-doublon],
+  .marquee-toggle {
+    display: none !important;
+  }
+  .animated-gradient,
+  .animate-float,
+  .pulse-glow,
+  .animate-pulse,
+  .animate-bounce,
+  .animate-ping,
+  .animate-spin {
+    animation: none !important;
+  }
+  .hover-tilt:hover {
+    transform: none !important;
+  }
 
   .btn-primary:hover,
   .btn-secondary:hover,

@@ -126,7 +126,7 @@ const sideProjects = [
 
 <BaseLayout {title} {description}>
   <Header />
-  <main>
+  <main id="contenu" tabindex="-1" class="focus:outline-none">
     <!-- Intro -->
     <section class="section bg-slate-50 pt-32">
       <div class="max-w-4xl mx-auto text-center reveal-fade-up">
@@ -151,7 +151,7 @@ const sideProjects = [
                 <div class="flex flex-wrap gap-2 shrink-0">
                   <span class="px-3 py-1 bg-primary-500/20 text-primary-600 rounded-full text-sm border border-primary-500/30">{project.metrics.type}</span>
                   <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm">{project.metrics.date}</span>
-                  <span class="px-3 py-1 bg-green-500/20 text-green-700 rounded-full text-sm border border-green-500/30">{project.metrics.status}</span>
+                  <span class="px-3 py-1 bg-green-500/20 text-green-800 rounded-full text-sm border border-green-500/30">{project.metrics.status}</span>
                 </div>
               </div>
 
@@ -187,7 +187,7 @@ const sideProjects = [
                 <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {project.highlights.map((h) => (
                     <li class="flex items-start gap-2 text-slate-600 text-sm">
-                      <span class="text-primary-400 shrink-0 mt-0.5">✓</span>
+                      <span class="text-primary-400 shrink-0 mt-0.5" aria-hidden="true">✓</span>
                       {h}
                     </li>
                   ))}
@@ -199,7 +199,7 @@ const sideProjects = [
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {Object.entries(project.techStack).map(([label, techs]) => (
                     <div>
-                      <div class="text-primary-400 text-sm font-medium mb-2">{label}</div>
+                      <div class="text-primary-700 text-sm font-medium mb-2">{label}</div>
                       <div class="flex flex-wrap gap-1">
                         {techs.map((tech: string) => (
                           <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">{tech}</span>
@@ -217,7 +217,7 @@ const sideProjects = [
                   rel="noopener noreferrer"
                   class="btn-primary inline-block"
                 >
-                  {project.linkLabel} →
+                  {project.linkLabel}<span class="sr-only"> de {project.title} (nouvel onglet)</span><span aria-hidden="true"> →</span>
                 </a>
               )}
             </div>
@@ -242,7 +242,7 @@ const sideProjects = [
                 <div class="flex flex-wrap gap-2 shrink-0">
                   <span class="px-3 py-1 bg-primary-500/20 text-primary-600 rounded-full text-sm border border-primary-500/30">{project.metrics.type}</span>
                   <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm">{project.metrics.date}</span>
-                  <span class="px-3 py-1 bg-yellow-500/20 text-yellow-700 rounded-full text-sm border border-yellow-500/30">{project.metrics.status}</span>
+                  <span class="px-3 py-1 bg-yellow-500/20 text-yellow-800 rounded-full text-sm border border-yellow-500/30">{project.metrics.status}</span>
                 </div>
               </div>
 
@@ -282,7 +282,7 @@ const sideProjects = [
                 <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {project.highlights.map((h) => (
                     <li class="flex items-start gap-2 text-slate-600 text-sm">
-                      <span class="text-primary-400 shrink-0 mt-0.5">✓</span>{h}
+                      <span class="text-primary-400 shrink-0 mt-0.5" aria-hidden="true">✓</span>{h}
                     </li>
                   ))}
                 </ul>
@@ -293,7 +293,7 @@ const sideProjects = [
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {Object.entries(project.techStack).map(([label, techs]) => (
                     <div>
-                      <div class="text-primary-400 text-xs font-medium mb-2">{label}</div>
+                      <div class="text-primary-700 text-xs font-medium mb-2">{label}</div>
                       <div class="flex flex-wrap gap-1">
                         {techs.map((tech: string) => (
                           <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">{tech}</span>
@@ -343,7 +343,7 @@ const sideProjects = [
                 'Export PDF des livrables directement depuis l\'agent',
               ].map((h) => (
                 <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 shrink-0 mt-0.5">✓</span>{h}
+                  <span class="text-primary-400 shrink-0 mt-0.5" aria-hidden="true">✓</span>{h}
                 </li>
               ))}
             </ul>
@@ -360,7 +360,7 @@ const sideProjects = [
 
           <div class="flex gap-4 flex-wrap">
             <a href="https://github.com/guyboireau/agent-freelance" target="_blank" rel="noopener noreferrer" class="btn-secondary inline-block text-sm">
-              Voir le code GitHub →
+              Voir le code GitHub<span class="sr-only"> d’Agent Freelance (nouvel onglet)</span><span aria-hidden="true"> →</span>
             </a>
             <a href="/contact" class="btn-primary inline-block text-sm">
               Demander une démo
@@ -391,9 +391,9 @@ const sideProjects = [
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-primary-400 hover:text-primary-600 transition-colors text-sm font-medium"
+                class="text-primary-700 hover:text-primary-600 transition-colors text-sm font-medium"
               >
-                Voir le code →
+                Voir le code<span class="sr-only"> de {project.title} (nouvel onglet)</span><span aria-hidden="true"> →</span>
               </a>
             </div>
           ))}

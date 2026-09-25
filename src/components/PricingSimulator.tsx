@@ -154,7 +154,7 @@ export default function PricingSimulator() {
                     <span className="flex-1 text-slate-700 text-sm md:text-base">{opt.label}</span>
                     <span className="text-primary-600 font-semibold whitespace-nowrap text-sm md:text-base">
                       +{formatPrice(opt.price)}
-                      {opt.unit && <span className="text-slate-400 font-normal text-xs ml-0.5">{opt.unit}</span>}
+                      {opt.unit && <span className="text-slate-600 font-normal text-xs ml-0.5">{opt.unit}</span>}
                     </span>
                   </label>
                 )
@@ -163,42 +163,50 @@ export default function PricingSimulator() {
 
             {/* Quantité pour options spéciales */}
             {isChecked('opt-page') && block.title === 'Options à la création' && (
-              <div className="mt-4 flex items-center gap-4 pl-14">
-                <span className="text-slate-500 text-sm">Nombre de pages :</span>
+              <div className="mt-4 flex items-center gap-4 pl-14" role="group" aria-labelledby="simulateur-pages">
+                <span id="simulateur-pages" className="text-slate-600 text-sm">Nombre de pages :</span>
                 <div className="flex items-center gap-2">
                   <button
-                    className="w-8 h-8 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-50"
+                    type="button"
+                    aria-label="Retirer une page"
+                    className="w-8 h-8 rounded-full border border-slate-500 text-slate-700 hover:bg-slate-50"
                     onClick={() => setOptPages((p) => Math.max(1, p - 1))}
                   >
-                    −
+                    <span aria-hidden="true">−</span>
                   </button>
-                  <span className="w-8 text-center font-semibold text-slate-800">{optPages}</span>
+                  <output aria-live="polite" className="w-8 text-center font-semibold text-slate-800">{optPages}</output>
                   <button
-                    className="w-8 h-8 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-50"
+                    type="button"
+                    aria-label="Ajouter une page"
+                    className="w-8 h-8 rounded-full border border-slate-500 text-slate-700 hover:bg-slate-50"
                     onClick={() => setOptPages((p) => p + 1)}
                   >
-                    +
+                    <span aria-hidden="true">+</span>
                   </button>
                 </div>
               </div>
             )}
 
             {isChecked('boost-hour') && block.title === 'Boosts ponctuels' && (
-              <div className="mt-4 flex items-center gap-4 pl-14">
-                <span className="text-slate-500 text-sm">Nombre d'heures :</span>
+              <div className="mt-4 flex items-center gap-4 pl-14" role="group" aria-labelledby="simulateur-heures">
+                <span id="simulateur-heures" className="text-slate-600 text-sm">Nombre d'heures :</span>
                 <div className="flex items-center gap-2">
                   <button
-                    className="w-8 h-8 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-50"
+                    type="button"
+                    aria-label="Retirer une heure"
+                    className="w-8 h-8 rounded-full border border-slate-500 text-slate-700 hover:bg-slate-50"
                     onClick={() => setBoostHours((p) => Math.max(1, p - 1))}
                   >
-                    −
+                    <span aria-hidden="true">−</span>
                   </button>
-                  <span className="w-8 text-center font-semibold text-slate-800">{boostHours}</span>
+                  <output aria-live="polite" className="w-8 text-center font-semibold text-slate-800">{boostHours}</output>
                   <button
-                    className="w-8 h-8 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-50"
+                    type="button"
+                    aria-label="Ajouter une heure"
+                    className="w-8 h-8 rounded-full border border-slate-500 text-slate-700 hover:bg-slate-50"
                     onClick={() => setBoostHours((p) => p + 1)}
                   >
-                    +
+                    <span aria-hidden="true">+</span>
                   </button>
                 </div>
               </div>
@@ -212,13 +220,16 @@ export default function PricingSimulator() {
         <div className="glass-card p-6 border-2 border-primary-500/30 shadow-xl shadow-primary-500/10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <p className="text-slate-500 text-sm">Total création + options</p>
-              <p className="text-3xl font-bold text-gradient">{formatPrice(oneTimeTotal)}</p>
-              {monthlyTotal > 0 && (
-                <p className="text-slate-500 text-sm mt-1">
-                  + {formatPrice(monthlyTotal)}/mois d'abonnement
-                </p>
-              )}
+              {/* Le total change à chaque case cochée : annoncé, sans interrompre. */}
+              <div aria-live="polite" aria-atomic="true">
+                <p className="text-slate-600 text-sm">Total création + options</p>
+                <p className="text-3xl font-bold text-gradient">{formatPrice(oneTimeTotal)}</p>
+                {monthlyTotal > 0 && (
+                  <p className="text-slate-600 text-sm mt-1">
+                    + {formatPrice(monthlyTotal)}/mois d'abonnement
+                  </p>
+                )}
+              </div>
               <p className="text-slate-600 text-xs mt-2">
                 Prix nets — TVA non applicable, art. 293 B du CGI.{' '}
                 <a href="/cgv" className="text-primary-700 underline underline-offset-2 hover:text-primary-600">
@@ -230,7 +241,7 @@ export default function PricingSimulator() {
               href={`/contact?subject=Devis%20site%20web&budget=${oneTimeTotal}${monthlyTotal > 0 ? `&monthly=${monthlyTotal}` : ''}`}
               className="btn-primary text-center block md:inline-block px-8 py-3"
             >
-              Demander ce devis →
+              Demander ce devis<span aria-hidden="true"> →</span>
             </a>
           </div>
         </div>

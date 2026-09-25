@@ -340,7 +340,8 @@ describe('ChatBot', () => {
       fireEvent.submit(screen.getByRole('textbox').closest('form')!)
 
       await waitFor(() => expect(screen.getByRole('alert')).toBeInTheDocument())
-      expect(annonce()).toHaveTextContent('')
+      // L'annonce est vidée par un effet, juste après l'affichage de l'erreur.
+      await waitFor(() => expect(annonce()).toHaveTextContent(''))
     })
 
     it('chaque bulle dit qui parle, pour les lecteurs d’écran', async () => {

@@ -11,7 +11,7 @@ const description =
 
 <BaseLayout {title} {description}>
   <Header />
-  <main>
+  <main id="contenu" tabindex="-1" class="focus:outline-none">
     <section class="section bg-slate-50 pt-32">
       <div class="max-w-5xl mx-auto">
         <div class="reveal-fade-up mb-12 text-center">
@@ -22,49 +22,51 @@ const description =
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <!-- Form (React island) -->
           <div class="reveal-fade-up">
+            <h2 class="sr-only">Formulaire de contact</h2>
             <ContactForm client:load />
           </div>
 
           <!-- Contact info -->
           <div class="space-y-5 reveal-fade-right">
+            <h2 class="sr-only">Coordonnées</h2>
             <div class="glass-card p-6 hover-tilt">
-              <div class="text-primary-400 text-2xl mb-3">📧</div>
+              <div class="text-primary-400 text-2xl mb-3" aria-hidden="true">📧</div>
               <h3 class="text-lg font-semibold text-slate-800 mb-1">Email</h3>
-              <a href="mailto:me@guyboireau.com" class="text-slate-500 hover:text-primary-400 transition-colors">
+              <a href="mailto:me@guyboireau.com" class="text-slate-600 hover:text-primary-700 transition-colors">
                 me@guyboireau.com
               </a>
             </div>
 
             <div class="glass-card p-6 hover-tilt">
-              <div class="text-primary-400 text-2xl mb-3">📱</div>
+              <div class="text-primary-400 text-2xl mb-3" aria-hidden="true">📱</div>
               <h3 class="text-lg font-semibold text-slate-800 mb-1">Téléphone</h3>
-              <a href="tel:+33675751439" class="text-slate-500 hover:text-primary-400 transition-colors">
+              <a href="tel:+33675751439" class="text-slate-600 hover:text-primary-700 transition-colors">
                 06 75 75 14 39
               </a>
             </div>
 
             <div class="glass-card p-6 hover-tilt">
-              <div class="text-primary-400 text-2xl mb-3">📍</div>
+              <div class="text-primary-400 text-2xl mb-3" aria-hidden="true">📍</div>
               <h3 class="text-lg font-semibold text-slate-800 mb-1">Localisation</h3>
               <p class="text-slate-500">Bordeaux, France</p>
               <p class="text-slate-500 text-sm mt-1">Disponible en remote partout en France</p>
             </div>
 
             <div class="glass-card p-6 hover-tilt">
-              <div class="text-primary-400 text-2xl mb-3">💼</div>
+              <div class="text-primary-400 text-2xl mb-3" aria-hidden="true">💼</div>
               <h3 class="text-lg font-semibold text-slate-800 mb-1">LinkedIn</h3>
               <a
                 href="https://www.linkedin.com/in/guy-boireau"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-slate-500 hover:text-primary-400 transition-colors text-sm break-all"
+                class="text-slate-600 hover:text-primary-700 transition-colors text-sm break-all"
               >
-                linkedin.com/in/guy-boireau
+                linkedin.com/in/guy-boireau<span class="sr-only"> (nouvel onglet)</span>
               </a>
             </div>
 
             <div class="glass-card p-6">
-              <div class="text-primary-400 text-2xl mb-3">📞</div>
+              <div class="text-primary-400 text-2xl mb-3" aria-hidden="true">📞</div>
               <h3 class="text-lg font-semibold text-slate-800 mb-2">Appel découverte</h3>
               <p class="text-slate-500 text-sm mb-4">
                 Préférez un échange oral ? Appelez-moi directement ou envoyez un message, on fixe un créneau ensemble.
