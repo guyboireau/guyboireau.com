@@ -1,0 +1,66 @@
+---
+// Gabarit commun aux pages légales : mentions légales, politique de
+// confidentialité, conditions générales de vente. Le texte est dans la page
+// appelante ; ses titres et listes sont mis en forme par `.texte-legal`
+// (src/styles/global.css).
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from './Header.astro'
+import Footer from './Footer.astro'
+
+interface EntreeSommaire {
+  id: string
+  titre: string
+}
+
+interface Props {
+  title: string
+  description: string
+  titre: string
+  /** Date de dernière mise à jour, au format AAAA-MM-JJ. */
+  miseAJour: string
+  sommaire?: EntreeSommaire[]
+}
+
+const { title, description, titre, miseAJour, sommaire = [] } = Astro.props
+
+const dateLisible = new Date(`${miseAJour}T12:00:00Z`).toLocaleDateString('fr-FR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'Europe/Paris',
+})
+---
+
+<BaseLayout {title} {description}>
+  <Header />
+  <main id="contenu" tabindex="-1" class="focus:outline-none">
+    <section class="section bg-slate-50 pt-32 min-h-screen">
+      <div class="max-w-3xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-bold text-gradient mb-3">{titre}</h1>
+        <p class="text-slate-600 mb-10">
+          Dernière mise à jour : <time datetime={miseAJour}>{dateLisible}</time>
+        </p>
+
+        {sommaire.length > 0 && (
+          <nav aria-labelledby="sommaire-titre" class="glass-card p-6 md:p-8 mb-8">
+            <h2 id="sommaire-titre" class="text-lg font-semibold text-slate-800 mb-3">Sommaire</h2>
+            <ol class="list-decimal pl-5 space-y-1 text-slate-700">
+              {sommaire.map((entree) => (
+                <li>
+                  <a href={`#${entree.id}`} class="text-primary-700 underline underline-offset-2 hover:text-primary-600">
+                    {entree.titre}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+
+        <div class="glass-card p-6 md:p-12 texte-legal">
+          <slot />
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

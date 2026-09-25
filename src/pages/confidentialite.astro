@@ -1,0 +1,281 @@
+---
+import PageLegale from '../components/PageLegale.astro'
+import OppositionMesure from '../components/OppositionMesure.astro'
+
+const title = 'Politique de confidentialité | Guy Boireau EI'
+const description =
+  'Données personnelles traitées par guyboireau.com : formulaire de contact, assistant IA, mesure d’audience sans cookie, journaux, e-mails et sauvegardes. Durées, prestataires et droits.'
+
+const sommaire = [
+  { id: 'responsable', titre: 'Responsable du traitement' },
+  { id: 'traitements', titre: 'Les traitements, un par un' },
+  { id: 'transferts', titre: 'Transferts hors de l’Union européenne' },
+  { id: 'champs-obligatoires', titre: 'Informations obligatoires ou facultatives' },
+  { id: 'droits', titre: 'Vos droits' },
+  { id: 'reclamation', titre: 'Réclamation auprès de la CNIL' },
+  { id: 'cookies', titre: 'Cookies et traceurs' },
+  { id: 'modifications', titre: 'Modifications de cette politique' },
+]
+---
+
+<PageLegale {title} {description} titre="Politique de confidentialité" miseAJour="2026-09-25" {sommaire}>
+  <p>
+    Cette page explique quelles données personnelles le site guyboireau.com traite, pourquoi, pendant combien de
+    temps et avec quels prestataires. Elle couvre aussi les messages écrits directement à
+    <a href="mailto:me@guyboireau.com">me@guyboireau.com</a>. Le site ne dépose aucun cookie et n’affiche aucune
+    publicité. Aucune donnée n’est vendue ni cédée à des fins commerciales.
+  </p>
+
+  <h2 id="responsable">1. Responsable du traitement</h2>
+  <p>
+    Guy Boireau EI (entrepreneur individuel), 17 rue Beck, 33800 Bordeaux.<br />
+    Pour toute question sur vos données : <a href="mailto:me@guyboireau.com">me@guyboireau.com</a> —
+    <a href="tel:+33675751439">06 75 75 14 39</a>.
+  </p>
+
+  <h2 id="traitements">2. Les traitements, un par un</h2>
+  <p>
+    Pour chaque usage : les données concernées, la raison du traitement (finalité), sa base légale au sens du
+    règlement général sur la protection des données (RGPD), la durée de conservation et les destinataires.
+  </p>
+
+  <h3 id="formulaire-contact">2.1 Formulaire de contact (pages Contact et Automatisations)</h3>
+  <dl>
+    <dt>Données</dt>
+    <dd>Nom, adresse e-mail, type de projet (facultatif), message, date d’envoi.</dd>
+    <dt>Finalité</dt>
+    <dd>Répondre à votre demande et, le cas échéant, établir un devis.</dd>
+    <dt>Base légale</dt>
+    <dd>Mesures précontractuelles prises à votre demande (article 6.1.b du RGPD).</dd>
+    <dt>Durée</dt>
+    <dd>3 ans à compter de votre message.</dd>
+    <dt>Destinataires et sous-traitants</dt>
+    <dd>
+      Guy Boireau EI est le seul destinataire. Le message est enregistré dans une base de données chez Supabase,
+      Inc. (région du projet : <span class="a-completer">[À COMPLÉTER : région du projet Supabase]</span>). Une
+      notification qui reprend votre message est envoyée par Resend (États-Unis) vers la messagerie Gmail de Guy
+      Boireau (Google), avec votre adresse e-mail comme adresse de réponse. Le site lui-même tourne sur un serveur
+      loué à OVH, en France.
+    </dd>
+  </dl>
+  <p>
+    Votre adresse IP sert aussi, en mémoire vive et pendant quelques minutes au plus, à limiter le nombre d’envois
+    par minute. Elle n’est pas enregistrée avec votre message.
+  </p>
+
+  <h3 id="assistant-ia">2.2 Assistant IA (page d’accueil)</h3>
+  <p>
+    L’assistant est un programme d’intelligence artificielle, pas Guy Boireau. Ses réponses sont indicatives,
+    peuvent contenir des erreurs et ne valent pas devis. N’y saisissez pas de données sensibles (santé, opinions,
+    etc.) ni d’informations sur d’autres personnes.
+  </p>
+  <dl>
+    <dt>Données</dt>
+    <dd>
+      Les messages que vous écrivez à l’assistant, et l’historique de la conversation en cours, renvoyé à chaque
+      nouvelle question.
+    </dd>
+    <dt>Finalité</dt>
+    <dd>Répondre aux questions des visiteurs qui choisissent d’utiliser l’assistant.</dd>
+    <dt>Base légale</dt>
+    <dd>Intérêt légitime (article 6.1.f du RGPD) : répondre aux questions des visiteurs qui le sollicitent.</dd>
+    <dt>Durée</dt>
+    <dd>
+      Le site ne conserve pas les conversations : elles n’existent que dans l’onglet de votre navigateur et
+      disparaissent quand vous rechargez ou fermez la page. Chez Anthropic :
+      <span class="a-completer">[À COMPLÉTER : durée de conservation selon le contrat Anthropic — 30 jours par défaut pour l’API, à vérifier]</span>.
+    </dd>
+    <dt>Destinataires et sous-traitants</dt>
+    <dd>
+      Chaque message, avec l’historique de la conversation et les instructions données à l’assistant, est
+      transmis à Anthropic, PBC (États-Unis), qui fournit le modèle Claude Haiku 4.5 utilisé pour rédiger la
+      réponse.
+    </dd>
+  </dl>
+  <p>
+    Comme pour le formulaire, votre adresse IP sert, en mémoire vive et pendant quelques minutes au plus, à
+    limiter le nombre de messages par minute.
+  </p>
+
+  <h3 id="mesure-audience">2.3 Mesure d’audience (Umami)</h3>
+  <dl>
+    <dt>Données</dt>
+    <dd>
+      L’adresse de la page consultée avec ses paramètres, la page d’origine, le titre de la page, la taille de
+      l’écran, la langue, le navigateur, le système d’exploitation, le type d’appareil, ainsi que le pays, la
+      région et la ville, déduits de votre adresse IP.
+    </dd>
+    <dt>Finalité</dt>
+    <dd>Connaître la fréquentation du site et les pages consultées, pour l’améliorer.</dd>
+    <dt>Base légale</dt>
+    <dd>Intérêt légitime (article 6.1.f du RGPD).</dd>
+    <dt>Durée</dt>
+    <dd>25 mois au maximum.</dd>
+    <dt>Destinataires</dt>
+    <dd>
+      Guy Boireau EI uniquement. Umami est un logiciel libre installé sur le serveur de l’éditeur, en France
+      (stats.guyboireau.com) : les statistiques ne sont transmises à aucun tiers.
+    </dd>
+  </dl>
+  <p>
+    Umami n’enregistre pas votre adresse IP. Il s’en sert au moment de la visite pour déduire la localisation et
+    pour calculer un identifiant de visite : une empreinte (hachage) du site, de l’adresse IP, du navigateur et
+    d’un sel secret renouvelé chaque mois. Cet identifiant regroupe les pages vues depuis un même navigateur et
+    une même adresse IP au cours du mois ; il change le mois suivant.
+  </p>
+  <p>
+    Comme toute requête reçue par le serveur, l’envoi vers stats.guyboireau.com apparaît dans les journaux du
+    serveur, avec votre adresse IP, pendant 30 jours (voir <a href="#journaux">2.4</a>). Pour vous opposer à la
+    mesure, utilisez le bouton de la section <a href="#cookies">Cookies et traceurs</a>.
+  </p>
+
+  <h3 id="journaux">2.4 Journaux du serveur</h3>
+  <dl>
+    <dt>Données</dt>
+    <dd>
+      Adresse IP, date et heure, adresse de la page demandée avec ses paramètres, navigateur, page d’origine.
+    </dd>
+    <dt>Finalité</dt>
+    <dd>Assurer la sécurité du site et diagnostiquer les pannes.</dd>
+    <dt>Base légale</dt>
+    <dd>Intérêt légitime (article 6.1.f du RGPD).</dd>
+    <dt>Durée</dt>
+    <dd>30 jours.</dd>
+    <dt>Destinataires</dt>
+    <dd>
+      Guy Boireau EI. Les journaux sont écrits par le serveur web (Caddy) et copiés dans un outil de
+      centralisation des journaux (Loki), sur le même serveur, en France.
+    </dd>
+  </dl>
+
+  <h3 id="e-mails">2.5 E-mails envoyés à me@guyboireau.com</h3>
+  <dl>
+    <dt>Données</dt>
+    <dd>Votre adresse e-mail, votre nom s’il apparaît, le contenu du message et ses pièces jointes.</dd>
+    <dt>Finalité</dt>
+    <dd>Répondre à votre message et assurer le suivi de l’échange.</dd>
+    <dt>Base légale</dt>
+    <dd>
+      Mesures précontractuelles ou exécution du contrat (article 6.1.b du RGPD) quand votre message concerne une
+      prestation ; intérêt légitime (article 6.1.f) — répondre aux messages reçus — dans les autres cas.
+    </dd>
+    <dt>Durée</dt>
+    <dd><span class="a-completer">[À COMPLÉTER : durée de conservation des e-mails reçus]</span></dd>
+    <dt>Destinataires et sous-traitants</dt>
+    <dd>
+      Les messages sont reçus par ImprovMX, le service de messagerie du domaine (localisation :
+      <span class="a-completer">[À COMPLÉTER]</span>), puis transférés vers la messagerie Gmail de Guy Boireau
+      (Google). Un programme trie automatiquement le courrier reçu pour le classer et le résumer :
+      <span class="a-completer">[À COMPLÉTER : préciser s’il passe par Anthropic ou par un modèle local]</span>.
+    </dd>
+  </dl>
+
+  <h3 id="sauvegardes">2.6 Sauvegardes</h3>
+  <dl>
+    <dt>Données</dt>
+    <dd>
+      Une copie des données du serveur de l’éditeur (bases de données, fichiers, configurations), y compris celles
+      des traitements ci-dessus qui y sont stockées. Les messages du formulaire de contact, stockés chez Supabase,
+      n’en font pas partie.
+    </dd>
+    <dt>Finalité</dt>
+    <dd>Pouvoir restaurer le site et ses données après une panne, une erreur ou une attaque.</dd>
+    <dt>Base légale</dt>
+    <dd>Intérêt légitime (article 6.1.f du RGPD) : assurer la disponibilité et l’intégrité du service.</dd>
+    <dt>Durée</dt>
+    <dd>
+      <span class="a-completer">[À COMPLÉTER : durée de conservation des sauvegardes — la page Hébergement annonce 14 jours sur le serveur et 30 jours chez le second fournisseur ; durée de la copie sur l’ordinateur de l’éditeur]</span>
+    </dd>
+    <dt>Destinataires</dt>
+    <dd>
+      Chaque nuit, les copies sont chiffrées sur le serveur avant d’en sortir, puis conservées sur Google Drive
+      (Google, dont les serveurs peuvent se trouver hors de l’Union européenne) et sur l’ordinateur de l’éditeur.
+      Google ne conserve que des copies chiffrées.
+    </dd>
+  </dl>
+
+  <h2 id="transferts">3. Transferts hors de l’Union européenne</h2>
+  <p>
+    Certains prestataires sont établis aux États-Unis ou peuvent traiter les données hors de l’Union
+    européenne : Anthropic (assistant IA), Resend (notification du formulaire), Google (Gmail et Google Drive)
+    et, selon la région du projet, Supabase (base du formulaire). ImprovMX est concerné selon sa localisation
+    (<span class="a-completer">[À COMPLÉTER]</span>).
+  </p>
+  <p>
+    Ces transferts sont encadrés par les clauses contractuelles types adoptées par la Commission européenne. Vous
+    pouvez obtenir une copie de ces garanties en écrivant à <a href="mailto:me@guyboireau.com">me@guyboireau.com</a>.
+  </p>
+
+  <h2 id="champs-obligatoires">4. Informations obligatoires ou facultatives</h2>
+  <p>
+    Dans le formulaire de contact, le nom, l’adresse e-mail et le message sont obligatoires (marqués d’un
+    astérisque) : sans eux, il est impossible de vous répondre. Le type de projet est facultatif.
+  </p>
+  <p>
+    L’assistant IA est facultatif : vous pouvez aussi écrire par le formulaire ou par e-mail. Aucun de ces
+    traitements ne conduit à une décision automatisée produisant des effets juridiques à votre égard.
+  </p>
+
+  <h2 id="droits">5. Vos droits</h2>
+  <p>Vous disposez des droits suivants sur vos données :</p>
+  <ul>
+    <li><strong>accès</strong> : savoir quelles données sont traitées et en obtenir une copie ;</li>
+    <li><strong>rectification</strong> : faire corriger des données inexactes ;</li>
+    <li><strong>effacement</strong> : faire supprimer vos données ;</li>
+    <li><strong>limitation</strong> : faire suspendre temporairement un traitement ;</li>
+    <li>
+      <strong>opposition</strong> : vous opposer à un traitement fondé sur l’intérêt légitime (assistant IA,
+      mesure d’audience, journaux, sauvegardes, e-mails hors prestation) ;
+    </li>
+    <li>
+      <strong>portabilité</strong> : recevoir, dans un format lisible par une machine, les données que vous avez
+      fournies dans le cadre de mesures précontractuelles ou d’un contrat (formulaire de contact, e-mails liés à
+      une prestation) ;
+    </li>
+    <li>
+      <strong>directives post-mortem</strong> : indiquer ce que doivent devenir vos données après votre décès
+      (article 85 de la loi Informatique et Libertés).
+    </li>
+  </ul>
+  <p>
+    Pour les exercer, écrivez à <a href="mailto:me@guyboireau.com">me@guyboireau.com</a> ou par courrier à Guy
+    Boireau EI, 17 rue Beck, 33800 Bordeaux. Une réponse vous est apportée dans un délai d’un mois à compter de la
+    réception de votre demande. Ce délai peut être prolongé de deux mois pour une demande complexe ; vous en êtes
+    alors informé. En cas de doute raisonnable sur votre identité, un justificatif peut vous être demandé.
+  </p>
+
+  <h2 id="reclamation">6. Réclamation auprès de la CNIL</h2>
+  <p>
+    Vous pouvez à tout moment adresser une réclamation à la Commission nationale de l’informatique et des
+    libertés (CNIL) : 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 —
+    <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">cnil.fr<span class="sr-only"> (nouvel onglet)</span></a>.
+  </p>
+
+  <h2 id="cookies">7. Cookies et traceurs</h2>
+  <p><strong>Ce site ne dépose aucun cookie.</strong></p>
+  <p>
+    La mesure d’audience Umami fonctionne sans cookie et n’écrit rien dans votre navigateur. Elle remplit les
+    conditions posées par la CNIL pour être dispensée de consentement (article 82 de la loi Informatique et
+    Libertés) : elle sert uniquement à mesurer l’audience de ce site, produit des statistiques anonymes, ne
+    recoupe pas ses données avec d’autres traitements, ne les transmet à aucun tiers, ne conserve pas votre
+    adresse IP et ne garde ses données que 25 mois au plus. C’est pourquoi le site n’affiche pas de bandeau de
+    consentement.
+  </p>
+  <p>
+    Le site n’écrit rien dans le stockage de votre navigateur, sauf si vous refusez la mesure d’audience : il y
+    enregistre alors la clé <code>umami.disabled</code>, que le script de mesure consulte avant chaque envoi. Ce
+    stockage sert uniquement à respecter votre choix et ne quitte pas votre appareil. Il vaut pour ce navigateur :
+    si vous effacez les données de navigation, le choix disparaît.
+  </p>
+  <p>
+    Le seul domaine extérieur contacté par votre navigateur est stats.guyboireau.com, le service de mesure de
+    l’éditeur. Les polices de caractères sont servies par le site lui-même.
+  </p>
+  <OppositionMesure />
+
+  <h2 id="modifications">8. Modifications de cette politique</h2>
+  <p>
+    Cette politique évolue quand le site change, par exemple si un service est ajouté ou retiré. La date de
+    dernière mise à jour figure en haut de la page.
+  </p>
+</PageLegale>
