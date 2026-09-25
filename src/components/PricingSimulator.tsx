@@ -94,10 +94,12 @@ export default function PricingSimulator() {
 
   const isChecked = (id: string) => selected.has(id)
 
+  // Les options d'abonnement sont comptées dans le total mensuel, pas ici :
+  // jusqu'au 2026-09-25 elles s'ajoutaient aux deux totaux.
   const oneTimeTotal = Array.from(selected).reduce((sum, id) => {
     for (const block of BLOCKS) {
       const opt = block.options.find((o) => o.id === id)
-      if (opt) {
+      if (opt && !block.isSubscription) {
         if (opt.id === 'opt-page') return sum + opt.price * optPages
         if (opt.id === 'boost-hour') return sum + opt.price * boostHours
         return sum + opt.price
@@ -217,6 +219,12 @@ export default function PricingSimulator() {
                   + {formatPrice(monthlyTotal)}/mois d'abonnement
                 </p>
               )}
+              <p className="text-slate-600 text-xs mt-2">
+                Prix nets — TVA non applicable, art. 293 B du CGI.{' '}
+                <a href="/cgv" className="text-primary-700 underline underline-offset-2 hover:text-primary-600">
+                  Conditions générales de vente
+                </a>
+              </p>
             </div>
             <a
               href={`/contact?subject=Devis%20site%20web&budget=${oneTimeTotal}${monthlyTotal > 0 ? `&monthly=${monthlyTotal}` : ''}`}
