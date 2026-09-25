@@ -21,11 +21,11 @@ vi.mock('@supabase/supabase-js', () => ({
   })),
 }))
 
-function createContactRequest(body: object, clientAddress = '127.0.0.1') {
+function createContactRequest(body: object, clientAddress = '127.0.0.1', entetes: Record<string, string> = {}) {
   return {
     request: new Request('http://localhost/api/contact', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...entetes },
       body: JSON.stringify(body),
     }),
     clientAddress,
@@ -135,6 +135,38 @@ describe('/api/contact', () => {
     expect(serialized).not.toContain('Jean Dupont')
 
     consoleError.mockRestore()
+  })
+
+  /**
+   * En production, Caddy est la seule connexion que voit Astro : 127.0.0.1.
+   * Avant la lecture de X-Forwarded-For, 5 envois par minute fermaient le
+   * formulaire pour TOUS les visiteurs du site.
+   */
+  describe('limitation derrière Caddy', () => {
+    const corps = { name: 'Jean Dupont', email: 'jean@example.com', message: 'Message de test suffisamment long.' }
+
+    it('un visiteur qui épuise son quota ne bloque pas les autres', async () => {
+      const caddy = '127.0.0.1'
+      for (let i = 0; i < 5; i++) {
+        await POST(createContactRequest(corps, caddy, { 'X-Forwarded-For': '203.0.113.10' }))
+      }
+
+      const bloque = await POST(createContactRequest(corps, caddy, { 'X-Forwarded-For': '203.0.113.10' }))
+      expect(bloque.status).toBe(429)
+
+      const autre = await POST(createContactRequest(corps, caddy, { 'X-Forwarded-For': '203.0.113.11' }))
+      expect(autre.status).toBe(200)
+    })
+
+    it('un client direct ne contourne pas la limite en changeant de X-Forwarded-For', async () => {
+      const direct = '198.51.100.40'
+      for (let i = 0; i < 5; i++) {
+        await POST(createContactRequest(corps, direct, { 'X-Forwarded-For': `192.0.2.${i}` }))
+      }
+
+      const reponse = await POST(createContactRequest(corps, direct, { 'X-Forwarded-For': '192.0.2.99' }))
+      expect(reponse.status).toBe(429)
+    })
   })
 
   it('échappe les caractères HTML dans le contenu', async () => {

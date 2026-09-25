@@ -6,6 +6,7 @@ import { Resend } from 'resend'
 import { z } from 'zod'
 import { getSupabaseServer } from '@/lib/supabase.server'
 import { contactRateLimiter } from '@/lib/rate-limit'
+import { adresseVisiteur } from '@/lib/client-ip'
 
 const contactSchema = z.object({
   name: z.string().min(2).max(100),
@@ -24,11 +25,11 @@ function escapeHtml(unsafe: string): string {
 }
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
-  const ip = clientAddress ?? 'unknown'
+  const ip = adresseVisiteur(request, clientAddress)
   // Corrèle les lignes de log entre elles et avec l'email reçu, sans y mettre
   // de donnée personnelle (nom / email / message du prospect).
   const requestId = randomUUID()
-  if (await contactRateLimiter(ip)) {
+  if (contactRateLimiter(ip)) {
     return new Response(JSON.stringify({ error: 'Trop de requêtes. Réessaie dans une minute.' }), {
       status: 429,
       headers: { 'Content-Type': 'application/json', 'Retry-After': '60' },
