@@ -109,6 +109,11 @@ La seule écriture réelle en base est celle de `/api/contact` dans `portfolio_c
 (`supabase/migrations/20260901120000_portfolio_contacts.sql`). Aucune migration du dépôt
 ne crée `pricing_tiers` ni `contacts`.
 
+`supabase/migrations/20260925090000_portfolio_contacts_lecture_service_role.sql` retire
+la lecture de `portfolio_contacts` au rôle `authenticated` : seule la clé de service lit.
+**Écrite le 2026-09-25, pas encore appliquée** — la purge à 3 ans
+(`20260901140000_contacts_retention.sql`) attend elle aussi sa planification pg_cron.
+
 ---
 
 ## Variables d'environnement
