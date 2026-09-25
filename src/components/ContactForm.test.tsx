@@ -106,6 +106,97 @@ describe('ContactForm', () => {
   })
 
   /**
+   * Information des personnes (art. 13 RGPD) et accessibilité du formulaire.
+   * Ce sont des obligations, pas du confort : un champ en erreur que le
+   * lecteur d'écran n'annonce pas, c'est un visiteur qui ne peut pas écrire.
+   */
+  describe('information et accessibilité', () => {
+    it('indique ce que signifie l’astérisque', () => {
+      render(<ContactForm />)
+      expect(screen.getByText(/champ obligatoire/i)).toBeInTheDocument()
+    })
+
+    it('les champs obligatoires sont marqués requis, le type de projet ne l’est pas', () => {
+      render(<ContactForm />)
+      expect(screen.getByLabelText(/Nom/i)).toBeRequired()
+      expect(screen.getByLabelText(/Email/i)).toBeRequired()
+      expect(screen.getByLabelText(/Message/i)).toBeRequired()
+      expect(screen.getByLabelText(/Type de projet/i)).not.toBeRequired()
+    })
+
+    it('donne la finalité, le destinataire, la durée, les droits et le lien vers la politique', () => {
+      render(<ContactForm />)
+      const mention = screen.getByText(/servent uniquement à répondre à votre demande/i)
+
+      expect(mention).toHaveTextContent(/établir un devis/i)
+      expect(mention).toHaveTextContent(/Destinataire : Guy Boireau EI/)
+      expect(mention).toHaveTextContent(/3 ans à compter de votre message/)
+      expect(mention).toHaveTextContent(/me@guyboireau\.com/)
+      expect(screen.getByRole('link', { name: /Politique de confidentialité/i })).toHaveAttribute(
+        'href',
+        '/confidentialite#formulaire-contact'
+      )
+    })
+
+    it('les champs d’identité portent leur autocomplétion', () => {
+      render(<ContactForm />)
+      expect(screen.getByLabelText(/Nom/i)).toHaveAttribute('autocomplete', 'name')
+      expect(screen.getByLabelText(/Email/i)).toHaveAttribute('autocomplete', 'email')
+    })
+
+    it('au départ, aucun champ n’est marqué invalide', () => {
+      render(<ContactForm />)
+      expect(screen.getByLabelText(/Email/i)).not.toHaveAttribute('aria-invalid')
+      expect(screen.getByLabelText(/Email/i)).not.toHaveAttribute('aria-describedby')
+    })
+
+    it('une erreur serveur est reliée à son champ (aria-invalid, aria-describedby)', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 400,
+        json: async () => ({ details: { email: ['Adresse e-mail invalide.'], message: ['Trop court.'] } }),
+      }) as unknown as typeof fetch
+
+      render(<ContactForm />)
+      fireEvent.change(screen.getByLabelText(/Nom/i), { target: { name: 'name', value: 'Jean Dupont' } })
+      fireEvent.change(screen.getByLabelText(/Email/i), { target: { name: 'email', value: 'jean@example.com' } })
+      fireEvent.change(screen.getByLabelText(/Message/i), { target: { name: 'message', value: 'Bonjour, un projet.' } })
+      fireEvent.submit(screen.getByRole('button', { name: /Envoyer le message/i }).closest('form')!)
+
+      const email = screen.getByLabelText(/Email/i)
+      await waitFor(() => expect(email).toHaveAttribute('aria-invalid', 'true'))
+      expect(email).toHaveAccessibleDescription('Adresse e-mail invalide.')
+      expect(screen.getByLabelText(/Message/i)).toHaveAccessibleDescription('Trop court.')
+      expect(screen.getByLabelText(/Nom/i)).not.toHaveAttribute('aria-invalid')
+      expect(screen.getByRole('status')).toHaveTextContent(/Vérifiez les champs signalés/)
+    })
+
+    it('le succès est annoncé dans une zone role="status", et reste affiché', async () => {
+      vi.useFakeTimers({ shouldAdvanceTime: true })
+      global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) }) as unknown as typeof fetch
+
+      render(<ContactForm />)
+      fireEvent.change(screen.getByLabelText(/Nom/i), { target: { name: 'name', value: 'Jean Dupont' } })
+      fireEvent.change(screen.getByLabelText(/Email/i), { target: { name: 'email', value: 'jean@example.com' } })
+      fireEvent.change(screen.getByLabelText(/Message/i), { target: { name: 'message', value: 'Bonjour, un projet.' } })
+      fireEvent.submit(screen.getByRole('button', { name: /Envoyer le message/i }).closest('form')!)
+
+      await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Message envoyé/))
+      // Plus de disparition au bout de 6 secondes : chacun lit à son rythme.
+      vi.advanceTimersByTime(10_000)
+      expect(screen.getByRole('status')).toHaveTextContent(/Message envoyé/)
+      vi.useRealTimers()
+    })
+
+    it('les libellés ne sont plus en slate-300 (1,5:1 sur fond blanc)', () => {
+      render(<ContactForm />)
+      const libelle = screen.getByText(/^Nom/).closest('label')!
+      expect(libelle.className).not.toMatch(/text-slate-300/)
+      expect(libelle.className).toMatch(/text-slate-700/)
+    })
+  })
+
+  /**
    * Les branches non couvertes du composant : la construction de la charge
    * utile et la remontée des erreurs de validation du serveur.
    *

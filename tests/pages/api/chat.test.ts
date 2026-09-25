@@ -32,11 +32,15 @@ vi.mock('@anthropic-ai/sdk', () => {
   }
 })
 
-function createChatRequest(messages: { role: string; content: string }[], clientAddress = '127.0.0.1') {
+function createChatRequest(
+  messages: { role: string; content: string }[],
+  clientAddress = '127.0.0.1',
+  entetes: Record<string, string> = {}
+) {
   return {
     request: new Request('http://localhost/api/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...entetes },
       body: JSON.stringify({ messages }),
     }),
     clientAddress,
@@ -69,6 +73,21 @@ describe('/api/chat', () => {
     expect(response.status).toBe(429)
     const body = await response.json()
     expect(body.error).toContain('Trop de requêtes')
+  })
+
+  it('derrière Caddy, le quota est compté par visiteur, pas pour tout le site', async () => {
+    // Toutes les requêtes arrivent de 127.0.0.1 en production. Le visiteur
+    // réel est dans X-Forwarded-For, posé par Caddy.
+    const caddy = '127.0.0.1'
+    for (let i = 0; i < 10; i++) {
+      await POST(createChatRequest([{ role: 'user', content: `Message ${i}` }], caddy, { 'X-Forwarded-For': '203.0.113.50' }))
+    }
+
+    const bloque = await POST(createChatRequest([{ role: 'user', content: 'Encore' }], caddy, { 'X-Forwarded-For': '203.0.113.50' }))
+    expect(bloque.status).toBe(429)
+
+    const autre = await POST(createChatRequest([{ role: 'user', content: 'Bonjour' }], caddy, { 'X-Forwarded-For': '203.0.113.51' }))
+    expect(autre.status).toBe(200)
   })
 
   it('retourne 500 si la clé Anthropic est manquante', async () => {

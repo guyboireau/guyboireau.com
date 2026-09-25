@@ -1,118 +1,63 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro'
-import Header from '../components/Header.astro'
-import Footer from '../components/Footer.astro'
+import PageLegale from '../components/PageLegale.astro'
 
-const title = 'Mentions Légales | Guy Boireau'
-const description = 'Mentions légales du site guyboireau.com — Guy Boireau, développeur web freelance, auto-entrepreneur, Bordeaux.'
+const title = 'Mentions légales | Guy Boireau EI'
+const description =
+  'Mentions légales du site guyboireau.com — Guy Boireau EI, entrepreneur individuel (micro-entreprise), Bordeaux. Éditeur, directeur de la publication, hébergeur.'
 ---
 
-<BaseLayout {title} {description}>
-  <Header />
-  <main>
-    <section class="section bg-slate-50 pt-32 min-h-screen">
-      <div class="max-w-3xl mx-auto">
-        <h1 class="text-4xl md:text-5xl font-bold text-gradient mb-3">Mentions Légales</h1>
-        <p class="text-slate-500 mb-10">Dernière mise à jour : 18 septembre 2026</p>
+<PageLegale {title} {description} titre="Mentions légales" miseAJour="2026-09-25">
+  <h2 id="editeur">Éditeur du site</h2>
+  <p>
+    Le site guyboireau.com est édité par <strong>Guy Boireau EI</strong> (entrepreneur individuel), qui exerce sous
+    le régime de la micro-entreprise.
+  </p>
+  <ul>
+    <li>Adresse : 17 rue Beck, 33800 Bordeaux, France</li>
+    <li>E-mail : <a href="mailto:me@guyboireau.com">me@guyboireau.com</a></li>
+    <li>Téléphone : <a href="tel:+33675751439">06 75 75 14 39</a></li>
+    <li>SIREN : 993 605 542 — SIRET : 993 605 542 00014</li>
+    <li>Code APE : 62.01Z — Programmation informatique</li>
+    <li>Dispensé d’immatriculation au registre du commerce et des sociétés (RCS) et au répertoire des métiers (RM)</li>
+    <li>TVA non applicable, art. 293 B du CGI</li>
+  </ul>
 
-        <div class="glass-card p-8 md:p-12 space-y-8">
-          <div>
-            <h2 class="text-2xl font-bold text-primary-400 mb-4">Éditeur du site</h2>
-            <div class="text-slate-600 space-y-1">
-              <p class="font-semibold text-slate-800">Guy Boireau — Développeur Web Freelance</p>
-              <p>Auto-entrepreneur</p>
-              <p><span class="text-slate-500">SIRET :</span> 993 605 542 00014</p>
-              <p><span class="text-slate-500">Code APE :</span> 6201Z — Programmation informatique</p>
-            </div>
-          </div>
+  <h2 id="directeur-publication">Directeur de la publication</h2>
+  <p>Guy Boireau.</p>
 
-          <div class="border-t border-slate-200 pt-8">
-            <h2 class="text-2xl font-bold text-primary-400 mb-4">Contact</h2>
-            <div class="text-slate-600 space-y-1">
-              <p><span class="text-slate-500">Adresse :</span> 17 rue Beck, 33800 Bordeaux</p>
-              <p>
-                <span class="text-slate-500">Email :</span>
-                <a href="mailto:me@guyboireau.com" class="text-primary-400 hover:text-primary-600 ml-1">me@guyboireau.com</a>
-              </p>
-              <p>
-                <span class="text-slate-500">Téléphone :</span>
-                <a href="tel:+33675751439" class="text-primary-400 hover:text-primary-600 ml-1">06 75 75 14 39</a>
-              </p>
-            </div>
-          </div>
+  <h2 id="hebergeur">Hébergeur</h2>
+  <p>Le site est hébergé sur un serveur privé virtuel (VPS) loué à :</p>
+  <p>
+    <strong>OVH SAS</strong><br />
+    2 rue Kellermann, 59100 Roubaix, France<br />
+    Téléphone : 1007 (depuis la France)<br />
+    RCS Lille Métropole 424 761 419<br />
+    <a href="https://www.ovhcloud.com" target="_blank" rel="noopener noreferrer">ovhcloud.com<span class="sr-only"> (nouvel onglet)</span></a>
+  </p>
+  <p>Ce serveur privé virtuel est situé en France. Il est administré par l’éditeur lui-même.</p>
 
-          <div class="border-t border-slate-200 pt-8">
-            <h2 class="text-2xl font-bold text-primary-400 mb-4">Responsable de publication</h2>
-            <p class="text-slate-600">Guy Boireau</p>
-          </div>
+  <h2 id="propriete-intellectuelle">Propriété intellectuelle</h2>
+  <p>
+    L’ensemble du contenu de ce site (textes, images, code) est protégé par le droit d’auteur. Toute reproduction,
+    même partielle, est interdite sans autorisation préalable.
+  </p>
+  <p>
+    Font exception : les captures des sites et applications réalisés pour des clients, dont le contenu appartient à
+    ces clients ; la police Cormorant Garamond, distribuée sous licence SIL Open Font License 1.1 ; les logiciels
+    libres utilisés pour construire le site, qui restent soumis à leur propre licence.
+  </p>
 
-          <div class="border-t border-slate-200 pt-8">
-            <h2 class="text-2xl font-bold text-primary-400 mb-4">Hébergeur</h2>
-            <div class="text-slate-600 space-y-1">
-              <p class="font-semibold text-slate-800">OVH SAS</p>
-              <p>2 rue Kellermann, 59100 Roubaix, France</p>
-              <p>
-                <a href="https://www.ovhcloud.com" target="_blank" rel="noopener noreferrer" class="text-primary-400 hover:text-primary-600">
-                  ovhcloud.com
-                </a>
-              </p>
-              <p class="pt-2">Le site est servi depuis un serveur privé situé en France.</p>
-            </div>
-          </div>
+  <h2 id="donnees-personnelles">Données personnelles et cookies</h2>
+  <p>
+    Les données personnelles traitées par le site, leurs durées de conservation, les prestataires concernés et vos
+    droits sont décrits dans la <a href="/confidentialite">politique de confidentialité</a>. Le site ne dépose aucun
+    cookie.
+  </p>
 
-          <div class="border-t border-slate-200 pt-8">
-            <h2 class="text-2xl font-bold text-primary-400 mb-4">Propriété intellectuelle</h2>
-            <p class="text-slate-600 leading-relaxed">
-              L'ensemble du contenu de ce site (textes, images, code) est protégé par le droit d'auteur. Toute reproduction, même partielle, est interdite sans autorisation préalable.
-            </p>
-          </div>
-
-          <div class="border-t border-slate-200 pt-8">
-            <h2 class="text-2xl font-bold text-primary-400 mb-4">Données personnelles (RGPD)</h2>
-            <div class="text-slate-600 space-y-3 leading-relaxed">
-              <p>
-                <strong>Formulaire de contact.</strong> Les données saisies (nom, adresse e-mail, type de projet, message) servent
-                uniquement à répondre à votre demande. Base légale : mesures précontractuelles à votre demande.
-                Elles sont conservées 3 ans à compter du dernier échange, puis supprimées.
-              </p>
-              <p>
-                <strong>Assistant conversationnel.</strong> Ce site propose un assistant propulsé par un modèle d'intelligence
-                artificielle. Le contenu des messages que vous y saisissez est transmis à
-                <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener noreferrer" class="text-primary-400 hover:text-primary-600"> Anthropic</a>,
-                établie aux États-Unis, pour produire la réponse. N'y saisissez aucune information confidentielle
-                ni donnée personnelle de tiers. Aucune conversation n'est conservée sur ce site.
-              </p>
-              <p>
-                <strong>Sous-traitants.</strong> OVH (hébergement, en France), Supabase (base de données),
-                Resend (envoi des e-mails) et Anthropic (assistant conversationnel). Vercel n'héberge plus le site
-                mais reste, le temps du transfert, le registraire du nom de domaine. Certains sont établis hors de l'Union européenne ; ces transferts
-                sont encadrés par les clauses contractuelles types de la Commission européenne. Aucune donnée n'est vendue
-                ni cédée à des fins commerciales.
-              </p>
-              <p>
-                <strong>Mesure d'audience.</strong> Depuis le 17 septembre 2026, la fréquentation du site est mesurée
-                avec <strong>Umami</strong>, un logiciel libre hébergé sur mon propre serveur en France
-                (<code>stats.guyboireau.com</code>) — aucune donnée de fréquentation n'est transmise à un tiers.
-                Cette mesure ne dépose <strong>aucun cookie</strong> et n'écrit rien dans votre navigateur. Sont
-                enregistrés la page consultée, la page d'origine le cas échéant, le type d'appareil, le navigateur
-                et le pays. Votre adresse IP sert uniquement, le temps de la requête, à dériver un identifiant de
-                session anonyme et à déterminer le pays : elle n'est pas conservée, et cet identifiant change chaque
-                jour. Base légale : intérêt légitime (art. 6.1.f). Conservation : 13 mois. Aucun traceur publicitaire
-                n'est utilisé et la mesure remplit les conditions posées par la CNIL pour être exemptée de
-                consentement — aucune bannière n'est donc nécessaire. Pour vous y opposer, écrivez-moi.
-              </p>
-              <p>
-                Conformément au Règlement (UE) 2016/679 (RGPD), vous disposez d'un droit d'accès, de rectification, d'effacement,
-                de limitation, d'opposition et de portabilité. Pour les exercer, écrivez à
-                <a href="mailto:me@guyboireau.com" class="text-primary-400 hover:text-primary-600">me@guyboireau.com</a>.
-                En cas de désaccord, vous pouvez saisir la
-                <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener noreferrer" class="text-primary-400 hover:text-primary-600">CNIL</a>.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-  <Footer />
-</BaseLayout>
+  <h2 id="conditions-vente">Conditions de vente et médiation</h2>
+  <p>
+    Les prestations sont vendues selon les <a href="/cgv">conditions générales de vente et de prestation de services</a>.
+    Un consommateur peut recourir gratuitement à un médiateur de la consommation : voir la section
+    <a href="/cgv#mediation">Médiation de la consommation</a>.
+  </p>
+</PageLegale>

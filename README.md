@@ -38,8 +38,14 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 | Automatisations | `/automatisations` | Solutions IA et automatisation |
 | Projets | `/projets` | Portfolio des réalisations |
 | Contact | `/contact` | Formulaire et coordonnées |
-| Mentions légales | `/mentions-legales` | Informations légales |
-| Page introuvable | `/404` | Page 404 du site |
+| Mentions légales | `/mentions-legales` | Éditeur (Guy Boireau EI), directeur de la publication, hébergeur |
+| Confidentialité | `/confidentialite` | Traitements de données, droits, cookies, bouton d'opposition à Umami |
+| CGV | `/cgv` | Conditions générales de vente et de prestation, médiation (`#mediation`), formulaire de rétractation |
+| Page introuvable | `/404` | Page 404 du site (`noindex`) |
+
+`public/llms.txt` résume le site pour les agents d'IA (format llmstxt.org) ; `public/robots.txt`
+autorise tous les robots. Les pages légales contiennent des `[À COMPLÉTER]` surlignés : à
+remplir avant la mise en production.
 
 ---
 
@@ -54,13 +60,16 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 Les deux endpoints utilisent un rate limiter en mémoire (Map côté serveur Astro), défini dans `src/lib/rate-limit.ts`, avec une **fenêtre fixe** par IP : à la première requête, `resetAt` est fixé à `now + windowMs` ; une fois la fenêtre expirée, le compteur repart à 1. Chaque endpoint a son propre compteur (`chatRateLimiter`, `contactRateLimiter`).
 
-> ⚠️ En production (VPS), un seul processus Node sert le site : le compteur est commun à
+> En production (VPS), un seul processus Node sert le site : le compteur est commun à
 > toutes les requêtes et repart de zéro à chaque redémarrage, donc à chaque déploiement.
-> Surtout, l'IP vue par les deux routes est celle de Caddy : Astro 7 ne lit
-> `X-Forwarded-For` que si `security.allowedDomains` est configuré, ce que
-> `astro.config.vps.mjs` ne fait pas. **Tous les visiteurs partagent donc le même quota**
-> (10 messages de chat et 5 envois de contact par minute pour tout le site). Le
-> commentaire en tête de `src/lib/rate-limit.ts` décrit encore le cas Vercel serverless.
+> L'adresse vue par Astro est celle de Caddy (127.0.0.1 ou ::1) : Astro 7 ne lit
+> `X-Forwarded-For` que si `security.allowedDomains` est configuré. Depuis le
+> 2026-09-25, `src/lib/client-ip.ts` prend la première adresse de `X-Forwarded-For`
+> **quand la connexion vient de la boucle locale**, et ignore cet en-tête sinon (un
+> client direct pourrait le forger). Cela suppose que Caddy remplace l'en-tête reçu,
+> ce qu'il fait tant qu'aucun `trusted_proxies` n'est configuré. Avant, tous les
+> visiteurs partageaient le même quota (10 messages de chat et 5 envois de contact par
+> minute pour tout le site).
 
 Le client Supabase server (`src/lib/supabase.server.ts`) est utilisé par `/api/contact`. Il instancie un `createClient(url, anonKey)` simple, **sans gestion de cookies ni de session** : les requêtes partent avec la clé anonyme et restent donc soumises aux Row Level Security policies.
 
@@ -105,6 +114,11 @@ Le projet ne contient aucun code d'authentification : les deux clients ne serven
 La seule écriture réelle en base est celle de `/api/contact` dans `portfolio_contacts`
 (`supabase/migrations/20260901120000_portfolio_contacts.sql`). Aucune migration du dépôt
 ne crée `pricing_tiers` ni `contacts`.
+
+`supabase/migrations/20260925090000_portfolio_contacts_lecture_service_role.sql` retire
+la lecture de `portfolio_contacts` au rôle `authenticated` : seule la clé de service lit.
+**Écrite le 2026-09-25, pas encore appliquée** — la purge à 3 ans
+(`20260901140000_contacts_retention.sql`) attend elle aussi sa planification pg_cron.
 
 ---
 

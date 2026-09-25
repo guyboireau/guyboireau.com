@@ -135,6 +135,65 @@
     background-size: 200% 200%;
     animation: gradientShift 15s ease infinite;
   }
+
+  /* Pages légales (PageLegale.astro) : texte long, lisible, liens soulignés.
+     scroll-margin : les ancres (#mediation…) ne passent pas sous l'en-tête fixe. */
+  .texte-legal {
+    @apply text-slate-700 leading-relaxed;
+  }
+
+  .texte-legal h2 {
+    @apply text-2xl font-bold text-primary-600 mt-10 mb-4 pt-8 border-t border-slate-200;
+    scroll-margin-top: 6rem;
+  }
+
+  .texte-legal > h2:first-child {
+    @apply mt-0 pt-0 border-t-0;
+  }
+
+  .texte-legal h3 {
+    @apply text-lg font-semibold text-slate-800 mt-8 mb-3;
+    scroll-margin-top: 6rem;
+  }
+
+  .texte-legal p,
+  .texte-legal ul,
+  .texte-legal ol,
+  .texte-legal dl {
+    @apply mb-4;
+  }
+
+  .texte-legal ul {
+    @apply list-disc pl-5 space-y-1;
+  }
+
+  .texte-legal ol {
+    @apply list-decimal pl-5 space-y-1;
+  }
+
+  .texte-legal a {
+    @apply text-primary-700 underline underline-offset-2;
+  }
+
+  .texte-legal a:hover {
+    @apply text-primary-600;
+  }
+
+  .texte-legal dt {
+    @apply font-semibold text-slate-800;
+  }
+
+  .texte-legal dd {
+    @apply mb-3;
+  }
+
+  .texte-legal code {
+    @apply text-sm bg-slate-100 text-slate-800 px-1 py-0.5 rounded;
+  }
+
+  .texte-legal .a-completer {
+    @apply bg-amber-100 text-amber-900 px-1 rounded;
+  }
 }
 
 @layer utilities {
@@ -260,6 +319,11 @@
   width: max-content;
 }
 
+/* Bouton pause/lecture (WCAG 2.2.2) : caché tant que le script ne l'a pas activé. */
+.trust-marquee.is-paused {
+  animation-play-state: paused;
+}
+
 /* ===== PROJETS — DÉFILEMENT HORIZONTAL (desktop, activé par JS) ===== */
 
 /* Par défaut — et sans JavaScript — la liste reste verticale. */
@@ -353,6 +417,17 @@ html.lenis body {
     animation: none !important;
     transition: none !important;
   }
+
+  /* Sans script, pas de bouton pause : le bandeau ne défile pas. */
+  .trust-marquee {
+    animation: none !important;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .trust-marquee [data-doublon] {
+    display: none;
+  }
 }
 
 /* ===== REDUCED MOTION ===== */
@@ -368,8 +443,32 @@ html.lenis body {
     opacity: 1 !important;
   }
   .particle { display: none !important; }
-  .trust-marquee { animation: none !important; }
   html.lenis { scroll-behavior: auto; }
+
+  /* Animations infinies : arrêtées. Le bandeau de confiance ne défile plus et
+     s'affiche en entier, sans ses doublons ni son bouton pause devenu inutile. */
+  .trust-marquee {
+    animation: none !important;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .trust-marquee [data-doublon],
+  .marquee-toggle {
+    display: none !important;
+  }
+  .animated-gradient,
+  .animate-float,
+  .pulse-glow,
+  .animate-pulse,
+  .animate-bounce,
+  .animate-ping,
+  .animate-spin {
+    animation: none !important;
+  }
+  .hover-tilt:hover {
+    transform: none !important;
+  }
 
   .btn-primary:hover,
   .btn-secondary:hover,

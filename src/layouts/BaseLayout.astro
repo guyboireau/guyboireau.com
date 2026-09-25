@@ -1,6 +1,22 @@
 ---
 import '../styles/global.css'
 
+// Google Tag Manager retiré le 2026-09-01. GTM se chargeait au premier octet,
+// sans bannière ni Consent Mode : un traceur non exempté déposé avant tout
+// consentement (art. 82 LIL). Une mesure sans cookie (Umami) suffit à ce site.
+// Ne pas réintroduire GTM sans recueil de consentement.
+//
+// Umami, auto-hébergé sur le VPS (stats.guyboireau.com), remplace Vercel
+// Analytics depuis la sortie de Vercel (2026-09-17). Sans cookie. L'adresse IP
+// n'est pas stockée par Umami : elle sert à la géolocalisation et à un
+// identifiant de session (hachage site + IP + navigateur + sel renouvelé
+// chaque mois). Mesure exemptée de consentement (conditions CNIL), décrite
+// dans /confidentialite, opposable par la clé localStorage `umami.disabled`.
+// L'identifiant de site est public par nature.
+//
+// Ces notes étaient des commentaires HTML : ils partaient dans chaque page
+// publiée. Ici, en frontmatter, ils ne quittent pas le dépôt.
+
 export interface Props {
   title: string
   description: string
@@ -8,6 +24,8 @@ export interface Props {
   ogImage?: string
   ogType?: string
   keywords?: string
+  /** Page à ne pas indexer (404) : robots noindex, pas d'URL canonique. */
+  noindex?: boolean
 }
 
 const {
@@ -16,6 +34,7 @@ const {
   canonical = Astro.url.href,
   ogImage = '/og-image.png',
   ogType = 'website',
+  noindex = false,
   keywords = 'application métier bordeaux, automatisation de processus entreprise, traitement documentaire automatisé, développeur indépendant bordeaux, logiciel métier PME, automatisation saisie bordeaux, développeur freelance bordeaux',
 } = Astro.props
 
@@ -29,10 +48,9 @@ const sameAs = [
 
 const address = {
   '@type': 'PostalAddress',
-  streetAddress: 'Bordeaux',
   addressLocality: 'Bordeaux',
   addressRegion: 'Nouvelle-Aquitaine',
-  postalCode: '33000',
+  postalCode: '33800',
   addressCountry: 'FR',
 }
 
@@ -42,7 +60,6 @@ const areaServed = [
   { '@type': 'City', 'name': 'Pessac' },
   { '@type': 'City', 'name': 'Talence' },
   { '@type': 'City', 'name': 'Villenave-d\'Ornon' },
-  { '@type': 'City', 'name': 'Mérignac' },
   { '@type': 'AdministrativeArea', 'name': 'Gironde' },
   { '@type': 'AdministrativeArea', 'name': 'Nouvelle-Aquitaine' },
   { '@type': 'Country', 'name': 'France' },
@@ -68,6 +85,7 @@ const jsonLd = [
     '@type': 'ProfessionalService',
     '@id': 'https://guyboireau.com/#business',
     name: 'Guy Boireau — Applications métier & automatisation · Bordeaux',
+    legalName: 'Guy Boireau EI',
     alternateName: 'Guy Boireau Développeur Indépendant',
     url: 'https://guyboireau.com',
     telephone: '+33675751439',
@@ -85,7 +103,6 @@ const jsonLd = [
     priceRange: '€€',
     currenciesAccepted: 'EUR',
     paymentAccepted: 'Virement bancaire, Chèque',
-    openingHours: 'Mo-Fr 09:00-18:00',
     taxID: '993 605 542 00014',
     founder: {
       '@type': 'Person',
@@ -113,7 +130,7 @@ const jsonLd = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
     <meta name="author" content="Guy Boireau" />
     <meta name="theme-color" content="#a0493b" />
     <meta name="keywords" content={keywords} />
@@ -124,7 +141,7 @@ const jsonLd = [
     <meta name="ICBM" content="44.8378, -0.5792" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {!noindex && <link rel="canonical" href={canonical} />}
 
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />
@@ -168,20 +185,17 @@ const jsonLd = [
 
     <!-- Slot pour JSON-LD supplémentaire par page -->
     <slot name="jsonld" />
-
-    <!-- Google Tag Manager retiré le 2026-09-01.
-         GTM se chargeait au premier octet, sans bannière ni Consent Mode :
-         un traceur non exempté déposé avant tout consentement (art. 82 LIL).
-         Sur un portfolio, une mesure sans cookie (Umami, ci-dessous) suffit :
-         elle n'identifie pas le visiteur, donc aucune bannière n'est requise.
-         Ne pas réintroduire GTM sans recueil de consentement. -->
   </head>
   <body>
+    <a
+      href="#contenu"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:font-medium focus:text-primary-700 focus:shadow-lg focus:outline-2 focus:outline-primary-600"
+    >
+      Aller au contenu
+    </a>
     <slot />
 
-    <!-- Umami, auto-hébergé sur le VPS (stats.guyboireau.com). Sans cookie, sans
-         identifiant : pas de bannière. Remplace Vercel Analytics depuis la sortie
-         de Vercel (2026-09-17). L'identifiant de site est public par nature. -->
+    {/* Umami : voir la note en tête de fichier. */}
     <script is:inline defer src="https://stats.guyboireau.com/stats.js" data-website-id="533f0180-52f1-43b3-971d-8ce5521fceb8"></script>
 
     <!-- Défilement fluide (Lenis) — chargé dynamiquement, jamais en mouvement réduit -->

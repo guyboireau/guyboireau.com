@@ -222,7 +222,7 @@ describe('useChat', () => {
                 await result.current.send('Salut')
             })
 
-            expect(result.current.error).toMatch(/attends une minute/i)
+            expect(result.current.error).toMatch(/attendez une minute/i)
         })
 
         it('un autre statut d’erreur donne un message générique', async () => {
@@ -234,7 +234,7 @@ describe('useChat', () => {
             })
 
             expect(result.current.error).toMatch(/une erreur est survenue/i)
-            expect(result.current.error).not.toMatch(/attends une minute/i)
+            expect(result.current.error).not.toMatch(/attendez une minute/i)
         })
 
         it('un rejet réseau est rattrapé', async () => {

@@ -1,0 +1,57 @@
+---
+// Bouton d'opposition à la mesure d'audience Umami (politique de confidentialité).
+// Sans JavaScript, le script de mesure ne s'exécute pas non plus : le bouton
+// reste caché et le texte le dit. La logique est dans src/lib/opposition-mesure.ts.
+---
+
+<div class="rounded-xl border border-slate-300 bg-slate-50 p-5" data-opposition-mesure>
+  <p class="text-slate-700 text-sm mb-3" role="status" aria-live="polite" data-etat>
+    JavaScript est désactivé dans votre navigateur : le script de mesure ne s'exécute pas, aucune
+    statistique n'est envoyée.
+  </p>
+  <button type="button" class="btn-secondary text-sm" data-basculer hidden>
+    Ne plus être mesuré sur ce site
+  </button>
+</div>
+
+<script>
+  import { enregistrerChoix, lireEtatMesure, type EtatMesure } from '../lib/opposition-mesure'
+
+  const TEXTES: Record<EtatMesure, { etat: string; bouton: string | null }> = {
+    active: {
+      etat: "La mesure d'audience est active dans ce navigateur.",
+      bouton: 'Ne plus être mesuré sur ce site',
+    },
+    refusee: {
+      etat: "Vous avez refusé la mesure d'audience : ce navigateur n'envoie plus aucune statistique à ce site.",
+      bouton: 'Réactiver la mesure',
+    },
+    indisponible: {
+      etat:
+        "Votre navigateur bloque le stockage local : votre choix ne peut pas y être enregistré. Vous pouvez bloquer le domaine stats.guyboireau.com avec un bloqueur de contenus.",
+      bouton: null,
+    },
+  }
+
+  const stockage = () => window.localStorage
+
+  document.querySelectorAll<HTMLElement>('[data-opposition-mesure]').forEach((racine) => {
+    const texte = racine.querySelector<HTMLElement>('[data-etat]')
+    const bouton = racine.querySelector<HTMLButtonElement>('[data-basculer]')
+    if (!texte || !bouton) return
+
+    const afficher = (etat: EtatMesure) => {
+      const { etat: message, bouton: libelle } = TEXTES[etat]
+      texte.textContent = message
+      bouton.hidden = libelle === null
+      if (libelle) bouton.textContent = libelle
+    }
+
+    afficher(lireEtatMesure(stockage))
+
+    bouton.addEventListener('click', () => {
+      const refuser = lireEtatMesure(stockage) === 'active'
+      afficher(enregistrerChoix(stockage, refuser))
+    })
+  })
+</script>

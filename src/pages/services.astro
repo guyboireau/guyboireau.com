@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import PricingSimulator from '../components/PricingSimulator.tsx'
+import MentionPrix from '../components/MentionPrix.astro'
 
 const title = 'Services & Tarifs | Guy Boireau — Développeur Web Freelance Bordeaux'
 const description =
@@ -58,7 +59,7 @@ const faq = [
     })),
   })} />
   <Header />
-  <main>
+  <main id="contenu" tabindex="-1" class="focus:outline-none">
     <!-- Intro -->
     <section class="section bg-slate-50 pt-32">
       <div class="max-w-4xl mx-auto text-center">
@@ -71,6 +72,7 @@ const faq = [
             Les projets qui échouent sont ceux qui essaient de tout couvrir d'un coup. Je travaille par lots : un diagnostic pour savoir où votre temps se perd, un premier processus outillé et mis en production, puis les suivants. Tarifs au forfait, annoncés avant de commencer.
           </p>
         </div>
+        <MentionPrix class="mt-4" />
       </div>
     </section>
 
@@ -93,7 +95,7 @@ const faq = [
               <a href="/contact?subject=Diagnostic" class="btn-primary block text-center">
                 Demander un diagnostic
               </a>
-              <p class="text-slate-400 text-xs mt-4 leading-relaxed">
+              <p class="text-slate-600 text-xs mt-4 leading-relaxed">
                 Déduit du projet s'il est engagé dans les 3 mois.
               </p>
             </div>
@@ -109,7 +111,7 @@ const faq = [
                   '3 pistes priorisées, chacune avec sa faisabilité technique et son budget',
                 ].map((item) => (
                   <li class="flex items-start gap-2 text-slate-600 text-sm">
-                    <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                    <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">✓</span>{item}
                   </li>
                 ))}
               </ul>
@@ -134,7 +136,7 @@ const faq = [
               <p class="text-slate-500 text-sm">Livré en 4 à 8 semaines</p>
             </div>
             <a href="/contact?subject=Premier%20lot" class="btn-primary inline-block text-center shrink-0">
-              En parler
+              En parler<span class="sr-only"> du premier lot en production</span>
             </a>
           </div>
 
@@ -151,7 +153,7 @@ const faq = [
                   'Un mois de garantie après la mise en production',
                 ].map((item) => (
                   <li class="flex items-start gap-2 text-slate-600 text-sm">
-                    <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                    <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">✓</span>{item}
                   </li>
                 ))}
               </ul>
@@ -166,7 +168,7 @@ const faq = [
                   'Gestion de devis complexes',
                 ].map((item) => (
                   <li class="flex items-start gap-2 text-slate-600 text-sm">
-                    <span class="text-primary-400 mt-0.5 shrink-0">→</span>{item}
+                    <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">→</span>{item}
                   </li>
                 ))}
               </ul>
@@ -217,7 +219,7 @@ const faq = [
             },
           ].map((item) => (
             <div class="glass-card lift p-8 stagger-item hover:border-primary-500/40">
-              <div class="text-3xl mb-4">{item.icon}</div>
+              <div class="text-3xl mb-4" aria-hidden="true">{item.icon}</div>
               <h3 class="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
               <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
             </div>
@@ -238,7 +240,7 @@ const faq = [
               </p>
             </div>
             <a href="/automatisations" class="btn-primary shrink-0 inline-block text-center">
-              Voir la démo →
+              Voir la démo<span aria-hidden="true"> →</span>
             </a>
           </div>
         </div>
@@ -270,7 +272,7 @@ const faq = [
         <div class="reveal-fade-up mb-12">
           <h2 class="section-title text-center">Formules de suivi mensuel</h2>
           <p class="section-subtitle text-center">Engagement 12 mois — premier mois offert</p>
-          <p class="text-slate-400 text-sm text-center -mt-8 mb-12">Sans engagement possible, +20 €/mois.</p>
+          <p class="text-slate-600 text-sm text-center -mt-8 mb-12">Sans engagement possible, +20 €/mois.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -297,11 +299,11 @@ const faq = [
                 'Support email sous 72h',
               ].map((item) => (
                 <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                  <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">✓</span>{item}
                 </li>
               ))}
             </ul>
-            <a href="/contact" class="btn-secondary text-center block">Choisir</a>
+            <a href="/contact" class="btn-secondary text-center block">Choisir<span class="sr-only"> le Pack Présence</span></a>
           </div>
 
           <!-- Pack Essentiel -->
@@ -325,11 +327,11 @@ const faq = [
                 'Rapport mensuel : disponibilité, incidents, interventions',
               ].map((item) => (
                 <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                  <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">✓</span>{item}
                 </li>
               ))}
             </ul>
-            <a href="/contact" class="btn-primary text-center block">Choisir ce pack</a>
+            <a href="/contact" class="btn-primary text-center block">Choisir ce pack<span class="sr-only"> : Pack Essentiel</span></a>
           </div>
 
           <!-- Pack Croissance -->
@@ -353,24 +355,24 @@ const faq = [
                 'Appel mensuel de suivi (30 min)',
               ].map((item) => (
                 <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 mt-0.5 shrink-0">✓</span>{item}
+                  <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">✓</span>{item}
                 </li>
               ))}
             </ul>
-            <a href="/contact" class="btn-secondary text-center block">Choisir</a>
+            <a href="/contact" class="btn-secondary text-center block">Choisir<span class="sr-only"> le Pack Croissance</span></a>
           </div>
         </div>
 
         <!-- Google Business explication -->
         <div class="mt-8 glass-card p-6 border border-primary-500/20 reveal-fade-up">
           <div class="flex flex-col sm:flex-row gap-4 items-start">
-            <div class="text-3xl shrink-0">📍</div>
+            <div class="text-3xl shrink-0" aria-hidden="true">📍</div>
             <div>
               <p class="font-semibold text-slate-800 mb-1">✦ Surveillance et alerte : ce que ça veut dire</p>
               <p class="text-slate-500 text-sm leading-relaxed">
                 Votre site est interrogé automatiquement toutes les 30 minutes. Si une page cesse de répondre, si le certificat de sécurité approche de son expiration ou si le nom de domaine arrive à échéance, je reçois une notification sur mon téléphone — y compris le week-end.
                 Ce n'est donc ni vous ni votre client qui découvrez la panne.
-                L'état des sites que j'héberge est <a href="https://statut.guyboireau.com/perso/" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">public</a> — <a href="/hebergement-exploitation" class="text-primary-500 hover:underline">détail de l'infrastructure</a>.
+                L'état des sites que j'héberge est <a href="https://statut.guyboireau.com/perso/" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">public<span class="sr-only"> (nouvel onglet)</span></a> — <a href="/hebergement-exploitation" class="text-primary-500 hover:underline">détail de l'infrastructure</a>.
               </p>
             </div>
           </div>
@@ -383,7 +385,7 @@ const faq = [
       <div class="max-w-4xl mx-auto">
         <div class="glass-card p-10 reveal-fade-up">
           <div class="flex flex-col md:flex-row gap-8 items-start">
-            <div class="text-5xl shrink-0">🖥️</div>
+            <div class="text-5xl shrink-0" aria-hidden="true">🖥️</div>
             <div>
               <h2 class="text-2xl font-bold text-slate-800 mb-2">Dépannage informatique</h2>
               <div class="flex items-end gap-1 mb-4">
@@ -401,7 +403,7 @@ const faq = [
                   'Disponible en soirée et week-end',
                 ].map((item) => (
                   <li class="flex items-start gap-2 text-slate-600 text-sm">
-                    <span class="text-primary-400 shrink-0">✓</span>{item}
+                    <span class="text-primary-400 shrink-0" aria-hidden="true">✓</span>{item}
                   </li>
                 ))}
               </ul>
@@ -425,7 +427,7 @@ const faq = [
             <details class="glass-card p-6 group stagger-item cursor-pointer">
               <summary class="text-slate-800 font-medium text-lg list-none flex items-center justify-between">
                 {item.q}
-                <span class="text-primary-400 ml-4 shrink-0 transition-transform group-open:rotate-180">▾</span>
+                <span class="text-primary-400 ml-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true">▾</span>
               </summary>
               <p class="text-slate-500 mt-4 leading-relaxed">{item.a}</p>
             </details>
