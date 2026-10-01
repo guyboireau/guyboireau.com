@@ -4,45 +4,114 @@ import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import PricingSimulator from '../components/PricingSimulator.tsx'
 import MentionPrix from '../components/MentionPrix.astro'
+import Icone from '../components/Icone.astro'
 
-const title = 'Services & Tarifs | Guy Boireau — Développeur Web Freelance Bordeaux'
+const title = 'Services et tarifs | Guy Boireau, développeur indépendant à Bordeaux'
 const description =
-  "Diagnostic à 1 400 €, premier lot en production de 6 000 à 10 000 €, suivi mensuel dès 79€/mois. Applications métier et automatisation pour les structures de 5 à 30 salariés, à Bordeaux."
+  'Diagnostic à 1 400 €, premier outil en service de 6 000 à 10 000 €, sites à partir de 490 €, suivi mensuel dès 79 € par mois. Prix nets, au forfait.'
 
 const faq = [
   {
-    q: 'C\'est quoi exactement la gestion de la fiche Google Business ?',
-    a: 'Google Business (anciennement Google My Business) est la fiche qui apparaît sur Google Maps quand on cherche un artisan ou commerce local. Je m\'occupe de la créer si elle n\'existe pas, de mettre à jour vos horaires, ajouter des photos de vos réalisations, publier des actualités et répondre aux avis. Un artisan sans fiche active perd en moyenne 30% de ses demandes locales.',
+    q: "Qu'est-ce que la gestion de la fiche Google Business ?",
+    a: "C'est la fiche qui apparaît sur Google Maps quand on cherche un artisan ou un commerce près de chez soi. Je la crée si elle n'existe pas. Je mets à jour vos horaires, j'ajoute des photos de vos réalisations, je publie des actualités et je réponds aux avis.",
   },
   {
     q: 'Y a-t-il un engagement de durée ?',
-    a: "Les formules mensuelles sont engagées 12 mois, avec le premier mois offert. Vous pouvez changer de formule à tout moment pendant cette période. Si l'engagement ne vous convient pas, la même formule existe sans engagement pour 20 € de plus par mois.",
+    a: "Les formules mensuelles sont engagées 12 mois, et le premier mois est offert. Vous pouvez changer de formule pendant cette période. La même formule existe sans engagement, pour 20 € de plus par mois.",
   },
   {
-    q: "Qu'est-ce qui est inclus dans la maintenance ?",
-    a: 'Hébergement, nom de domaine, mises à jour de sécurité, sauvegardes automatiques, et les modifications incluses selon la formule (1h/mois en Essentiel, 2h/mois en Accompagnement).',
+    q: "Qu'est-ce qui est inclus dans le suivi mensuel ?",
+    a: "Hébergement, nom de domaine, mises à jour de sécurité et sauvegardes dans toutes les formules. Ensuite, selon la formule : une modification de contenu par mois en Essentiel, deux heures d'évolutions par mois en Croissance.",
   },
   {
     q: 'À quoi sert le diagnostic si je sais déjà ce que je veux ?',
-    a: "Souvent à confirmer votre intuition, parfois à la corriger. Il chiffre ce que l'existant vous coûte réellement chaque année et classe les pistes par rapport gain/effort — c'est ce qui permet de choisir par quoi commencer. Si vous engagez le projet dans les 3 mois, il est déduit.",
+    a: "Il confirme votre intuition, ou il la corrige. Il chiffre ce que l'existant vous coûte chaque année et classe les pistes par rapport entre gain et effort. Vous savez alors par quoi commencer. S'il est suivi d'un projet dans les 3 mois, il est déduit.",
   },
   {
     q: 'Pourquoi commencer par un seul processus ?',
-    a: "Parce qu'un outil livré en 6 semaines et utilisé tous les jours vous apprend plus que 6 mois de spécifications. Le premier lot est en production, avec vos données réelles et vos équipes dessus. Les lots suivants sont décidés à partir de ce qui s'est passé, pas de ce qu'on avait imaginé.",
+    a: "Un outil livré en quelques semaines et utilisé tous les jours apprend plus que des mois de cahier des charges. Le premier lot tourne avec vos vraies données et vos équipes. Les lots suivants se décident à partir de cet usage réel.",
   },
   {
-    q: 'Comment se déroule la création d\'un site ?',
-    a: 'Appel découverte gratuit → devis → design → développement → livraison. Je vous tiens informé à chaque étape et vous avez toujours accès aux livrables.',
+    q: "Comment se passe la création d'un site ?",
+    a: "Un premier appel gratuit, puis un devis. Ensuite la maquette, le développement et la mise en ligne. Vous avez accès à chaque étape.",
   },
   {
-    q: 'Puis-je garder mon site existant et prendre juste la maintenance ?',
-    a: 'Oui, si votre site est techniquement compatible. On en discute lors de l\'appel découverte.',
+    q: 'Puis-je garder mon site actuel et prendre seulement le suivi ?',
+    a: "Oui, si votre site le permet techniquement. On le vérifie ensemble lors du premier appel.",
   },
   {
-    q: 'Comment fonctionne le dépannage informatique ?',
-    a: 'Vous me contactez, on fixe un créneau. Je me connecte à votre ordinateur à distance (avec votre accord) et résous le problème. Facturation au temps réel passé.',
+    q: 'Comment se passe un dépannage informatique ?',
+    a: "Vous me contactez et on fixe un créneau. Je me connecte à votre ordinateur à distance, avec votre accord, et je règle le problème. Je facture le temps réellement passé.",
   },
 ]
+
+const formules = [
+  {
+    nom: 'Présence',
+    prix: '79 €',
+    resume: 'Votre site en ligne et votre fiche Google à jour.',
+    inclus: [
+      'Hébergement en France et nom de domaine',
+      'Certificat de sécurité renouvelé automatiquement',
+      'Mises à jour de sécurité du serveur',
+      'Sauvegarde chaque nuit, avec une copie chiffrée hors site',
+      'Contrôle toutes les 30 minutes : disponibilité, certificat, échéance du domaine',
+      'Fiche Google Business gérée',
+      'Réponse aux e-mails sous 72 h',
+    ],
+    recommandee: false,
+  },
+  {
+    nom: 'Essentiel',
+    prix: '149 €',
+    resume: 'Pour être visible et faire évoluer votre contenu.',
+    inclus: [
+      'Tout ce que contient Présence',
+      'Une modification de contenu par mois',
+      'Réponse aux e-mails sous 48 h',
+      'Rapport mensuel : disponibilité, incidents, interventions',
+    ],
+    recommandee: true,
+  },
+  {
+    nom: 'Croissance',
+    prix: '299 €',
+    resume: 'Pour un travail régulier sur votre visibilité en ligne.',
+    inclus: [
+      'Tout ce que contient Essentiel',
+      'Travail de référencement chaque mois',
+      'Un article ou une actualité par mois',
+      "Deux heures d'évolutions par mois",
+      'Rapport de positionnement Search Console',
+      'Réponse prioritaire sous 24 h',
+      'Un appel de suivi de 30 minutes par mois',
+    ],
+    recommandee: false,
+  },
+]
+
+const automatisations = [
+  {
+    icone: 'mail-check',
+    titre: 'Réponse immédiate aux demandes',
+    texte: "Un client remplit votre formulaire. Il reçoit une réponse adaptée à sa demande en moins d'une minute, même la nuit.",
+  },
+  {
+    icone: 'list-filter',
+    titre: 'Tri des demandes entrantes',
+    texte: 'Chaque demande est classée et rangée dans votre outil ou votre agenda. Vous traitez en premier celles qui comptent.',
+  },
+  {
+    icone: 'receipt',
+    titre: 'Devis, factures et relances',
+    texte: 'Les devis et factures se préparent seuls. Les relances de paiement partent à date fixe.',
+  },
+  {
+    icone: 'plug',
+    titre: 'Vos outils reliés entre eux',
+    texte: "Google Sheets, Gmail, Notion, Stripe : ce que vous utilisez déjà, relié pour que l'information ne soit saisie qu'une fois.",
+  },
+] as const
 ---
 
 <BaseLayout {title} {description}>
@@ -61,57 +130,51 @@ const faq = [
   <Header />
   <main id="contenu" tabindex="-1" class="focus:outline-none">
     <!-- Intro -->
-    <section class="section bg-slate-50 pt-32">
-      <div class="max-w-4xl mx-auto text-center">
-        <div class="reveal-fade-up">
-          <h1 class="section-title">Services & Tarifs</h1>
-          <p class="section-subtitle">
-            On commence petit, on met en production, on élargit ensuite.
-          </p>
-          <p class="text-slate-600 text-lg max-w-2xl mx-auto">
-            Les projets qui échouent sont ceux qui essaient de tout couvrir d'un coup. Je travaille par lots : un diagnostic pour savoir où votre temps se perd, un premier processus outillé et mis en production, puis les suivants. Tarifs au forfait, annoncés avant de commencer.
-          </p>
-        </div>
-        <MentionPrix class="mt-4" />
+    <section class="bg-creme border-b border-ligne pt-28 pb-16 md:pt-36 md:pb-20 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto">
+        <p class="etiquette mb-6">Services et tarifs</p>
+        <h1 class="text-4xl md:text-6xl leading-[1.08] mb-6">On commence petit, on met en service, puis on élargit.</h1>
+        <p class="text-lg md:text-xl text-encre-2 leading-relaxed max-w-3xl">
+          Je travaille par étapes. Un diagnostic pour voir où votre temps se perd. Un premier outil mis en service. Puis les suivants.
+          Chaque prix est fixé au forfait avant de commencer.
+        </p>
+        <MentionPrix class="mt-6" />
       </div>
     </section>
 
     <!-- Diagnostic -->
-    <section class="section bg-white">
+    <section class="section">
       <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12 text-center">
-          <span class="inline-block px-4 py-1.5 bg-primary-500/10 text-primary-600 rounded-full text-sm font-semibold mb-4">
-            Le point de départ
-          </span>
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Étape 1 · le point de départ</p>
           <h2 class="section-title">Où votre temps se perd</h2>
-          <p class="section-subtitle">Deux jours pour savoir quoi outiller en premier</p>
+          <p class="text-lg text-encre-2">Deux jours pour savoir quoi outiller en premier.</p>
         </div>
 
-        <div class="glass-card p-8 md:p-10 border-2 border-primary-500/30 reveal-scale">
+        <div class="carte p-6 md:p-10 apparition">
           <div class="flex flex-col md:flex-row gap-8">
             <div class="md:w-1/3 shrink-0">
-              <div class="text-4xl font-bold text-gradient mb-1">1 400 €</div>
-              <p class="text-slate-500 text-sm mb-6">2 jours d'intervention</p>
-              <a href="/contact?subject=Diagnostic" class="btn-primary block text-center">
-                Demander un diagnostic
-              </a>
-              <p class="text-slate-600 text-xs mt-4 leading-relaxed">
-                Déduit du projet s'il est engagé dans les 3 mois.
+              <p class="chiffre text-4xl mb-1">1 400 €</p>
+              <p class="font-mono text-[13px] text-encre-3 mb-6">2 jours d'intervention</p>
+              <a href="/contact?subject=Diagnostic" class="btn-primary w-full">Demander un diagnostic</a>
+              <p class="text-encre-2 text-sm mt-4 leading-relaxed">
+                Déduit du projet s'il commence dans les 3 mois.
               </p>
             </div>
             <div class="flex-1">
-              <p class="text-slate-600 mb-6 leading-relaxed">
-                Je passe deux jours dans votre organisation — vos outils, vos fichiers, vos habitudes de travail. Vous repartez avec un document écrit de 10 à 15 pages, pas avec une présentation.
+              <p class="text-encre-2 mb-6 leading-relaxed">
+                Je passe deux jours avec vous : vos outils, vos fichiers, vos habitudes de travail.
+                Vous recevez un document écrit de 10 à 15 pages.
               </p>
-              <h3 class="text-slate-800 font-semibold mb-3">Ce que contient le document</h3>
+              <h3 class="text-xl mb-4">Ce que contient le document</h3>
               <ul class="space-y-3">
                 {[
-                  'Cartographie des tâches répétitives : qui les fait, combien de temps, à quelle fréquence',
-                  "Chiffrage du coût annuel de l'existant, en heures et en euros",
-                  '3 pistes priorisées, chacune avec sa faisabilité technique et son budget',
+                  'Les tâches répétitives : qui les fait, combien de temps, à quelle fréquence',
+                  "Ce que l'existant vous coûte par an, en heures et en euros",
+                  'Trois pistes classées, chacune avec sa faisabilité et son budget',
                 ].map((item) => (
-                  <li class="flex items-start gap-2 text-slate-600 text-sm">
-                    <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">✓</span>{item}
+                  <li class="flex items-start gap-3 text-encre-2">
+                    <Icone nom="check" class="text-primary-500 mt-0.5 shrink-0" />{item}
                   </li>
                 ))}
               </ul>
@@ -121,59 +184,53 @@ const faq = [
       </div>
     </section>
 
-    <!-- Premier lot en production -->
-    <section class="section bg-slate-50">
+    <!-- Premier lot -->
+    <section class="section bg-creme border-y border-ligne">
       <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12 text-center">
-          <h2 class="section-title">Premier lot en production</h2>
-          <p class="section-subtitle">Un processus traité de bout en bout, utilisé pour de vrai</p>
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Étape 2 · le premier outil</p>
+          <h2 class="section-title">Un processus outillé, utilisé pour de vrai</h2>
         </div>
 
-        <div class="glass-card p-8 md:p-10 stagger-item">
-          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8 pb-8 border-b border-slate-200">
+        <div class="carte p-6 md:p-10 apparition">
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8 pb-8 border-b border-ligne">
             <div>
-              <div class="text-4xl font-bold text-gradient mb-1">6 000 – 10 000 €</div>
-              <p class="text-slate-500 text-sm">Livré en 4 à 8 semaines</p>
+              <p class="chiffre text-4xl mb-1">de 6 000 à 10 000 €</p>
+              <p class="font-mono text-[13px] text-encre-3">Livré en 4 à 8 semaines</p>
             </div>
-            <a href="/contact?subject=Premier%20lot" class="btn-primary inline-block text-center shrink-0">
-              En parler<span class="sr-only"> du premier lot en production</span>
+            <a href="/contact?subject=Premier%20lot" class="btn-primary shrink-0">
+              En parler<span class="sr-only"> : premier outil en service</span>
             </a>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 class="text-slate-800 font-semibold mb-3">Ce qui est compris</h3>
+              <h3 class="text-xl mb-4">Ce qui est compris</h3>
               <ul class="space-y-3">
                 {[
-                  'Cadrage du processus retenu avec les personnes qui le font',
-                  'Maquettes validées avant la moindre ligne de code',
-                  "Import de l'existant : Excel, ancienne base, export ERP",
-                  'Mise en production, pas une démonstration',
-                  'Transfert de compétences à vos équipes',
-                  'Un mois de garantie après la mise en production',
+                  'Le cadrage, avec les personnes qui font le travail',
+                  'Des maquettes validées avant de développer',
+                  "La reprise de l'existant : Excel, ancienne base, export de l'ERP",
+                  'La mise en service, avec vos données réelles',
+                  'La formation de vos équipes',
+                  'Un mois de garantie après la mise en service',
                 ].map((item) => (
-                  <li class="flex items-start gap-2 text-slate-600 text-sm">
-                    <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">✓</span>{item}
+                  <li class="flex items-start gap-3 text-encre-2">
+                    <Icone nom="check" class="text-primary-500 mt-0.5 shrink-0" />{item}
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h3 class="text-slate-800 font-semibold mb-3">Exemples de périmètre</h3>
-              <ul class="space-y-3">
-                {[
-                  'Suivi de commandes atelier',
-                  'Fiches de contrôle qualité avec photos depuis mobile',
-                  "Planning d'interventions terrain",
-                  'Gestion de devis complexes',
-                ].map((item) => (
-                  <li class="flex items-start gap-2 text-slate-600 text-sm">
-                    <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">→</span>{item}
-                  </li>
-                ))}
+              <h3 class="text-xl mb-4">Exemples de processus</h3>
+              <ul class="space-y-3 text-encre-2">
+                <li>Suivi de commandes en atelier</li>
+                <li>Fiches de contrôle qualité, avec photos prises sur téléphone</li>
+                <li>Planning d'interventions sur le terrain</li>
+                <li>Devis complexes à plusieurs options</li>
               </ul>
-              <p class="text-slate-500 text-sm mt-6 leading-relaxed">
-                Un seul de ces périmètres à la fois. C'est ce qui permet de tenir 4 à 8 semaines et d'apprendre de l'usage réel avant d'élargir.
+              <p class="text-encre-2 text-sm mt-6 leading-relaxed">
+                Un seul processus à la fois. C'est ce qui permet de livrer en 4 à 8 semaines et d'apprendre de l'usage avant d'aller plus loin.
               </p>
             </div>
           </div>
@@ -181,263 +238,157 @@ const faq = [
       </div>
     </section>
 
-    <!-- Automatisations IA -->
-    <section class="section bg-white">
+    <!-- Automatisations -->
+    <section class="section">
       <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12 text-center">
-          <span class="inline-block px-4 py-1.5 bg-primary-500/10 text-primary-600 rounded-full text-sm font-semibold mb-4">
-            Nouveau
-          </span>
-          <h2 class="section-title">Automatisations IA</h2>
-          <p class="section-subtitle">Vos tâches répétitives, on les supprime</p>
-          <p class="text-slate-600 text-lg max-w-2xl mx-auto">
-            Votre formulaire répond tout seul. Vos leads sont qualifiés avant même que vous décrochiez. Vos relances partent sans que vous y pensiez.
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Automatisations</p>
+          <h2 class="section-title">Les tâches répétitives, faites par un programme</h2>
+          <p class="text-lg text-encre-2">
+            Des automatisations plus petites, pour une tâche précise. Certaines utilisent l'intelligence artificielle, quand elle apporte quelque chose.
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-          {[
-            {
-              icon: '⚡',
-              title: 'Réponse automatique en 60 secondes',
-              desc: 'Un client remplit votre formulaire de contact → il reçoit une réponse personnalisée en moins d\'une minute, 24h/24, 7j/7.',
-            },
-            {
-              icon: '🎯',
-              title: 'Qualification automatique des leads',
-              desc: 'Un lead entre → il est qualifié, catégorisé et envoyé directement dans votre CRM ou votre agenda. Vous ne traitez que les vraies opportunités.',
-            },
-            {
-              icon: '📄',
-              title: 'Factures, relances & rapports',
-              desc: 'Génération automatique de devis et factures, relances de paiement planifiées, rapports hebdomadaires envoyés sans intervention.',
-            },
-            {
-              icon: '🔗',
-              title: 'Vos outils connectés entre eux',
-              desc: 'Notion, Google Sheets, Slack, Stripe, Airtable, Gmail… Tout ce que vous utilisez déjà, branché ensemble avec Make + IA.',
-            },
-          ].map((item) => (
-            <div class="glass-card lift p-8 stagger-item hover:border-primary-500/40">
-              <div class="text-3xl mb-4" aria-hidden="true">{item.icon}</div>
-              <h3 class="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
-              <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {automatisations.map((item) => (
+            <div class="carte p-6 apparition">
+              <Icone nom={item.icone} taille={24} class="text-primary-500 mb-6" />
+              <h3 class="text-xl mb-3">{item.titre}</h3>
+              <p class="text-encre-2 text-[15px] leading-relaxed">{item.texte}</p>
             </div>
           ))}
         </div>
 
-        <div class="glass-card p-8 border-2 border-primary-500/30 reveal-scale">
-          <div class="flex flex-col md:flex-row md:items-center gap-6">
-            <div class="flex-1">
-              <div class="inline-block px-3 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold mb-3">
-                3 paliers de prix
-              </div>
-              <h3 class="text-2xl font-bold text-slate-800 mb-2">
-                À partir de <span class="text-gradient">100€ / automatisation</span>
-              </h3>
-              <p class="text-slate-500">
-                Basique à 100€, standard à 250€, sur-mesure avec IA à partir de 500€. Workflow livré clé en main, testé et documenté.
-              </p>
-            </div>
-            <a href="/automatisations" class="btn-primary shrink-0 inline-block text-center">
-              Voir la démo<span aria-hidden="true"> →</span>
-            </a>
+        <div class="carte-creme p-6 md:p-8 apparition flex flex-col md:flex-row md:items-center gap-6">
+          <div class="flex-1">
+            <p class="chiffre text-2xl mb-2">à partir de 100 € l'automatisation</p>
+            <p class="text-encre-2">
+              Simple : 100 €. Standard : 250 €. Avec intelligence artificielle : à partir de 500 €. Livrée testée et documentée.
+            </p>
           </div>
+          <a href="/automatisations" class="btn-secondary shrink-0">Voir des exemples</a>
         </div>
       </div>
     </section>
 
-    <!-- Création de site — Simulateur interactif -->
-    <section class="section bg-slate-50">
+    <!-- Sites -->
+    <section class="section bg-creme border-y border-ligne" id="sites">
       <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12 text-center">
-          <h2 class="section-title">Sites & présence en ligne</h2>
-          <p class="section-subtitle">Composez votre site, le prix se calcule en direct</p>
-          <p class="text-slate-600 text-lg max-w-2xl mx-auto mt-4">
-            <strong class="text-primary-500">Mise en service 490 €</strong>, puis abonnement mensuel. Cochez les options dont vous avez besoin et voyez le total en temps réel.
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Sites pour artisans et commerces</p>
+          <h2 class="section-title">Composez votre site, le prix se calcule</h2>
+          <p class="text-lg text-encre-2">
+            <span class="chiffre">490 €</span> de mise en service, puis un abonnement mensuel. Cochez les options dont vous avez besoin.
           </p>
         </div>
 
-        <PricingSimulator client:visible />
-
-        <div class="text-center mt-12 reveal-fade-up">
-          <p class="text-slate-500 mb-4">Besoin d'un développement sur-mesure plutôt que d'un site ? Le sur-mesure démarre à <strong class="text-primary-500">1 500 €</strong> — <a href="/contact" class="text-primary-500 hover:underline">décrivez-moi votre besoin</a>.</p>
+        <div id="simulateur" class="scroll-mt-24">
+          <PricingSimulator client:visible />
         </div>
+
+        <p class="text-encre-2 mt-12 apparition">
+          Vous avez besoin d'une application plutôt que d'un site ? Un développement spécifique démarre à <span class="chiffre">1 500 €</span>.
+          <a href="/contact" class="lien">Décrivez-moi votre besoin</a>.
+        </p>
       </div>
     </section>
 
-    <!-- Maintenance plans -->
-    <section class="section bg-white">
+    <!-- Formules de suivi -->
+    <section class="section">
       <div class="max-w-6xl mx-auto">
-        <div class="reveal-fade-up mb-12">
-          <h2 class="section-title text-center">Formules de suivi mensuel</h2>
-          <p class="section-subtitle text-center">Engagement 12 mois — premier mois offert</p>
-          <p class="text-slate-600 text-sm text-center -mt-8 mb-12">Sans engagement possible, +20 €/mois.</p>
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Suivi mensuel</p>
+          <h2 class="section-title">Trois formules pour un site tenu à jour</h2>
+          <p class="text-lg text-encre-2">Engagement de 12 mois, premier mois offert. Sans engagement : 20 € de plus par mois.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          <!-- Pack Présence -->
-          <div class="glass-card p-8 stagger-item flex flex-col">
-            <div class="mb-6">
-              <h3 class="text-xl font-bold text-slate-800 mb-2">Pack Présence</h3>
-              <div class="flex items-end gap-1 mb-3">
-                <span class="text-4xl font-bold text-gradient">79€</span>
-                <span class="text-slate-500 mb-1">/mois</span>
-              </div>
-              <p class="text-slate-500 text-sm">Votre site en ligne et votre fiche Google tenue à jour</p>
+          {formules.map((formule) => (
+            <div class={`carte p-6 md:p-8 apparition flex flex-col ${formule.recommandee ? 'border-primary-500 border-2' : ''}`}>
+              {formule.recommandee && <p class="etiquette mb-4">Recommandée</p>}
+              <h3 class="text-2xl mb-2">{formule.nom}</h3>
+              <p class="mb-3"><span class="chiffre text-3xl">{formule.prix}</span> <span class="text-encre-3">par mois</span></p>
+              <p class="text-encre-2 mb-6">{formule.resume}</p>
+              <ul class="space-y-3 flex-grow mb-8">
+                {formule.inclus.map((item) => (
+                  <li class="flex items-start gap-3 text-encre-2 text-[15px]">
+                    <Icone nom="check" class="text-primary-500 mt-0.5 shrink-0" />{item}
+                  </li>
+                ))}
+              </ul>
+              <a href={`/contact?subject=Formule%20${formule.nom}`} class={formule.recommandee ? 'btn-primary' : 'btn-secondary'}>
+                Choisir {formule.nom}
+              </a>
             </div>
-            <ul class="space-y-3 flex-grow mb-8">
-              {[
-                'Hébergement en France + nom de domaine inclus',
-                'Certificat de sécurité renouvelé automatiquement',
-                'Mises à jour de sécurité du serveur',
-                'Sauvegarde chaque nuit + copie chiffrée hors site',
-                'Surveillance toutes les 30 min : disponibilité, certificat, échéance du domaine',
-                'Panne détectée en moins de 30 minutes ✦',
-                'Fiche Google Business gérée',
-                'Support email sous 72h',
-              ].map((item) => (
-                <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">✓</span>{item}
-                </li>
-              ))}
-            </ul>
-            <a href="/contact" class="btn-secondary text-center block">Choisir<span class="sr-only"> le Pack Présence</span></a>
-          </div>
-
-          <!-- Pack Essentiel -->
-          <div class="glass-card p-8 border-2 border-primary-500/70 stagger-item flex flex-col relative shadow-lg shadow-primary-500/10">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold whitespace-nowrap">
-              Recommandé
-            </div>
-            <div class="mb-6">
-              <h3 class="text-xl font-bold text-slate-800 mb-2">Pack Essentiel</h3>
-              <div class="flex items-end gap-1 mb-3">
-                <span class="text-4xl font-bold text-gradient">149€</span>
-                <span class="text-slate-500 mb-1">/mois</span>
-              </div>
-              <p class="text-slate-500 text-sm">Tout ce qu'il faut pour être visible et gérer votre contenu</p>
-            </div>
-            <ul class="space-y-3 flex-grow mb-8">
-              {[
-                'Tout le Pack Présence +',
-                '1 modification de contenu/mois',
-                'Support email sous 48h',
-                'Rapport mensuel : disponibilité, incidents, interventions',
-              ].map((item) => (
-                <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">✓</span>{item}
-                </li>
-              ))}
-            </ul>
-            <a href="/contact" class="btn-primary text-center block">Choisir ce pack<span class="sr-only"> : Pack Essentiel</span></a>
-          </div>
-
-          <!-- Pack Croissance -->
-          <div class="glass-card p-8 stagger-item flex flex-col">
-            <div class="mb-6">
-              <h3 class="text-xl font-bold text-slate-800 mb-2">Pack Croissance</h3>
-              <div class="flex items-end gap-1 mb-3">
-                <span class="text-4xl font-bold text-gradient">299€</span>
-                <span class="text-slate-500 mb-1">/mois</span>
-              </div>
-              <p class="text-slate-500 text-sm">Pour développer votre clientèle sur le web activement</p>
-            </div>
-            <ul class="space-y-3 flex-grow mb-8">
-              {[
-                'Tout le Pack Essentiel +',
-                'Optimisation SEO mensuelle',
-                '1 article / actualité par mois',
-                '2h d\'évolutions incluses',
-                'Rapport de positionnement Search Console',
-                'Support prioritaire sous 24h',
-                'Appel mensuel de suivi (30 min)',
-              ].map((item) => (
-                <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 mt-0.5 shrink-0" aria-hidden="true">✓</span>{item}
-                </li>
-              ))}
-            </ul>
-            <a href="/contact" class="btn-secondary text-center block">Choisir<span class="sr-only"> le Pack Croissance</span></a>
-          </div>
+          ))}
         </div>
 
-        <!-- Google Business explication -->
-        <div class="mt-8 glass-card p-6 border border-primary-500/20 reveal-fade-up">
-          <div class="flex flex-col sm:flex-row gap-4 items-start">
-            <div class="text-3xl shrink-0" aria-hidden="true">📍</div>
-            <div>
-              <p class="font-semibold text-slate-800 mb-1">✦ Surveillance et alerte : ce que ça veut dire</p>
-              <p class="text-slate-500 text-sm leading-relaxed">
-                Votre site est interrogé automatiquement toutes les 30 minutes. Si une page cesse de répondre, si le certificat de sécurité approche de son expiration ou si le nom de domaine arrive à échéance, je reçois une notification sur mon téléphone — y compris le week-end.
-                Ce n'est donc ni vous ni votre client qui découvrez la panne.
-                L'état des sites que j'héberge est <a href="https://statut.guyboireau.com/perso/" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">public<span class="sr-only"> (nouvel onglet)</span></a> — <a href="/hebergement-exploitation" class="text-primary-500 hover:underline">détail de l'infrastructure</a>.
-              </p>
-            </div>
-          </div>
+        <div class="mt-8 bloc-technique p-6 md:p-8 apparition">
+          <p class="text-creme font-medium mb-3">Ce que veut dire « contrôle toutes les 30 minutes »</p>
+          <p class="text-creme-sourd leading-relaxed">
+            Un programme interroge votre site toutes les 30 minutes. Si une page ne répond plus, si le certificat approche de son expiration
+            ou si le nom de domaine arrive à échéance, je reçois une alerte sur mon téléphone, y compris le week-end.
+          </p>
+          <p class="text-creme-sourd leading-relaxed mt-3">
+            L'état des sites que j'héberge est
+            <a href="https://statut.guyboireau.com/perso/" target="_blank" rel="noopener noreferrer" class="text-creme underline underline-offset-4">public<span class="sr-only"> (nouvel onglet)</span></a>.
+            Le détail est sur la page <a href="/hebergement-exploitation" class="text-creme underline underline-offset-4">hébergement et suivi</a>.
+          </p>
         </div>
       </div>
     </section>
 
     <!-- Dépannage -->
-    <section class="section bg-slate-50">
-      <div class="max-w-4xl mx-auto">
-        <div class="glass-card p-10 reveal-fade-up">
-          <div class="flex flex-col md:flex-row gap-8 items-start">
-            <div class="text-5xl shrink-0" aria-hidden="true">🖥️</div>
-            <div>
-              <h2 class="text-2xl font-bold text-slate-800 mb-2">Dépannage informatique</h2>
-              <div class="flex items-end gap-1 mb-4">
-                <span class="text-3xl font-bold text-gradient">35€</span>
-                <span class="text-slate-500 mb-1">/heure</span>
-              </div>
-              <p class="text-slate-600 mb-4">
-                Dépannage à distance pour professionnels et particuliers. Virus, lenteur, problème de connexion, installation logiciel, récupération de données…
-              </p>
-              <ul class="space-y-2 mb-6">
-                {[
-                  'Prise en main à distance sécurisée',
-                  'Diagnostic gratuit avant intervention',
-                  'Facturation au temps réel',
-                  'Disponible en soirée et week-end',
-                ].map((item) => (
-                  <li class="flex items-start gap-2 text-slate-600 text-sm">
-                    <span class="text-primary-400 shrink-0" aria-hidden="true">✓</span>{item}
-                  </li>
-                ))}
-              </ul>
-              <a href="/contact" class="btn-primary inline-block">Demander un dépannage</a>
-            </div>
+    <section class="section bg-creme border-y border-ligne">
+      <div class="max-w-4xl mx-auto apparition">
+        <div class="flex flex-col md:flex-row gap-8">
+          <Icone nom="monitor" taille={32} class="text-primary-500 shrink-0" />
+          <div>
+            <h2 class="text-2xl md:text-3xl mb-2">Dépannage informatique</h2>
+            <p class="mb-4"><span class="chiffre text-3xl">35 €</span> <span class="text-encre-3">de l'heure</span></p>
+            <p class="text-encre-2 mb-6">
+              À distance, pour les professionnels et les particuliers. Virus, lenteur, connexion, installation d'un logiciel, récupération de données.
+            </p>
+            <ul class="space-y-3 mb-6">
+              {[
+                'Prise en main à distance, avec votre accord',
+                'Diagnostic gratuit avant intervention',
+                'Facturation au temps réellement passé',
+                'Disponible en soirée et le week-end',
+              ].map((item) => (
+                <li class="flex items-start gap-3 text-encre-2">
+                  <Icone nom="check" class="text-primary-500 mt-0.5 shrink-0" />{item}
+                </li>
+              ))}
+            </ul>
+            <a href="/contact?subject=Dépannage" class="btn-secondary">Demander un dépannage</a>
           </div>
         </div>
       </div>
     </section>
 
     <!-- FAQ -->
-    <section class="section bg-white">
+    <section class="section">
       <div class="max-w-3xl mx-auto">
-        <div class="reveal-fade-up">
-          <h2 class="section-title text-center">Questions fréquentes</h2>
-          <p class="section-subtitle text-center">Tout ce que vous voulez savoir</p>
+        <div class="apparition mb-8">
+          <h2 class="section-title">Questions fréquentes</h2>
         </div>
 
-        <div class="space-y-4">
+        <div class="divide-y divide-ligne border-y border-ligne">
           {faq.map((item) => (
-            <details class="glass-card p-6 group stagger-item cursor-pointer">
-              <summary class="text-slate-800 font-medium text-lg list-none flex items-center justify-between">
+            <details class="group py-4 apparition">
+              <summary class="text-encre font-medium text-lg list-none flex items-center justify-between gap-4 cursor-pointer">
                 {item.q}
-                <span class="text-primary-400 ml-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true">▾</span>
+                <Icone nom="chevron-down" class="text-primary-500 shrink-0 transition-transform group-open:rotate-180" />
               </summary>
-              <p class="text-slate-500 mt-4 leading-relaxed">{item.a}</p>
+              <p class="text-encre-2 mt-4 leading-relaxed">{item.a}</p>
             </details>
           ))}
         </div>
 
-        <div class="text-center mt-12 reveal-fade-up">
-          <h3 class="text-xl font-bold text-slate-800 mb-3">Encore des questions ?</h3>
-          <p class="text-slate-500 mb-6">Écrivez-moi directement, je réponds sous 24h.</p>
-          <a href="/contact" class="btn-primary inline-block">Me contacter</a>
+        <div class="mt-12 apparition">
+          <p class="text-encre-2 mb-6">Une autre question ? Écrivez-moi, je réponds sous 24 h.</p>
+          <a href="/contact" class="btn-primary">Me contacter</a>
         </div>
       </div>
     </section>

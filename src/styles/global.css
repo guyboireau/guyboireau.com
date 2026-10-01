@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
-/* ===== POLICE DE MARQUE — Cormorant Garamond (auto-hébergée, variable) ===== */
+/* Toutes les valeurs de ce fichier viennent de DESIGN.md. Une valeur qui n'y
+   figure pas s'y ajoute d'abord. */
+
+/* ===== POLICES (auto-hébergées, licence OFL) ===== */
 @font-face {
   font-family: 'Cormorant Garamond';
   src: url('/fonts/cormorant-garamond.woff2') format('woff2');
@@ -9,19 +12,25 @@
   font-display: swap;
 }
 
-/* ===== JETONS DE MARQUE « Atelier » ===== */
-:root {
-  --gb-terracotta: #a0493b;   /* encre du sceau — couleur primaire */
-  --gb-terracotta-soft: #b9604b;
-  --gb-cream: #f4ecdd;        /* ivoire / crème */
-  --gb-cream-2: #faf5ec;
-  --gb-forest: #25332b;       /* vert forêt — fonds sombres */
-  --gb-ink: #2c2723;          /* brun encre — texte */
-  --gb-serif: 'Cormorant Garamond', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ===== JETONS ===== */
 @theme {
-  /* Rampe primaire — terracotta du sceau gb */
+  /* Principale : terracotta du sceau gb */
   --color-primary-50: #faf3ef;
   --color-primary-100: #f4e2da;
   --color-primary-200: #e7c3b6;
@@ -31,119 +40,142 @@
   --color-primary-600: #8a3d31;
   --color-primary-700: #6f3026;
 
-  /* Police display exposée en utilitaire `font-display` */
+  /* Accent */
+  --color-foret: #25332b;
+
+  /* Neutres */
+  --color-papier: #faf5ec;
+  --color-creme: #f4ecdd;
+  --color-creme-sourd: #c9bfa8;
+  --color-ligne: #e0d3bd;
+  --color-encre: #2c2723;
+  --color-encre-2: #5a4f46;
+  --color-encre-3: #6e6258;
+
+  /* Polices */
   --font-display: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Un seul rayon d'arrondi : 4 px. Toutes les variantes y renvoient, pour
+     qu'aucune classe oubliée ne réintroduise un autre rayon. */
+  --radius-xs: 4px;
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-xl: 4px;
+  --radius-2xl: 4px;
+  --radius-3xl: 4px;
 }
 
 @layer base {
-  /* Pas de `scroll-behavior: smooth` ici : Lenis pilote le défilement.
-     Le repli natif est réactivé plus bas quand Lenis ne tourne pas. */
-  html:not(.lenis) {
+  html {
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-white text-slate-800 font-sans antialiased;
+    @apply bg-papier text-encre font-sans antialiased;
   }
 
   * {
-    @apply border-slate-200;
+    @apply border-ligne;
+  }
+
+  h1, h2, h3 {
+    @apply font-display text-encre;
+    font-weight: 600;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-600;
   }
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-white border border-slate-200 rounded-2xl shadow-sm;
+  /* Carte : bordure ligne, fond blanc cassé, pas d'ombre */
+  .carte {
+    @apply bg-papier border border-ligne rounded;
   }
 
-  /* Cartes cliquables uniquement — un bloc de texte ne se soulève pas */
-  .lift {
-    transition:
-      transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.26s ease,
-      border-color 0.26s ease;
-    will-change: transform;
+  .carte-creme {
+    @apply bg-creme border border-ligne rounded;
   }
 
-  .lift:hover {
-    transform: translateY(-5px);
-    @apply shadow-lg shadow-slate-900/5;
+  /* Carte cliquable : seule la bordure réagit */
+  .carte-lien {
+    transition: border-color 150ms ease;
   }
 
-  /* Souligné qui se dessine de la gauche vers la droite */
-  .link-underline {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-position: 0 100%;
-    background-repeat: no-repeat;
-    background-size: 0% 1px;
-    transition: background-size 0.26s cubic-bezier(0.22, 1, 0.36, 1);
-    padding-bottom: 2px;
+  .carte-lien:hover {
+    @apply border-primary-500;
   }
 
-  .link-underline:hover,
-  .link-underline:focus-visible {
-    background-size: 100% 1px;
+  .lien {
+    @apply text-primary-700 underline decoration-1 underline-offset-4;
+    transition: color 150ms ease;
+  }
+
+  .lien:hover {
+    @apply text-primary-500;
   }
 
   .btn-primary {
-    @apply px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium rounded-lg hover:from-primary-600 hover:to-primary-700 shadow-lg shadow-primary-500/20 hover:shadow-primary-500/40;
-    transition:
-      transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.24s ease,
-      background-color 0.24s ease;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-500 text-white font-medium rounded;
+    transition: background-color 150ms ease;
   }
 
   .btn-primary:hover {
-    transform: translateY(-2px);
-  }
-
-  .btn-primary:active {
-    transform: translateY(0);
+    @apply bg-primary-600;
   }
 
   .btn-secondary {
-    @apply px-6 py-3 border-2 border-primary-500 text-primary-600 font-medium rounded-lg hover:bg-primary-500/10;
-    transition:
-      transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-      background-color 0.24s ease,
-      border-color 0.24s ease;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 border border-primary-500 text-primary-700 font-medium rounded;
+    transition: background-color 150ms ease;
   }
 
   .btn-secondary:hover {
-    transform: translateY(-2px);
+    @apply bg-creme;
   }
 
+  .btn-primary:active,
   .btn-secondary:active {
-    transform: translateY(0);
+    transform: translateY(1px);
   }
 
   .section {
-    @apply py-20 px-4 sm:px-6 lg:px-8;
+    @apply py-16 md:py-24 px-4 sm:px-6 lg:px-8;
   }
 
   .section-title {
-    font-family: var(--gb-serif);
-    @apply text-5xl md:text-6xl font-semibold mb-4 bg-gradient-to-r from-[#8a3d31] to-[#2c2723] bg-clip-text text-transparent;
+    @apply font-display text-3xl md:text-4xl mb-4 text-encre;
   }
 
   .section-subtitle {
-    @apply text-lg text-slate-500 mb-12;
+    @apply text-lg text-encre-2 mb-12;
   }
 
-  .animated-gradient {
-    background: linear-gradient(135deg, #f6efe2 0%, #ffffff 50%, #f6efe2 100%);
-    background-size: 200% 200%;
-    animation: gradientShift 15s ease infinite;
+  /* Étiquette en chasse fixe, au-dessus d'un titre ou dans un bloc technique */
+  .etiquette {
+    @apply font-mono text-[13px] font-medium uppercase tracking-wider text-primary-700;
+  }
+
+  /* Bloc factuel (direction C) : fond forêt, chasse fixe */
+  .bloc-technique {
+    @apply bg-foret text-creme rounded font-mono text-sm leading-relaxed;
+  }
+
+  /* Prix et chiffres */
+  .chiffre {
+    @apply font-mono font-medium text-primary-700;
   }
 
   /* Pages légales (PageLegale.astro) : texte long, lisible, liens soulignés.
      scroll-margin : les ancres (#mediation…) ne passent pas sous l'en-tête fixe. */
   .texte-legal {
-    @apply text-slate-700 leading-relaxed;
+    @apply text-encre leading-relaxed;
   }
 
   .texte-legal h2 {
-    @apply text-2xl font-bold text-primary-600 mt-10 mb-4 pt-8 border-t border-slate-200;
+    @apply text-2xl text-primary-700 mt-10 mb-4 pt-8 border-t border-ligne;
     scroll-margin-top: 6rem;
   }
 
@@ -152,7 +184,7 @@
   }
 
   .texte-legal h3 {
-    @apply text-lg font-semibold text-slate-800 mt-8 mb-3;
+    @apply text-xl text-encre mt-8 mb-3;
     scroll-margin-top: 6rem;
   }
 
@@ -180,7 +212,7 @@
   }
 
   .texte-legal dt {
-    @apply font-semibold text-slate-800;
+    @apply font-semibold text-encre;
   }
 
   .texte-legal dd {
@@ -188,7 +220,7 @@
   }
 
   .texte-legal code {
-    @apply text-sm bg-slate-100 text-slate-800 px-1 py-0.5 rounded;
+    @apply font-mono text-sm bg-creme text-encre px-1 py-0.5 rounded;
   }
 
   .texte-legal .a-completer {
@@ -196,291 +228,49 @@
   }
 }
 
-@layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-primary-500 to-primary-600 bg-clip-text text-transparent;
-  }
+/* ===== MOUVEMENT : apparition douce, la seule animation au défilement ===== */
 
-  .glow-effect {
-    text-shadow: 0 0 30px rgba(160, 73, 59, 0.22);
-  }
-}
-
-/* ===== KEYFRAMES ===== */
-
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-/* ===== SCROLL REVEAL ===== */
-
-.reveal-fade-up {
+.apparition {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal-fade-up.revealed { opacity: 1; transform: translateY(0); }
-
-.reveal-fade-left {
-  opacity: 0;
-  transform: translateX(-28px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal-fade-left.revealed { opacity: 1; transform: translateX(0); }
-
-.reveal-fade-right {
-  opacity: 0;
-  transform: translateX(28px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal-fade-right.revealed { opacity: 1; transform: translateX(0); }
-
-.reveal-scale {
-  opacity: 0;
-  transform: scale(0.94);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal-scale.revealed { opacity: 1; transform: scale(1); }
-
-.stagger-item {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.stagger-item.revealed { opacity: 1; transform: translateY(0); }
-
-/* ===== HERO ENTRANCE ===== */
-
-@keyframes heroSlideUp {
-  from { opacity: 0; transform: translateY(60px); }
-  to { opacity: 1; transform: translateY(0); }
+  transform: translateY(8px);
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
 }
 
-.hero-animate {
-  animation: heroSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  opacity: 0;
-}
-.hero-animate-delay-1 { animation-delay: 0.2s; }
-.hero-animate-delay-2 { animation-delay: 0.4s; }
-.hero-animate-delay-3 { animation-delay: 0.6s; }
-.hero-animate-delay-4 { animation-delay: 0.8s; }
-
-/* ===== PARTICLES ===== */
-
-@keyframes particleFloat {
-  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 0.5; }
-  90% { opacity: 0.5; }
-  100% { transform: translateY(-100vh) translateX(50px) rotate(360deg); opacity: 0; }
-}
-
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: rgba(160, 73, 59, 0.32);
-  border-radius: 50%;
-  pointer-events: none;
-  animation: particleFloat linear infinite;
-}
-
-/* ===== PULSE GLOW ===== */
-
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(160, 73, 59, 0.18); }
-  50% { box-shadow: 0 0 40px rgba(160, 73, 59, 0.38); }
-}
-.pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
-
-/* ===== HOVER TILT ===== */
-
-.hover-tilt { transition: transform 0.3s ease; }
-.hover-tilt:hover { transform: perspective(800px) rotateX(2deg) rotateY(-2deg) scale(1.02); }
-
-/* ===== TRUST MARQUEE ===== */
-
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.trust-marquee {
-  animation: marquee 25s linear infinite;
-  width: max-content;
-}
-
-/* Bouton pause/lecture (WCAG 2.2.2) : caché tant que le script ne l'a pas activé. */
-.trust-marquee.is-paused {
-  animation-play-state: paused;
-}
-
-/* ===== PROJETS — DÉFILEMENT HORIZONTAL (desktop, activé par JS) ===== */
-
-/* Par défaut — et sans JavaScript — la liste reste verticale. */
-.projects-scroller.is-horizontal .projects-viewport {
-  position: sticky;
-  top: 4rem;
-  height: calc(100vh - 4rem);
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
-
-.projects-scroller.is-horizontal .projects-track {
-  display: flex;
-  align-items: stretch;
-  gap: 2rem;
-  padding-inline: 1rem;
-  will-change: transform;
-}
-
-.projects-scroller.is-horizontal .projects-track > * {
-  flex: 0 0 min(68vw, 860px);
-  margin-top: 0 !important;
-  max-height: calc(100vh - 8rem);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-
-/* ===== CURSEUR PERSONNALISÉ (souris fine, activé par JS) ===== */
-
-.custom-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 26px;
-  height: 26px;
-  margin: -13px 0 0 -13px;
-  border: 1.5px solid rgba(160, 73, 59, 0.55);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0;
-  transition:
-    opacity 0.2s ease,
-    width 0.22s cubic-bezier(0.22, 1, 0.36, 1),
-    height 0.22s cubic-bezier(0.22, 1, 0.36, 1),
-    margin 0.22s cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 0.22s ease;
-  will-change: transform;
-}
-
-.custom-cursor.is-visible {
+.apparition.visible {
   opacity: 1;
+  transform: none;
 }
 
-.custom-cursor.is-hovering {
-  width: 46px;
-  height: 46px;
-  margin: -23px 0 0 -23px;
-  background-color: rgba(160, 73, 59, 0.08);
-}
-
-/* ===== LENIS — DÉFILEMENT FLUIDE ===== */
-
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-/* ===== SANS JAVASCRIPT (TD-008) =====
-   Le contenu s'affiche en position finale quand les scripts sont coupés.
-   Règle ici plutôt que dans un <noscript><style> : un style en ligne n'a pas
-   d'empreinte dans la CSP du site et serait bloqué par le navigateur. */
-
+/* Sans JavaScript, le contenu s'affiche à sa place. Règle ici plutôt que dans
+   un <noscript><style> : un style en ligne n'a pas d'empreinte dans la CSP. */
 @media (scripting: none) {
-  .reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-scale, .stagger-item, .hero-animate {
-    opacity: 1 !important;
-    transform: none !important;
-    animation: none !important;
-    transition: none !important;
-  }
-
-  /* Sans script, pas de bouton pause : le bandeau ne défile pas. */
-  .trust-marquee {
-    animation: none !important;
-    width: auto;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .trust-marquee [data-doublon] {
-    display: none;
+  .apparition {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
-
-/* ===== REDUCED MOTION ===== */
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-scale, .stagger-item {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
-  .hero-animate {
-    animation: none !important;
-    opacity: 1 !important;
-  }
-  .particle { display: none !important; }
-  html.lenis { scroll-behavior: auto; }
-
-  /* Animations infinies : arrêtées. Le bandeau de confiance ne défile plus et
-     s'affiche en entier, sans ses doublons ni son bouton pause devenu inutile. */
-  .trust-marquee {
-    animation: none !important;
-    width: auto;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .trust-marquee [data-doublon],
-  .marquee-toggle {
-    display: none !important;
-  }
-  .animated-gradient,
-  .animate-float,
-  .pulse-glow,
-  .animate-pulse,
-  .animate-bounce,
-  .animate-ping,
-  .animate-spin {
-    animation: none !important;
-  }
-  .hover-tilt:hover {
-    transform: none !important;
+  html {
+    scroll-behavior: auto;
   }
 
-  .btn-primary:hover,
-  .btn-secondary:hover,
-  .lift:hover {
-    transform: none !important;
+  .apparition {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
-  .link-underline {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
     transition: none !important;
   }
 
-  .custom-cursor {
-    display: none !important;
+  .btn-primary:active,
+  .btn-secondary:active {
+    transform: none;
   }
 }

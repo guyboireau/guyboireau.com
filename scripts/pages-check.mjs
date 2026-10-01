@@ -137,13 +137,14 @@ exiger('404.html', [/<meta name="robots" content="noindex/]);
 if (existsSync(join(RACINE, '404.html')) && /rel="canonical"/.test(lire('404.html'))) signaler('/404.html', 'URL canonique sur une page noindex');
 
 for (const page of ['index.html', 'services/index.html', 'automatisations/index.html', 'facturation-electronique/index.html', 'hebergement-exploitation/index.html', 'traitement-documentaire/index.html']) {
-  exiger(page, ['Prix nets — TVA non applicable, art. 293 B du CGI', 'href="/cgv"']);
+  exiger(page, ['Prix nets. TVA non applicable, art. 293 B du CGI', 'href="/cgv"']);
 }
 
+// Le bandeau défilant (et son bouton pause) a été retiré le 2026-10-01 : plus
+// aucune animation en boucle sur l'accueil (DESIGN.md, « Mouvement »).
 exiger('index.html', [
-  'id="trust-marquee-toggle"', /data-doublon[^>]*aria-hidden="true"|aria-hidden="true"[^>]*data-doublon/,
   "assistant d'intelligence artificielle (Gemini, de Google), pas avec Guy", 'Assistant IA',
-], ['En ligne', 'Mon assistant répond en direct']);
+], ['En ligne', 'Mon assistant répond en direct', 'trust-marquee', '10+ projets']);
 
 exiger('contact/index.html', ['3 ans à compter de votre message', 'champ obligatoire', 'href="/confidentialite#formulaire-contact"']);
 exiger('a-propos/index.html', ['Mastère Expert en développement Web'], [/Master 2/]);

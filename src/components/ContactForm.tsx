@@ -7,10 +7,10 @@ const PROJECT_TYPES: Array<{ value: string; label: string }> = [
   { value: 'traitement-documentaire', label: 'Traitement documentaire' },
   { value: 'facturation-electronique', label: 'Facturation électronique' },
   { value: 'diagnostic', label: 'Diagnostic' },
-  { value: 'site-vitrine', label: 'Interface publique / site' },
+  { value: 'site-vitrine', label: 'Site web' },
   { value: 'app-mobile', label: 'Application mobile' },
-  { value: 'maintenance', label: 'Maintenance / évolution' },
-  { value: 'automatisation', label: 'Automatisation IA' },
+  { value: 'maintenance', label: 'Suivi ou évolution' },
+  { value: 'automatisation', label: 'Automatisation' },
   { value: 'depannage', label: 'Dépannage informatique' },
   { value: 'autre', label: 'Autre' },
 ]
@@ -95,12 +95,12 @@ export default function ContactForm({ defaultType = '' }: Props) {
     }
   }
 
-  // Bordure slate-500 : 4,8:1 sur blanc. Le contour d'un champ doit se voir
-  // (contraste non textuel ≥ 3:1) ; slate-300 n'en donnait que 1,5:1.
+  // Bordure encre-3 : 5,4:1 sur le fond papier. Le contour d'un champ doit se voir
+  // (contraste non textuel ≥ 3:1) ; l'ancien slate-300 n'en donnait que 1,5:1.
   const inputClass =
-    'w-full px-4 py-3 bg-white border border-slate-500 rounded-lg text-slate-800 placeholder:text-slate-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all'
+    'w-full px-4 py-3 bg-papier border border-encre-3 rounded text-encre placeholder:text-encre-3 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all'
   const erreurClass = 'border-red-700 focus:border-red-700 focus:ring-red-700/20'
-  const labelClass = 'block text-slate-700 mb-2 font-medium text-sm'
+  const labelClass = 'block text-encre-2 mb-2 font-medium text-sm'
 
   /** Relie un champ à son message d'erreur, quand il y en a un. */
   const aria = (champ: Champ) =>
@@ -111,17 +111,17 @@ export default function ContactForm({ defaultType = '' }: Props) {
   const hasFieldErrors = Object.keys(fieldErrors).length > 0
 
   return (
-    <div className="glass-card p-8">
+    <div className="carte p-8">
       {/* Zone annoncée par les lecteurs d'écran : présente dès le départ,
           pour que l'arrivée du message soit bien lue. */}
       <div role="status" aria-live="polite" aria-atomic="true">
         {submitStatus === 'success' && (
-          <p className="mb-6 p-4 bg-green-50 border border-green-700 rounded-lg text-green-800">
+          <p className="mb-6 p-4 bg-green-50 border border-green-700 rounded text-green-800">
             Message envoyé ! Je vous répondrai sous 24h.
           </p>
         )}
         {submitStatus === 'error' && (
-          <p className="mb-6 p-4 bg-red-50 border border-red-700 rounded-lg text-red-800">
+          <p className="mb-6 p-4 bg-red-50 border border-red-700 rounded text-red-800">
             Erreur lors de l'envoi.{hasFieldErrors ? ' Vérifiez les champs signalés.' : ''} Réessayez ou
             écrivez-moi directement à{' '}
             <a href="mailto:me@guyboireau.com" className="underline">
@@ -133,7 +133,7 @@ export default function ContactForm({ defaultType = '' }: Props) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-encre-2">
           <span aria-hidden="true">*</span> champ obligatoire
         </p>
 
@@ -219,7 +219,7 @@ export default function ContactForm({ defaultType = '' }: Props) {
             maxLength={5000}
             rows={5}
             className={`${inputClass} resize-none ${fieldErrors.message ? erreurClass : ''}`}
-            placeholder="Décrivez votre projet..."
+            placeholder="Votre activité, ce qui vous fait perdre du temps, votre délai…"
             {...aria('message')}
           />
           {fieldErrors.message && (
@@ -232,12 +232,12 @@ export default function ContactForm({ defaultType = '' }: Props) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full px-6 py-3 bg-primary-500 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
+          className="w-full px-6 py-3 bg-primary-500 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded transition-colors"
         >
-          {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
+          {isSubmitting ? 'Envoi en cours…' : 'Envoyer le message'}
         </button>
 
-        <p className="text-xs leading-relaxed text-slate-600">
+        <p className="text-xs leading-relaxed text-encre-2">
           Vos données servent uniquement à répondre à votre demande et, le cas échéant, à établir un devis.
           Destinataire : Guy Boireau EI. Conservation : 3 ans à compter de votre message. Vous pouvez y accéder, les
           faire rectifier ou effacer, en limiter l'usage ou les récupérer en écrivant à me@guyboireau.com.{' '}

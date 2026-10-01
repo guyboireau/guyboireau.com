@@ -192,7 +192,7 @@ describe('ContactForm', () => {
       render(<ContactForm />)
       const libelle = screen.getByText(/^Nom/).closest('label')!
       expect(libelle.className).not.toMatch(/text-slate-300/)
-      expect(libelle.className).toMatch(/text-slate-700/)
+      expect(libelle.className).toMatch(/text-encre-2/)
     })
   })
 

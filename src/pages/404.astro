@@ -13,20 +13,19 @@ const description = "Cette page n'existe pas ou a été déplacée."
 <BaseLayout {title} {description} noindex>
   <Header />
   <main id="contenu" tabindex="-1" class="focus:outline-none">
-    <section class="section bg-slate-50 pt-32 min-h-screen">
-      <div class="max-w-3xl mx-auto text-center">
-        <p class="text-7xl md:text-8xl font-bold text-gradient mb-4">404</p>
-        <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Page introuvable</h1>
-        <p class="text-slate-600 leading-relaxed mb-10">
-          Cette page n'existe pas, ou elle a été déplacée. Si vous êtes arrivé ici depuis un lien
-          de ce site, <a href="/contact" class="text-primary-700 underline underline-offset-2 hover:text-primary-600">dites-le moi</a> —
-          je le corrigerai.
+    <section class="bg-creme pt-28 pb-24 md:pt-36 px-4 sm:px-6 lg:px-8 min-h-[70vh]">
+      <div class="max-w-3xl mx-auto">
+        <p class="etiquette mb-6">Erreur 404</p>
+        <h1 class="text-4xl md:text-6xl mb-6">Cette page n'existe pas</h1>
+        <p class="text-encre-2 leading-relaxed mb-10">
+          Elle a peut-être été déplacée. Si vous êtes arrivé ici par un lien de ce site,
+          <a href="/contact" class="lien">dites-le-moi</a> et je le corrigerai.
         </p>
 
-        <div class="flex flex-wrap gap-3 justify-center">
-          <a href="/" class="btn-primary inline-block">Retour à l'accueil</a>
-          <a href="/projets" class="btn-secondary inline-block">Voir les projets</a>
-          <a href="/services" class="btn-secondary inline-block">Les services</a>
+        <div class="flex flex-wrap gap-4">
+          <a href="/" class="btn-primary">Retour à l'accueil</a>
+          <a href="/projets" class="btn-secondary">Les projets</a>
+          <a href="/services" class="btn-secondary">Les services</a>
         </div>
       </div>
     </section>

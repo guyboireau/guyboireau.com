@@ -71,7 +71,7 @@ const jsonLd = [
     '@type': 'Person',
     '@id': 'https://guyboireau.com/#person',
     name: 'Guy Boireau',
-    jobTitle: 'Développeur indépendant — applications métier & automatisation',
+    jobTitle: 'Développeur indépendant, applications métier et automatisation',
     url: 'https://guyboireau.com',
     email: 'me@guyboireau.com',
     telephone: '+33675751439',
@@ -84,7 +84,7 @@ const jsonLd = [
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
     '@id': 'https://guyboireau.com/#business',
-    name: 'Guy Boireau — Applications métier & automatisation · Bordeaux',
+    name: 'Guy Boireau, applications métier et automatisation, Bordeaux',
     legalName: 'Guy Boireau EI',
     alternateName: 'Guy Boireau Développeur Indépendant',
     url: 'https://guyboireau.com',
@@ -146,14 +146,14 @@ const jsonLd = [
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content="Guy Boireau — Applications métier & automatisation" />
+    <meta property="og:site_name" content="Guy Boireau, développeur indépendant" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:image" content={ogImageAbsolute} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Guy Boireau — Applications métier & automatisation · Bordeaux" />
+    <meta property="og:image:alt" content="Sceau gb et nom de Guy Boireau, développeur indépendant à Bordeaux" />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -161,7 +161,7 @@ const jsonLd = [
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageAbsolute} />
 
-    <!-- Favicons — sceau gb -->
+    <!-- Favicons : sceau gb -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
@@ -172,6 +172,13 @@ const jsonLd = [
     <link
       rel="preload"
       href="/fonts/cormorant-garamond.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-mono-latin-500-normal.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -189,7 +196,7 @@ const jsonLd = [
   <body>
     <a
       href="#contenu"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:font-medium focus:text-primary-700 focus:shadow-lg focus:outline-2 focus:outline-primary-600"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded focus:bg-papier focus:px-4 focus:py-2 focus:font-medium focus:text-primary-700 focus:outline-2 focus:outline-primary-600"
     >
       Aller au contenu
     </a>
@@ -197,79 +204,6 @@ const jsonLd = [
 
     {/* Umami : voir la note en tête de fichier. */}
     <script is:inline defer src="https://stats.guyboireau.com/stats.js" data-website-id="533f0180-52f1-43b3-971d-8ce5521fceb8"></script>
-
-    <!-- Défilement fluide (Lenis) — chargé dynamiquement, jamais en mouvement réduit -->
-    <script>
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
-
-      const startLenis = async () => {
-        if (prefersReducedMotion.matches) return
-        const { default: Lenis } = await import('lenis')
-        const lenis = new Lenis({
-          duration: 1.05,
-          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        })
-
-        const raf = (time: number) => {
-          lenis.raf(time)
-          requestAnimationFrame(raf)
-        }
-        requestAnimationFrame(raf)
-
-        // Coupe le défilement fluide si l'utilisateur active le mouvement réduit en cours de session
-        prefersReducedMotion.addEventListener('change', (event) => {
-          if (event.matches) lenis.destroy()
-        })
-      }
-
-      startLenis()
-    </script>
-
-    <!-- Curseur personnalisé — souris fine uniquement, jamais au tactile -->
-    <script>
-      const finePointer = window.matchMedia('(pointer: fine)')
-      const cursorReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
-
-      if (finePointer.matches && !cursorReducedMotion.matches) {
-        const cursor = document.createElement('div')
-        cursor.className = 'custom-cursor'
-        cursor.setAttribute('aria-hidden', 'true')
-        document.body.appendChild(cursor)
-
-        const INTERACTIVE = 'a, button, summary, input, select, textarea, label, [role="button"]'
-        let pending = false
-        let x = 0
-        let y = 0
-
-        const place = () => {
-          pending = false
-          cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`
-        }
-
-        document.addEventListener(
-          'pointermove',
-          (event) => {
-            if (event.pointerType !== 'mouse') return
-            x = event.clientX
-            y = event.clientY
-            cursor.classList.add('is-visible')
-            if (!pending) {
-              pending = true
-              requestAnimationFrame(place)
-            }
-          },
-          { passive: true }
-        )
-
-        document.addEventListener('pointerover', (event) => {
-          const target = event.target as Element | null
-          cursor.classList.toggle('is-hovering', Boolean(target?.closest(INTERACTIVE)))
-        })
-
-        document.addEventListener('pointerleave', () => cursor.classList.remove('is-visible'))
-        window.addEventListener('blur', () => cursor.classList.remove('is-visible'))
-      }
-    </script>
 
     <!-- Années d'expérience : le HTML porte la valeur du build, le navigateur la recalcule -->
     <script>
@@ -281,61 +215,31 @@ const jsonLd = [
       })
     </script>
 
-    <!-- Scroll Reveal -->
+    <!-- Apparition douce (DESIGN.md, « Mouvement ») : une fois, au premier passage
+         dans l'écran. Sans IntersectionObserver ou en mouvement réduit, le
+         contenu reste simplement à sa place (règles CSS de .apparition). -->
     <script>
-      const SELECTOR = '.reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-scale, .stagger-item'
-
-      // Filet de sécurité : sans IntersectionObserver, tout s'affiche en position finale
-      // plutôt que de rester invisible (le contenu est déjà dans le HTML rendu).
-      if (!('IntersectionObserver' in window)) {
-        document.querySelectorAll(SELECTOR).forEach((el) => el.classList.add('revealed'))
+      const marquer = () => {
+        const elements = document.querySelectorAll('.apparition:not(.visible)')
+        if (!('IntersectionObserver' in window)) {
+          elements.forEach((el) => el.classList.add('visible'))
+          return
+        }
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return
+              entry.target.classList.add('visible')
+              observer.unobserve(entry.target)
+            })
+          },
+          { threshold: 0.05 }
+        )
+        elements.forEach((el) => observer.observe(el))
       }
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('revealed')
-            }
-          })
-        },
-        { threshold: 0.05, rootMargin: '0px 0px -30px 0px' }
-      )
-
-      // Décalage progressif entre les éléments d'une même grille (60 à 100 ms)
-      const STAGGER_MS = 70
-      const STAGGER_MAX = 6
-
-      const applyStagger = () => {
-        const groups = new Map<Element, Element[]>()
-
-        document.querySelectorAll('.stagger-item').forEach((el) => {
-          const parent = el.parentElement
-          if (!parent) return
-          const siblings = groups.get(parent) ?? []
-          siblings.push(el)
-          groups.set(parent, siblings)
-        })
-
-        groups.forEach((siblings) => {
-          if (siblings.length < 2) return
-          siblings.forEach((el, index) => {
-            const delay = Math.min(index, STAGGER_MAX) * STAGGER_MS
-            ;(el as HTMLElement).style.transitionDelay = `${delay}ms`
-          })
-        })
-      }
-
-      const observe = () => {
-        applyStagger()
-        document.querySelectorAll(SELECTOR).forEach((el) => observer.observe(el))
-      }
-
-      // Scan initial
-      observe()
-      // Rescan après hydration des islands Astro
-      document.addEventListener('astro:page-load', observe)
-      window.addEventListener('astro:load', observe)
+      marquer()
+      document.addEventListener('astro:page-load', marquer)
     </script>
   </body>
 </html>

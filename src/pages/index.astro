@@ -5,7 +5,8 @@ import Hero from '../components/Hero.astro'
 import Footer from '../components/Footer.astro'
 import ChatBot from '../components/ChatBot.tsx'
 import MentionPrix from '../components/MentionPrix.astro'
-import { anneesExperience } from '../data/experience'
+import Icone from '../components/Icone.astro'
+import { AVIS } from '../data/avis'
 import { Image } from 'astro:assets'
 import lalucarneDesktop from '../assets/lalucarne-desktop.png'
 import lalucarneMobile from '../assets/lalucarne-mobile.png'
@@ -13,111 +14,117 @@ import niidoAdmin from '../assets/niido-admin.png'
 import niidoMobile from '../assets/niido-mobile.png'
 import arnaultDesktop from '../assets/arnault-desktop.webp'
 
-const title = 'Guy Boireau — Applications métier & automatisation | Développeur freelance Bordeaux'
+const title = 'Guy Boireau, développeur indépendant à Bordeaux : applications métier et sites'
 const description =
-  'Guy Boireau, développeur web freelance à Bordeaux. Applications métier, automatisation de processus et sites web sur-mesure. Suivi mensuel dès 79€/mois. Devis gratuit.'
+  'Je développe des applications métier, des automatisations et des sites pour les PME et les artisans, puis je les héberge en France. Réponse sous 24 h.'
 
 const services = [
   {
-    icon: '⚙️',
-    title: 'Applications métier & automatisation',
+    icone: 'app-window',
+    title: 'Applications métier et automatisation',
     description:
-      "Suivi de commandes atelier, fiches de contrôle, planning d'interventions : l'outil qui manque entre votre ERP et vos tableurs. Et les tâches que vos équipes refont chaque semaine, supprimées.",
+      "Suivi de commandes, fiches de contrôle, planning d'interventions. L'outil qui manque entre votre ERP et vos tableurs, et les tâches répétitives en moins.",
     link: '/services',
   },
   {
-    icon: '📄',
-    title: 'Traitement documentaire automatisé',
+    icone: 'file-text',
+    title: 'Traitement de documents',
     description:
-      'Bons de livraison, certificats matière, fiches techniques, factures : lus, contrôlés et classés sans ressaisie.',
+      'Bons de livraison, certificats matière, factures. Lus, contrôlés et classés sans ressaisie.',
     link: '/traitement-documentaire',
   },
   {
-    icon: '🌐',
-    title: 'Sites & présence en ligne',
+    icone: 'globe',
+    title: 'Sites pour artisans et commerces',
     description:
-      'Une interface publique rapide, bien référencée sur Google, que vous mettez à jour vous-même. Pour les artisans et commerces locaux.',
-    link: '/services',
+      'Un site rapide, trouvé sur Google, que vous mettez à jour vous-même. Avec un suivi mensuel.',
+    link: '/services#sites',
   },
   {
-    icon: '🔧',
-    title: 'Hébergement & exploitation',
+    icone: 'server',
+    title: 'Hébergement et suivi',
     description:
-      "Votre application hébergée en France, contrôlée toutes les 30 minutes, sauvegardée chaque nuit — par la personne qui l'a écrite. À partir de 79€/mois.",
+      "Votre application hébergée en France, surveillée et sauvegardée par la personne qui l'a écrite.",
     link: '/hebergement-exploitation',
   },
+] as const
+
+const situations = [
+  "Votre site a plusieurs années, ou vous n'en avez pas.",
+  'Vos clients ne vous trouvent pas sur Google.',
+  'Vos équipes refont chaque semaine les mêmes saisies : devis, relances, rendez-vous.',
+  "Votre ancien prestataire ne répond plus, et personne ne s'occupe du site.",
 ]
 
-const trustMetrics = [
-  'experience',
-  '10+ projets livrés',
-  'Réponse sous 24h',
-  'Bordeaux & toute la France',
-  'Devis gratuit',
-]
-
-const problems = [
-  { icon: '📅', text: "Votre site date de plusieurs années — ou vous n'en avez pas du tout." },
-  { icon: '🔍', text: "Vos clients ne vous trouvent pas sur Google quand ils cherchent un pro près de chez eux." },
-  { icon: '🔁', text: "Vous refaites les mêmes tâches manuelles chaque semaine : devis, relances, prise de rendez-vous." },
-  { icon: '😤', text: "Votre dernier prestataire a disparu après la livraison — et le site, personne ne s'en occupe." },
-]
-
-const processSteps = [
+const etapes = [
   {
-    num: '01',
-    title: 'On discute',
-    desc: "Appel ou message gratuit. Je comprends votre activité, vos besoins, votre budget. Aucun engagement.",
+    titre: 'On en parle',
+    texte: 'Un appel ou un message, gratuit et sans engagement. Je comprends votre activité et votre budget.',
   },
   {
-    num: '02',
-    title: 'Je propose',
-    desc: "Devis détaillé sous 48h. Tarif fixe, délai annoncé, aucune surprise cachée.",
+    titre: 'Je chiffre',
+    texte: 'Vous recevez un devis détaillé, à prix fixe, avec un délai annoncé.',
   },
   {
-    num: '03',
-    title: 'On construit',
-    desc: "Vous suivez l'avancement en direct. Je livre par étapes, vous validez à chaque fois.",
+    titre: 'Je construis',
+    texte: 'Je livre par étapes. Vous testez et validez chacune avant la suivante.',
   },
   {
-    num: '04',
-    title: 'Livraison & suivi',
-    desc: "Mise en production, transfert de compétences sur l'outil, 30 jours de garantie. Je reste disponible après.",
+    titre: 'Je mets en ligne',
+    texte: "Je vous forme à l'outil. Les anomalies sont corrigées pendant la garantie prévue aux CGV.",
   },
 ]
 
-const featuredProjects = [
+const realisations = [
   {
     title: 'La Lucarne Péniche',
-    subtitle: "Gestion autonome d'une programmation culturelle",
+    subtitle: 'Une programmation culturelle publiée par l’équipe elle-même',
     description:
-      "Une programmation qui change chaque semaine dépendait d'un prestataire à chaque modification. L'équipe publie désormais ses événements, actualités et photos elle-même, en quelques minutes, sans intervention technique.",
-    techs: ['React 19', 'Supabase', 'VPS OVHcloud', 'JavaScript'],
+      "Chaque nouvel événement passait par un prestataire. L'équipe publie maintenant ses événements, ses actualités et ses photos seule, en quelques minutes.",
+    techs: ['React 19', 'Supabase', 'VPS OVHcloud'],
     link: 'https://www.lalucarnepeniche.com',
     status: 'En production',
     images: { desktop: lalucarneDesktop, mobile: lalucarneMobile },
   },
   {
-    title: 'Arnault Janvier — Maître Verrier',
-    subtitle: 'Vitrine multilingue et galerie autonome',
+    title: 'Arnault Janvier, maître verrier',
+    subtitle: 'Un site en trois langues avec une galerie gérée par l’artisan',
     description:
-      "Un atelier d'art invisible hors de sa région. Site en trois langues avec une galerie que l'artisan gère seul — et des demandes entrantes de clients anglophones et hispanophones qu'il ne touchait pas avant.",
-    techs: ['Next.js 16', 'TypeScript', 'Supabase', 'next-intl'],
+      "Un atelier d'art peu visible hors de sa région. Depuis le site en français, anglais et espagnol, il reçoit des demandes de clients anglophones et hispanophones.",
+    techs: ['Next.js 16', 'TypeScript', 'Supabase'],
     link: 'https://www.arnault-janvier-vitrail.fr',
     status: 'En production',
     images: { desktop: arnaultDesktop },
   },
   {
     title: 'Niido',
-    subtitle: 'Marketplace mobile avec validation documentaire automatisée',
+    subtitle: 'Une application mobile qui vérifie les justificatifs des prestataires',
     description:
-      "Vérifier manuellement les pièces d'identité et justificatifs de chaque prestataire ne tient pas à l'échelle. L'application intègre un pipeline de lecture et de contrôle automatique des documents, avec score de confiance et reprise humaine sur les seuls cas douteux. Quatre rôles utilisateurs, espace d'administration.",
-    techs: ['React Native', 'Expo', 'Supabase', 'TypeScript', 'API Anthropic'],
+      "Les pièces d'identité et justificatifs sont lus et contrôlés automatiquement. Une personne ne reprend que les cas douteux. Quatre rôles d'utilisateurs et un espace d'administration.",
+    techs: ['React Native', 'Expo', 'Supabase', 'TypeScript'],
     link: null,
-    status: 'En bêta privée — pas encore sur les stores',
+    status: 'En bêta privée, pas encore sur les stores',
     images: { desktop: niidoAdmin, mobile: niidoMobile },
   },
 ]
+
+const offreSite = [
+  {
+    icone: 'map-pin',
+    titre: 'Trouvé sur Google Maps',
+    texte: 'Je mets à jour votre fiche Google chaque mois : horaires, photos, actualités.',
+  },
+  {
+    icone: 'phone',
+    titre: 'Un site qui fait appeler',
+    texte: 'Rapide, lisible sur téléphone, avec vos réalisations en photos et votre numéro bien visible.',
+  },
+  {
+    icone: 'wrench',
+    titre: 'Je gère la technique',
+    texte: 'Hébergement, mises à jour, pannes et changements de contenu. Vous gardez votre temps pour votre métier.',
+  },
+] as const
 ---
 
 <BaseLayout {title} {description}>
@@ -125,487 +132,252 @@ const featuredProjects = [
   <main id="contenu" tabindex="-1" class="focus:outline-none">
     <Hero />
 
-    <!-- Trust bar : défilement continu, avec bouton pause/lecture (WCAG 2.2.2).
-         La seconde copie ne sert qu'à boucler sans à-coup : masquée aux lecteurs d'écran. -->
-    <div class="relative border-y border-slate-200 bg-slate-50 py-3 overflow-hidden">
-      <ul id="trust-marquee" class="flex items-center gap-0 trust-marquee" aria-label="En bref">
-        {[...trustMetrics, ...trustMetrics].map((metric, index) => (
-          <li
-            class="flex items-center gap-6 px-6 whitespace-nowrap text-sm font-medium text-slate-600 shrink-0"
-            aria-hidden={index >= trustMetrics.length ? 'true' : undefined}
-            data-doublon={index >= trustMetrics.length ? '' : undefined}
-          >
-            {metric === 'experience'
-              ? <span><span data-annees-experience>{anneesExperience()}</span> ans d'expérience</span>
-              : metric}
-            <span class="text-primary-400 text-base" aria-hidden="true">◆</span>
-          </li>
-        ))}
-      </ul>
-      <button
-        type="button"
-        id="trust-marquee-toggle"
-        class="marquee-toggle absolute right-2 top-1/2 -translate-y-1/2 rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 shadow-sm hover:border-primary-500 hover:text-primary-700"
-        hidden
-      >
-        <span aria-hidden="true" data-icone>❚❚</span>
-        <span data-libelle>Pause</span><span class="sr-only"> du défilement</span>
-      </button>
-    </div>
-
-    <!-- Le problème -->
-    <section class="section bg-white">
-      <div class="max-w-4xl mx-auto">
-        <div class="reveal-fade-up mb-12 text-center">
-          <span class="inline-block text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">01 — Le problème</span>
-          <h2 class="section-title">Vous vous reconnaissez ?</h2>
-          <p class="section-subtitle">La plupart de mes clients sont arrivés avec une de ces situations.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
-          {problems.map((problem) => (
-            <div class="flex items-start gap-4 glass-card p-6 stagger-item">
-              <span class="text-2xl shrink-0 mt-0.5" aria-hidden="true">{problem.icon}</span>
-              <p class="text-slate-600 leading-relaxed">{problem.text}</p>
-            </div>
-          ))}
-        </div>
-
-        <div class="text-center reveal-fade-up">
-          <p class="text-slate-500 mb-6">Si vous avez dit oui à au moins une — on a des choses à se dire.</p>
-          <a href="/contact" class="btn-primary inline-block">
-            Parlons de votre projet<span aria-hidden="true"> →</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Services overview -->
-    <section class="section bg-slate-50">
+    <!-- Services -->
+    <section class="section">
       <div class="max-w-6xl mx-auto">
-        <div class="reveal-fade-up">
-          <span class="block text-center text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">02 — Ce que je fais</span>
-          <h2 class="section-title text-center">Ce que je fais</h2>
-          <p class="section-subtitle text-center">Du cadrage à la mise en production, puis le suivi</p>
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Services</p>
+          <h2 class="section-title">Ce que je fais</h2>
+          <p class="text-lg text-encre-2">Je conçois, je développe, je mets en ligne. Puis je reste responsable de ce qui tourne.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service) => (
-            <a href={service.link} class="glass-card lift p-8 hover:border-primary-500/40 group stagger-item block">
-              <div class="text-4xl mb-4" aria-hidden="true">{service.icon}</div>
-              <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-primary-400 transition-colors">
-                {service.title}
-              </h3>
-              <p class="text-slate-500 text-sm leading-relaxed">{service.description}</p>
-              <span class="inline-block mt-4 text-primary-700 text-sm font-medium">
-                En savoir plus<span class="sr-only"> : {service.title}</span><span aria-hidden="true"> →</span>
-              </span>
+            <a href={service.link} class="carte carte-lien p-6 group apparition block">
+              <Icone nom={service.icone} taille={24} class="text-primary-500 mb-6" />
+              <h3 class="text-xl mb-3 group-hover:text-primary-700 transition-colors">{service.title}</h3>
+              <p class="text-encre-2 text-[15px] leading-relaxed">{service.description}</p>
             </a>
           ))}
         </div>
 
-        <div class="text-center mt-10 reveal-fade-up">
-          <a href="/services" class="btn-primary inline-block">
-            Voir toutes mes offres & tarifs
-          </a>
+        <div class="mt-12 apparition">
+          <a href="/services" class="btn-secondary">Voir les services et les tarifs</a>
         </div>
       </div>
     </section>
 
-    <!-- Featured projects -->
-    <section class="section bg-white">
-      <div class="max-w-6xl mx-auto">
-        <div class="reveal-fade-up">
-          <span class="block text-center text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">03 — Résultats</span>
-          <h2 class="section-title text-center">Projets récents</h2>
-          <p class="section-subtitle text-center">Ce que j'ai livré pour mes clients</p>
+    <!-- Situations -->
+    <section class="section bg-creme border-y border-ligne">
+      <div class="max-w-4xl mx-auto">
+        <div class="apparition mb-8">
+          <h2 class="section-title">Quatre situations que je sais régler</h2>
         </div>
 
-        <div id="projects-scroller" class="projects-scroller">
-          <div class="projects-viewport">
-            <div class="projects-track space-y-8">
-              {featuredProjects.map((project) => (
-                <div class="glass-card lift p-8 hover:border-primary-500/30 stagger-item">
+        <ul class="divide-y divide-ligne border-y border-ligne mb-12">
+          {situations.map((texte) => (
+            <li class="flex items-start gap-4 py-4 apparition">
+              <Icone nom="check" class="text-primary-500 shrink-0 mt-1" />
+              <p class="text-encre text-lg">{texte}</p>
+            </li>
+          ))}
+        </ul>
+
+        <div class="apparition">
+          <a href="/contact" class="btn-primary">Me décrire votre situation</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Réalisations -->
+    <section class="section">
+      <div class="max-w-6xl mx-auto">
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Réalisations</p>
+          <h2 class="section-title">Trois projets, trois clients</h2>
+          <p class="text-lg text-encre-2">Des projets en ligne ou en test, présentés avec l'accord des clients.</p>
+        </div>
+
+        <div class="space-y-8">
+          {realisations.map((project) => (
+            <article class="carte p-6 md:p-8 apparition">
               <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
                 <div>
-                  <h3 class="text-2xl font-bold text-primary-400 mb-1">{project.title}</h3>
-                  <p class="text-slate-600 font-medium">{project.subtitle}</p>
+                  <h3 class="text-2xl mb-1">{project.title}</h3>
+                  <p class="text-encre-2">{project.subtitle}</p>
                 </div>
-                <span class="px-3 py-1 bg-green-500/20 text-green-800 rounded-full text-sm border border-green-500/30 shrink-0 self-start">
+                <span class="font-mono text-[13px] text-encre-2 border border-ligne rounded px-2 py-1 shrink-0 self-start">
                   {project.status}
                 </span>
               </div>
 
-              <p class="text-slate-600 leading-relaxed mb-6">{project.description}</p>
+              <p class="text-encre-2 leading-relaxed mb-6 max-w-3xl">{project.description}</p>
 
-              {project.images && (
-                <div class="flex flex-col md:flex-row gap-4 mb-6">
-                  <Image
-                    src={project.images.desktop}
-                    alt={`${project.title} desktop`}
-                    widths={project.images.mobile ? [480, 960] : [480, 960, 1440]}
-                    sizes={project.images.mobile ? '(max-width: 768px) 100vw, 640px' : '(max-width: 768px) 100vw, 960px'}
-                    format="webp"
-                    class={`w-full ${project.images.mobile ? 'md:w-2/3' : ''} rounded-lg border border-slate-200 shadow-lg object-cover`}
-                    loading="lazy"
-                  />
-                  {project.images.mobile && (
+              <div class="flex flex-col md:flex-row gap-4 mb-6">
+                <Image
+                  src={project.images.desktop}
+                  alt={`Capture d'écran du site ${project.title} sur ordinateur`}
+                  widths={project.images.mobile ? [480, 960] : [480, 960, 1440]}
+                  sizes={project.images.mobile ? '(max-width: 768px) 100vw, 640px' : '(max-width: 768px) 100vw, 960px'}
+                  format="webp"
+                  class={`w-full ${project.images.mobile ? 'md:w-2/3' : ''} rounded border border-ligne object-cover`}
+                  loading="lazy"
+                />
+                {project.images.mobile && (
                   <Image
                     src={project.images.mobile}
-                    alt={`${project.title} mobile`}
+                    alt={`Capture d'écran de ${project.title} sur téléphone`}
                     widths={[320, 640]}
                     sizes="(max-width: 768px) 100vw, 320px"
                     format="webp"
-                    class="w-full md:w-1/3 rounded-lg border border-slate-200 shadow-lg object-cover"
+                    class="w-full md:w-1/3 rounded border border-ligne object-cover"
                     loading="lazy"
                   />
-                  )}
-                </div>
-              )}
-
-              <div class="flex flex-wrap gap-2 mb-4">
-                {project.techs.map((tech) => (
-                  <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs border border-slate-200">
-                    {tech}
-                  </span>
-                ))}
+                )}
               </div>
 
-              <div class="flex gap-4">
-                <a href="/projets" class="text-primary-700 hover:text-primary-600 transition-colors text-sm font-medium">
-                  Voir les détails<span class="sr-only"> du projet {project.title}</span><span aria-hidden="true"> →</span>
+              <p class="font-mono text-[13px] text-encre-3 mb-4">{project.techs.join(' · ')}</p>
+
+              <div class="flex flex-wrap gap-x-6 gap-y-2">
+                <a href="/projets" class="lien text-sm">
+                  Le détail du projet<span class="sr-only"> {project.title}</span>
                 </a>
                 {project.link && (
-                  <a href={project.link} target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-primary-700 transition-colors text-sm">
-                    Visiter le site<span class="sr-only"> de {project.title} (nouvel onglet)</span><span aria-hidden="true"> ↗</span>
+                  <a href={project.link} target="_blank" rel="noopener noreferrer" class="lien text-sm">
+                    Voir le site<span class="sr-only"> de {project.title} (nouvel onglet)</span>
                   </a>
                 )}
               </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div class="text-center mt-10 reveal-fade-up">
-          <a href="/projets" class="btn-secondary inline-block">
-            Voir tous mes projets
-          </a>
+            </article>
+          ))}
         </div>
       </div>
     </section>
 
-    <!-- Processus -->
-    <section class="section bg-slate-50">
-      <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12 text-center">
-          <span class="block text-primary-500 text-sm font-bold tracking-widest uppercase mb-3">04 — Comment ça se passe</span>
-          <h2 class="section-title">Simple. Transparent. Sans surprise.</h2>
-          <p class="section-subtitle">Du premier message à la mise en ligne, voici exactement ce qui se passe.</p>
+    <!-- Déroulé -->
+    <section class="section bg-creme border-y border-ligne">
+      <div class="max-w-6xl mx-auto">
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Déroulé</p>
+          <h2 class="section-title">Du premier message à la mise en ligne</h2>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {processSteps.map((step) => (
-            <div class="glass-card lift p-7 stagger-item relative overflow-hidden group hover:border-primary-500/30">
-              <div class="text-6xl font-black text-primary-500/10 absolute -top-2 -right-2 leading-none select-none group-hover:text-primary-500/15 transition-colors" aria-hidden="true">
-                {step.num}
-              </div>
-              <div class="relative z-10">
-                <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary-500/10 text-primary-500 font-bold text-sm mb-4">
-                  {step.num}
-                </div>
-                <h3 class="text-lg font-bold text-slate-800 mb-3">{step.title}</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">{step.desc}</p>
-              </div>
+        <ol class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {etapes.map((etape, index) => (
+            <li class="carte p-6 apparition">
+              <p class="font-mono text-[13px] font-medium text-primary-700 mb-4">Étape {index + 1}</p>
+              <h3 class="text-xl mb-3">{etape.titre}</h3>
+              <p class="text-encre-2 text-[15px] leading-relaxed">{etape.texte}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- Avis : n'apparaît que si data/avis.ts contient des avis vérifiés -->
+    {AVIS.length > 0 && (
+      <section class="section">
+        <div class="max-w-5xl mx-auto">
+          <div class="apparition mb-12">
+            <p class="etiquette mb-4">Avis</p>
+            <h2 class="section-title">Ce qu'en disent les clients</h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {AVIS.map((avis) => (
+              <figure class="carte p-6 md:p-8 apparition">
+                <blockquote class="font-display text-2xl leading-snug text-encre mb-6">
+                  « {avis.texte} »
+                </blockquote>
+                <figcaption>
+                  <p class="font-medium text-encre">{avis.auteur}</p>
+                  <p class="text-encre-2 text-sm">{avis.contexte}</p>
+                  <p class="font-mono text-[13px] text-encre-3 mt-2">
+                    {avis.lien
+                      ? <a href={avis.lien} target="_blank" rel="noopener noreferrer" class="lien">{avis.source}<span class="sr-only"> (nouvel onglet)</span></a>
+                      : avis.source}
+                  </p>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Offre artisans et commerces -->
+    <section class="section" id="artisans">
+      <div class="max-w-6xl mx-auto">
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Artisans et commerces</p>
+          <h2 class="section-title">Un site à l'abonnement, sans rien gérer</h2>
+          <p class="text-lg text-encre-2">
+            Pour les activités qui ont besoin d'être trouvées, pas d'une application. C'est une offre à part, plus simple.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {offreSite.map((item) => (
+            <div class="carte p-6 apparition">
+              <Icone nom={item.icone} taille={24} class="text-primary-500 mb-6" />
+              <h3 class="text-xl mb-3">{item.titre}</h3>
+              <p class="text-encre-2 text-[15px] leading-relaxed">{item.texte}</p>
             </div>
           ))}
         </div>
 
-        <div class="text-center mt-10 reveal-fade-up">
-          <a href="/contact" class="btn-primary inline-block">
-            Parlons de votre projet<span aria-hidden="true"> →</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Chatbot -->
-    <section class="section bg-slate-50">
-      <div class="max-w-2xl mx-auto">
-        <div class="reveal-fade-up">
-          <h2 class="section-title text-center">Une question ?</h2>
-          <p class="section-subtitle text-center">Un assistant d'intelligence artificielle vous répond — ce n'est pas moi qui écris</p>
-        </div>
-        <ChatBot client:visible />
-      </div>
-    </section>
-
-    <!-- Témoignages -->
-    <section class="section bg-white">
-      <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12 text-center">
-          <h2 class="section-title">Ce qu'ils en disent</h2>
-          <p class="section-subtitle">Des clients, pas des témoignages de catalogue</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          <div class="glass-card p-8 stagger-item border border-primary-500/20">
-            <div class="text-primary-400 text-4xl mb-4 leading-none" aria-hidden="true">"</div>
-            <p class="text-slate-600 leading-relaxed mb-6">
-              Guy a construit notre site de A à Z et s'occupe de tout depuis. On n'a rien à faire — il gère les mises à jour, notre fiche Google, les photos. C'est exactement ce qu'on cherchait.
+        <div class="carte-creme p-6 md:p-8 apparition flex flex-col md:flex-row md:items-center gap-6">
+          <div class="flex-1">
+            <p class="font-mono text-2xl font-medium text-primary-700 mb-2">490 € de mise en service, puis un abonnement mensuel</p>
+            <p class="text-encre-2">
+              Sur la page des tarifs, cochez les options dont vous avez besoin et le total se calcule. Engagement de 12 mois, premier mois offert.
             </p>
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-600 font-bold shrink-0" aria-hidden="true">
-                GB
-              </div>
-              <div>
-                <p class="font-semibold text-slate-800 text-sm">Gilles Boireau</p>
-                <p class="text-slate-500 text-xs">La Lucarne Péniche — Saint-Léger-des-Vignes</p>
-              </div>
-            </div>
           </div>
-
-          <div class="glass-card p-8 stagger-item border border-primary-500/20">
-            <div class="text-primary-400 text-4xl mb-4 leading-none" aria-hidden="true">"</div>
-            <p class="text-slate-600 leading-relaxed mb-6">
-              Guy a créé un site à l'image de mon atelier — élégant, multilingue, avec une galerie que je gère seul. Depuis la mise en ligne, je reçois des demandes de clients anglophones et espagnols que je n'aurais jamais touchés avant.
-            </p>
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-600 font-bold shrink-0" aria-hidden="true">
-                AJ
-              </div>
-              <div>
-                <p class="font-semibold text-slate-800 text-sm">Arnault Janvier</p>
-                <p class="text-slate-500 text-xs">Maître Verrier — arnault-janvier-vitrail.fr</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Availability banner -->
-    <section class="section bg-slate-50">
-      <div class="max-w-4xl mx-auto text-center">
-        <div class="glass-card p-10 border-2 border-green-500/30 reveal-scale">
-          <div class="inline-flex items-center gap-3 mb-6">
-            <span class="w-3 h-3 bg-green-400 rounded-full animate-pulse" aria-hidden="true"></span>
-            <span class="text-green-700 text-xl font-semibold">Disponible pour de nouveaux projets</span>
-          </div>
-          <p class="text-slate-600 text-lg mb-8">
-            Vous avez un projet en tête ? Je réponds sous 24h.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/contact" class="btn-primary inline-block">
-              Demander un devis gratuit
-            </a>
-            <a href="/services" class="btn-secondary inline-block">
-              Voir les formules
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Artisans & commerces locaux -->
-    <section class="section bg-white border-t-4 border-slate-200">
-      <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12 text-center">
-          <span class="inline-block px-4 py-1.5 bg-slate-100 text-slate-600 rounded-full text-sm font-semibold mb-4 border border-slate-200">
-            Offre distincte — artisans &amp; commerces locaux
-          </span>
-          <h2 class="section-title">Votre site doit travailler pour vous</h2>
-          <p class="section-subtitle">Pas pour votre prestataire web</p>
-          <p class="text-slate-500 max-w-2xl mx-auto -mt-6">
-            Rien à voir avec les applications métier ci-dessus : une présence en ligne clé en main, à l'abonnement, pour les activités qui n'ont pas besoin d'un outil sur-mesure.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          {[
-            {
-              icon: '📍',
-              title: 'Visible sur Google Maps',
-              desc: 'Votre fiche Google Business mise à jour chaque mois : horaires, photos, actualités. Les gens vous trouvent quand ils cherchent un artisan près de chez eux.',
-            },
-            {
-              icon: '📞',
-              title: 'Un site qui donne envie d\'appeler',
-              desc: 'Rapide, mobile, avec vos réalisations en photos. Un visiteur doit comprendre ce que vous faites et vous contacter en moins de 30 secondes.',
-            },
-            {
-              icon: '🛠️',
-              title: 'Je m\'occupe de tout',
-              desc: 'Hébergement, mises à jour, pannes, modifications de contenu. Vous faites votre métier, je fais le mien. Aucune compétence technique requise.',
-            },
-          ].map((item) => (
-            <div class="glass-card p-8 stagger-item text-center">
-              <div class="text-4xl mb-4" aria-hidden="true">{item.icon}</div>
-              <h3 class="text-lg font-bold text-slate-800 mb-3">{item.title}</h3>
-              <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        <div class="glass-card p-8 border-2 border-primary-500/30 reveal-scale">
-          <div class="flex flex-col md:flex-row md:items-center gap-6">
-            <div class="flex-1">
-              <div class="inline-block px-3 py-1 bg-primary-500 rounded-full text-white text-xs font-semibold mb-3">
-                Simulateur interactif
-              </div>
-              <h3 class="text-2xl font-bold text-slate-800 mb-2">
-                <span class="text-gradient">Mise en service 490 €</span>, puis abonnement mensuel
-              </h3>
-              <p class="text-slate-500">
-                Composez votre site en direct : cochez les options dont vous avez besoin (pages supplémentaires, formulaire, boutique, blog…) et voyez le total se calculer. Engagement 12 mois, premier mois offert.
-              </p>
-            </div>
-            <a href="/services" class="btn-primary shrink-0 inline-block text-center">
-              Simuler mon devis<span aria-hidden="true"> →</span>
-            </a>
-          </div>
+          <a href="/services#simulateur" class="btn-primary shrink-0">Calculer mon tarif</a>
         </div>
       </div>
     </section>
 
     <!-- Dépannage informatique -->
-    <section class="section bg-slate-50">
-      <div class="max-w-4xl mx-auto">
-        <div class="glass-card p-8 md:p-12 reveal-fade-up">
-          <div class="flex flex-col md:flex-row gap-8 items-center">
-            <div class="text-6xl shrink-0" aria-hidden="true">🖥️</div>
-            <div>
-              <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-3">
-                Besoin d'aide avec votre ordinateur ?
-              </h2>
-              <p class="text-slate-600 mb-4 text-lg">
-                Je propose aussi du <strong class="text-primary-600">dépannage informatique à distance</strong> pour les professionnels et particuliers.
-                Diagnostic et résolution rapide de vos problèmes.
-              </p>
-              <div class="flex flex-wrap gap-4 mb-6">
-                <div class="bg-slate-50 rounded-xl px-5 py-3 border border-slate-200">
-                  <p class="text-2xl font-bold text-primary-400">35€<span class="text-base font-normal text-slate-500">/h</span></p>
-                  <p class="text-slate-500 text-sm">Tarif horaire</p>
-                </div>
-                <div class="bg-slate-50 rounded-xl px-5 py-3 border border-slate-200">
-                  <p class="text-slate-800 font-medium">100% à distance</p>
-                  <p class="text-slate-500 text-sm">Prise en main à distance</p>
-                </div>
-                <div class="bg-slate-50 rounded-xl px-5 py-3 border border-slate-200">
-                  <p class="text-slate-800 font-medium">Réponse rapide</p>
-                  <p class="text-slate-500 text-sm">Sous 24h</p>
-                </div>
-              </div>
-              <a href="/contact" class="btn-primary inline-block">
-                Demander un dépannage
-              </a>
-              <MentionPrix class="mt-4" />
-            </div>
+    <section class="section bg-creme border-y border-ligne">
+      <div class="max-w-4xl mx-auto apparition">
+        <div class="flex flex-col md:flex-row gap-8">
+          <Icone nom="monitor" taille={32} class="text-primary-500 shrink-0" />
+          <div>
+            <h2 class="text-2xl md:text-3xl mb-4">Dépannage informatique à distance</h2>
+            <p class="text-encre-2 text-lg mb-6">
+              Pour les professionnels et les particuliers. Je prends la main sur votre ordinateur, avec votre accord, et je règle le problème.
+            </p>
+            <ul class="flex flex-wrap gap-x-8 gap-y-2 font-mono text-[13px] text-encre-2 mb-6">
+              <li><span class="text-primary-700 font-medium">35 € de l'heure</span></li>
+              <li>Entièrement à distance</li>
+              <li>Réponse sous 24 h</li>
+            </ul>
+            <a href="/contact" class="btn-secondary">Demander un dépannage</a>
+            <MentionPrix class="mt-4" />
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Assistant automatique -->
+    <section class="section">
+      <div class="max-w-2xl mx-auto">
+        <div class="apparition mb-8">
+          <p class="etiquette mb-4">Assistant automatique</p>
+          <h2 class="section-title">Une question rapide ?</h2>
+          <p class="text-encre-2">
+            Un programme d'intelligence artificielle répond ici à partir des informations de ce site. Ce n'est pas moi qui écris.
+            Pour un vrai échange, utilisez la page contact.
+          </p>
+        </div>
+        <ChatBot client:visible />
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section bg-foret">
+      <div class="max-w-4xl mx-auto apparition">
+        <h2 class="text-3xl md:text-4xl text-creme mb-4">Parlons de votre projet</h2>
+        <p class="text-creme-sourd text-lg mb-8">Écrivez-moi ou appelez-moi. Je réponds sous 24 h.</p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/contact" class="btn-primary">Me contacter</a>
+          <a href="tel:+33675751439" class="inline-flex items-center justify-center gap-2 px-6 py-3 border border-creme-sourd text-creme font-medium rounded hover:bg-creme/10 transition-colors">
+            <Icone nom="phone" />06 75 75 14 39
+          </a>
         </div>
       </div>
     </section>
   </main>
   <Footer />
 </BaseLayout>
-
-<script>
-  // Bandeau de confiance : bouton pause/lecture (WCAG 2.2.2). Il n'apparaît
-  // qu'une fois le script chargé ; en mouvement réduit, le CSS le masque et
-  // le bandeau ne défile pas.
-  const bandeau = document.getElementById('trust-marquee')
-  const basculeBandeau = document.getElementById('trust-marquee-toggle') as HTMLButtonElement | null
-
-  if (bandeau && basculeBandeau) {
-    const libelle = basculeBandeau.querySelector<HTMLElement>('[data-libelle]')
-    const icone = basculeBandeau.querySelector<HTMLElement>('[data-icone]')
-    basculeBandeau.hidden = false
-    basculeBandeau.addEventListener('click', () => {
-      const enPause = bandeau.classList.toggle('is-paused')
-      if (libelle) libelle.textContent = enPause ? 'Lecture' : 'Pause'
-      if (icone) icone.textContent = enPause ? '▶' : '❚❚'
-    })
-  }
-
-  // Défilement horizontal des projets — le scroll vertical fait défiler les cartes
-  // latéralement. Desktop large uniquement, désactivé en mouvement réduit : la
-  // liste verticale reste le comportement par défaut, y compris sans JavaScript.
-  const scroller = document.getElementById('projects-scroller')
-
-  if (scroller) {
-    const viewport = scroller.querySelector<HTMLElement>('.projects-viewport')
-    const track = scroller.querySelector<HTMLElement>('.projects-track')
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const wideScreen = window.matchMedia('(min-width: 1024px)')
-
-    let active = false
-    let distance = 0
-    let ticking = false
-
-    const disable = () => {
-      active = false
-      scroller.classList.remove('is-horizontal')
-      scroller.style.height = ''
-      if (track) track.style.transform = ''
-    }
-
-    const measure = () => {
-      if (!viewport || !track) return
-      distance = Math.max(0, track.scrollWidth - viewport.clientWidth)
-      // Un écran de défilement vertical par carte à parcourir, plus un pour la lecture
-      scroller.style.height = `${viewport.clientHeight + distance}px`
-    }
-
-    const update = () => {
-      ticking = false
-      if (!active || !track) return
-      const rect = scroller.getBoundingClientRect()
-      const travelled = Math.min(Math.max(-rect.top, 0), distance)
-      track.style.transform = `translate3d(${-travelled}px, 0, 0)`
-    }
-
-    const onScroll = () => {
-      if (!active || ticking) return
-      ticking = true
-      requestAnimationFrame(update)
-    }
-
-    const enable = () => {
-      if (!viewport || !track) return
-      active = true
-      scroller.classList.add('is-horizontal')
-      // Les cartes hors écran ne déclencheraient jamais l'observateur d'apparition
-      track.querySelectorAll('.stagger-item').forEach((card) => card.classList.add('revealed'))
-      measure()
-      update()
-    }
-
-    const evaluate = () => {
-      if (wideScreen.matches && !reducedMotion.matches) enable()
-      else disable()
-    }
-
-    evaluate()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', () => {
-      if (active) {
-        measure()
-        update()
-      }
-    })
-    wideScreen.addEventListener('change', evaluate)
-    reducedMotion.addEventListener('change', evaluate)
-
-    // Navigation clavier : amène la carte qui reçoit le focus dans le champ de vision
-    track?.addEventListener('focusin', (event) => {
-      if (!active || !viewport) return
-      const card = (event.target as HTMLElement).closest<HTMLElement>('.projects-track > *')
-      if (!card) return
-      const cards = Array.from(track.children) as HTMLElement[]
-      const index = cards.indexOf(card)
-      if (index < 0 || cards.length < 2) return
-      const progress = index / (cards.length - 1)
-      window.scrollTo({ top: scroller.offsetTop + progress * distance, behavior: 'auto' })
-    })
-  }
-</script>
