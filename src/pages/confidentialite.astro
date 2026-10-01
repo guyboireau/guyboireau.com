@@ -82,14 +82,16 @@ const sommaire = [
     <dt>Durée</dt>
     <dd>
       Le site ne conserve pas les conversations : elles n’existent que dans l’onglet de votre navigateur et
-      disparaissent quand vous rechargez ou fermez la page. Chez Anthropic :
-      <span class="a-completer">[À COMPLÉTER : durée de conservation selon le contrat Anthropic — 30 jours par défaut pour l’API, à vérifier]</span>.
+      disparaissent quand vous rechargez ou fermez la page. Sur le relais :
+      <span class="a-completer">[À COMPLÉTER : le relais garde-t-il une trace des messages, et combien de temps ?]</span>.
+      Chez Google :
+      <span class="a-completer">[À COMPLÉTER : palier de l’API Gemini (gratuit ou payant) et durée de conservation — avec le palier gratuit, Google peut réutiliser les messages pour améliorer ses produits et les faire relire par des personnes]</span>.
     </dd>
     <dt>Destinataires et sous-traitants</dt>
     <dd>
-      Chaque message, avec l’historique de la conversation et les instructions données à l’assistant, est
-      transmis à Anthropic, PBC (États-Unis), qui fournit le modèle Claude Haiku 4.5 utilisé pour rédiger la
-      réponse.
+      Chaque message, avec l’historique de la conversation et les instructions données à l’assistant, passe
+      par un relais hébergé sur le serveur de l’éditeur, en France, puis est transmis à Google (API Gemini),
+      aux États-Unis, dont le modèle rédige la réponse.
     </dd>
   </dl>
   <p>
@@ -198,15 +200,15 @@ const sommaire = [
   <h2 id="transferts">3. Transferts hors de l’Union européenne</h2>
   <p>
     Certains prestataires sont établis aux États-Unis ou peuvent traiter les données hors de l’Union
-    européenne : Anthropic (assistant IA), Resend (notification du formulaire), Google (Gmail et Google Drive)
-    et, selon la région du projet, Supabase (base du formulaire). ImprovMX est concerné selon sa localisation
+    européenne : Google (API Gemini pour l’assistant IA, Gmail et Google Drive), Resend (notification du
+    formulaire) et, selon la région du projet, Supabase (base du formulaire). ImprovMX est concerné selon sa localisation
     (<span class="a-completer">[À COMPLÉTER]</span>).
   </p>
   <p>
     Ces transferts reposent sur la décision d’adéquation de la Commission européenne pour les prestataires
     certifiés au cadre de protection des données UE–États-Unis (Data Privacy Framework) ou, à défaut, sur les
     clauses contractuelles types adoptées par la Commission européenne.
-    <span class="a-completer">[À COMPLÉTER : garantie retenue pour chaque prestataire — Anthropic, Resend, Google, Supabase, ImprovMX]</span>
+    <span class="a-completer">[À COMPLÉTER : garantie retenue pour chaque prestataire — Google, Resend, Supabase, ImprovMX]</span>
   </p>
   <p>
     Vous pouvez obtenir des informations sur ces garanties, et une copie des clauses contractuelles types

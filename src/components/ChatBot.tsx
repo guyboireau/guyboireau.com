@@ -17,7 +17,8 @@ const sansMarkdown = (texte: string) => texte.replace(/[*_`#>]+/g, '').replace(/
  *
  * Transparence (règlement européen sur l'IA, art. 50 §1) : l'interface dit,
  * avant toute saisie, qu'on échange avec un système d'IA et non avec Guy, que
- * les messages partent chez Anthropic et que les réponses sont indicatives.
+ * les messages partent chez Google (API Gemini, via un relais sur le serveur
+ * du site) et que les réponses sont indicatives.
  */
 export default function ChatBot() {
   const { messages, send, streaming, error, reset } = useChat()
@@ -176,8 +177,9 @@ export default function ChatBot() {
 
       {/* Mention de transparence, visible avant toute saisie */}
       <p id="chat-avertissement" className="px-4 pt-3 text-xs leading-relaxed text-slate-600 bg-white border-t border-slate-100">
-        Vous échangez avec un assistant d'intelligence artificielle (Claude, d'Anthropic), pas avec Guy. Vos messages
-        sont transmis à Anthropic, aux États-Unis, pour produire les réponses : n'y saisissez pas de données sensibles
+        Vous échangez avec un assistant d'intelligence artificielle (Gemini, de Google), pas avec Guy. Vos messages
+        passent par un relais sur le serveur du site, en France, puis sont transmis à Google, aux États-Unis, pour
+        produire les réponses : n'y saisissez pas de données sensibles
         ni d'informations sur d'autres personnes. Les réponses sont indicatives, peuvent contenir des erreurs et ne
         valent pas devis.{' '}
         <a href="/confidentialite#assistant-ia" className="text-primary-700 underline underline-offset-2 hover:text-primary-600">

@@ -5,7 +5,7 @@
 - Éditeur : Guy Boireau EI, entrepreneur individuel (micro-entreprise), SIREN 993 605 542, 17 rue Beck, 33800 Bordeaux.
 - Contact : me@guyboireau.com, 06 75 75 14 39, ou le formulaire https://guyboireau.com/contact/
 - Prix nets, TVA non applicable (art. 293 B du CGI). Les prix du site sont des prix de base ou des fourchettes : seul le devis signé engage.
-- La page d'accueil propose un assistant d'intelligence artificielle (Claude, d'Anthropic) ; ses réponses sont indicatives.
+- La page d'accueil propose un assistant d'intelligence artificielle (Gemini, de Google) ; ses réponses sont indicatives.
 
 ## Offres
 
