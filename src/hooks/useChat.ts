@@ -71,8 +71,8 @@ export function useChat() {
         const isRateLimit = _err instanceof Error && _err.message === 'RATE_LIMIT'
         setError(
           isRateLimit
-            ? 'Trop de messages envoyés. Attends une minute avant de réessayer.'
-            : 'Une erreur est survenue. Réessaie dans un instant.'
+            ? 'Trop de messages envoyés. Attendez une minute avant de réessayer.'
+            : 'Une erreur est survenue. Réessayez dans un instant.'
         )
         setMessages((prev) => prev.slice(0, -1))
       } finally {

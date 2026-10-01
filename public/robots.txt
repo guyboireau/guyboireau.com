@@ -1,3 +1,6 @@
+# Tous les robots sont autorisés, y compris ceux des moteurs et agents d'IA :
+# le site doit pouvoir être lu et cité (décision du 25 septembre 2026).
+# Résumé à l'intention des agents : https://guyboireau.com/llms.txt
 User-agent: *
 Allow: /
 

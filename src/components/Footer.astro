@@ -1,14 +1,29 @@
 ---
 const year = new Date().getFullYear()
+
+const liensSite = [
+  { href: '/', label: 'Accueil' },
+  { href: '/a-propos', label: 'À propos' },
+  { href: '/services', label: 'Services & Tarifs' },
+  { href: '/traitement-documentaire', label: 'Traitement documentaire' },
+  { href: '/facturation-electronique', label: 'Facturation électronique' },
+  { href: '/automatisations', label: 'Automatisations IA' },
+  { href: '/hebergement-exploitation', label: 'Hébergement & exploitation' },
+  { href: '/projets', label: 'Projets' },
+  { href: '/contact', label: 'Contact' },
+]
+
+// Survol en crème : le terracotta clair (#c17960) n'atteint que 3,9:1 sur ce vert.
+const lien = 'text-slate-400 hover:text-[#f4ecdd] transition-colors text-sm'
 ---
 
 <footer class="bg-[#25332b] border-t border-[#374a3f] py-10 text-slate-300">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-      <!-- Brand -->
+      <!-- Identité -->
       <div>
         <div class="flex items-center gap-3 mb-3">
-          <img src="/assets/logo-seal-cream.svg" alt="Guy Boireau — Applications métier & automatisation · Bordeaux" width="48" height="48" class="h-12 w-12" />
+          <img src="/assets/logo-seal-cream.svg" alt="" width="48" height="48" class="h-12 w-12" />
           <span class="flex flex-col leading-none">
             <span class="font-display text-xl font-semibold text-[#f4ecdd]">Guy Boireau</span>
             <span class="text-[10px] tracking-[0.14em] uppercase text-[#b9ad97] mt-1">Applications métier &amp; automatisation · Bordeaux</span>
@@ -16,62 +31,62 @@ const year = new Date().getFullYear()
         </div>
         <address class="not-italic">
           <p class="text-slate-400 text-sm">
+            Guy Boireau EI — entrepreneur individuel<br />
             Développeur indépendant — applications métier<br />
-            <span itemprop="addressLocality">Bordeaux</span>, <span itemprop="addressCountry">France</span>
+            Bordeaux, France
           </p>
           <p class="text-[#b9ad97] text-xs mt-2">SIRET : 993 605 542 00014</p>
         </address>
       </div>
 
       <!-- Navigation -->
-      <div>
-        <h3 class="text-slate-200 font-semibold mb-3">Navigation</h3>
+      <nav aria-label="Pied de page">
+        <h2 class="text-slate-200 font-semibold mb-3">Navigation</h2>
         <ul class="space-y-2">
-          <li><a href="/" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">Accueil</a></li>
-          <li><a href="/a-propos" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">À propos</a></li>
-          <li><a href="/services" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">Services & Tarifs</a></li>
-          <li><a href="/traitement-documentaire" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">Traitement documentaire</a></li>
-          <li><a href="/facturation-electronique" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">Facturation électronique</a></li>
-          <li><a href="/automatisations" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">Automatisations IA</a></li>
-          <li><a href="/hebergement-exploitation" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">Hébergement &amp; exploitation</a></li>
-          <li><a href="/projets" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">Projets</a></li>
-          <li><a href="/contact" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">Contact</a></li>
-          <li><a href="/mentions-legales" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">Mentions légales</a></li>
+          {liensSite.map((l) => (
+            <li><a href={l.href} class={lien}>{l.label}</a></li>
+          ))}
         </ul>
-      </div>
+      </nav>
 
       <!-- Contact -->
       <div>
-        <h3 class="text-slate-200 font-semibold mb-3">Contact</h3>
+        <h2 class="text-slate-200 font-semibold mb-3">Contact</h2>
         <ul class="space-y-2">
           <li>
-            <a href="mailto:me@guyboireau.com" class="text-slate-400 hover:text-primary-400 transition-colors text-sm" itemprop="email">
-              me@guyboireau.com
+            <a href="mailto:me@guyboireau.com" class={lien}>me@guyboireau.com</a>
+          </li>
+          <li>
+            <a href="tel:+33675751439" class={lien}>06 75 75 14 39</a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/guy-boireau" target="_blank" rel="noopener noreferrer" class={lien}>
+              LinkedIn<span class="sr-only"> (nouvel onglet)</span>
             </a>
           </li>
           <li>
-            <a href="tel:+33675751439" class="text-slate-400 hover:text-primary-400 transition-colors text-sm" itemprop="telephone">
-              06 75 75 14 39
-            </a>
-          </li>
-          <li>
-            <a href="https://www.linkedin.com/in/guy-boireau" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">
-              LinkedIn
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/guyboireau" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-primary-400 transition-colors text-sm">
-              GitHub
+            <a href="https://github.com/guyboireau" target="_blank" rel="noopener noreferrer" class={lien}>
+              GitHub<span class="sr-only"> (nouvel onglet)</span>
             </a>
           </li>
         </ul>
       </div>
     </div>
 
-    <div class="border-t border-[#374a3f] pt-6 text-center">
+    <div class="border-t border-[#374a3f] pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <p class="text-[#a99f8c] text-sm">
-        © {year} Guy Boireau — Développeur indépendant. Tous droits réservés.
+        © {year} Guy Boireau EI — Développeur indépendant. Tous droits réservés.
       </p>
+      <nav aria-label="Informations légales">
+        <ul class="flex flex-wrap gap-x-5 gap-y-2">
+          <li><a href="/mentions-legales" class={lien}>Mentions légales</a></li>
+          <li><a href="/confidentialite" class={lien}>Confidentialité</a></li>
+          <li>
+            <a href="/cgv" class={lien}>CGV<span class="sr-only"> — conditions générales de vente</span></a>
+          </li>
+          <li><a href="/cgv#mediation" class={lien}>Médiation de la consommation</a></li>
+        </ul>
+      </nav>
     </div>
   </div>
 </footer>

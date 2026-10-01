@@ -1,17 +1,15 @@
 /**
- * Rate limiting in-memory par IP.
+ * Limitation de débit en mémoire, par adresse de visiteur.
  *
- * ATTENTION — Limitation critique sur Vercel / serverless :
- * Chaque requête peut s'exécuter sur une instance différente. Le Map
- * en mémoire est donc réinitialisé à chaque cold start et ne partage
- * pas l'état entre les instances. Ce rate limiter ne protège réellement
- * que contre les abus sur une même instance (déploiement mono-instance
- * ou warm container).
+ * En production, un seul processus Node sert le site sur le VPS : la Map est
+ * commune à toutes les requêtes et repart de zéro à chaque redémarrage, donc à
+ * chaque déploiement. La clé est l'adresse calculée par `adresseVisiteur`
+ * (src/lib/client-ip.ts), qui lit X-Forwarded-For derrière Caddy — sans elle,
+ * tous les visiteurs partageaient le même compteur.
  *
- * Pour une protection robuste en production multi-instance, migrer vers :
- * - Upstash KV + @upstash/ratelimit (recommandé sur Vercel)
- * - Redis + ioredis / node-rate-limiter-flexible
- * - Cloudflare Workers KV si edge
+ * Sur une plateforme à plusieurs instances (fonctions serverless), chaque
+ * instance aurait sa propre Map : il faudrait alors un stockage partagé
+ * (Redis, Upstash…).
  */
 type RateLimitEntry = {
   count: number;
@@ -19,8 +17,8 @@ type RateLimitEntry = {
 };
 
 /**
- * Crée un rate limiter in-memory simple (fenêtre fixe).
- * Adapté aux déploiements mono-instance ; inefficace sur Vercel serverless.
+ * Crée un limiteur en mémoire à fenêtre fixe.
+ * Adapté à un processus unique ; sans effet réel sur plusieurs instances.
  */
 export function createRateLimiter(
   limit: number,

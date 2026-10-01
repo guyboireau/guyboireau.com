@@ -1,0 +1,14 @@
+---
+// Mention à placer sur chaque page qui affiche des prix : micro-entreprise en
+// franchise en base de TVA, le prix affiché est le prix payé.
+interface Props {
+  class?: string
+}
+
+const { class: classe } = Astro.props
+---
+
+<p class:list={['text-sm text-slate-600', classe]}>
+  Prix nets — TVA non applicable, art. 293 B du CGI.
+  <a href="/cgv" class="text-primary-700 underline underline-offset-2 hover:text-primary-600">Conditions générales de vente</a>
+</p>

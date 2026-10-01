@@ -5,6 +5,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { z } from 'zod'
 import { SYSTEM_PROMPT } from '@/data/system-prompt'
 import { chatRateLimiter } from '@/lib/rate-limit'
+import { adresseVisiteur } from '@/lib/client-ip'
 import { CLAUDE_MODEL, CHAT_MAX_TOKENS } from '@/data/ai-config'
 
 const messageSchema = z.object({
@@ -24,7 +25,7 @@ const MESSAGE_INDISPONIBLE =
   "L'assistant est momentanément indisponible. Réessayez plus tard, ou écrivez via le formulaire de contact."
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
-  const ip = clientAddress ?? 'unknown'
+  const ip = adresseVisiteur(request, clientAddress)
   if (chatRateLimiter(ip)) {
     return new Response(JSON.stringify({ error: 'Trop de requêtes. Réessaie dans une minute.' }), {
       status: 429,

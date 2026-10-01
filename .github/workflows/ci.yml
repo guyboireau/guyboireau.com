@@ -73,3 +73,6 @@ jobs:
 
       - name: CSP — empreintes des scripts et styles en ligne
         run: npm run test:csp
+
+      - name: Pages — mentions légales, confidentialité, CGV, accessibilité, agents IA
+        run: npm run test:pages

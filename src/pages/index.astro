@@ -4,6 +4,7 @@ import Header from '../components/Header.astro'
 import Hero from '../components/Hero.astro'
 import Footer from '../components/Footer.astro'
 import ChatBot from '../components/ChatBot.tsx'
+import MentionPrix from '../components/MentionPrix.astro'
 import { anneesExperience } from '../data/experience'
 import { Image } from 'astro:assets'
 import lalucarneDesktop from '../assets/lalucarne-desktop.png'
@@ -91,7 +92,7 @@ const featuredProjects = [
     subtitle: "Gestion autonome d'une programmation culturelle",
     description:
       "Une programmation qui change chaque semaine dépendait d'un prestataire à chaque modification. L'équipe publie désormais ses événements, actualités et photos elle-même, en quelques minutes, sans intervention technique.",
-    techs: ['React 19', 'Supabase', 'Vercel', 'JavaScript'],
+    techs: ['React 19', 'Supabase', 'VPS OVHcloud', 'JavaScript'],
     link: 'https://www.lalucarnepeniche.com',
     status: 'En production',
     images: { desktop: lalucarneDesktop, mobile: lalucarneMobile },
@@ -121,21 +122,35 @@ const featuredProjects = [
 
 <BaseLayout {title} {description}>
   <Header />
-  <main>
+  <main id="contenu" tabindex="-1" class="focus:outline-none">
     <Hero />
 
-    <!-- Trust bar -->
-    <div class="border-y border-slate-200 bg-slate-50 py-3 overflow-hidden">
-      <div class="flex items-center gap-0 trust-marquee">
-        {[...trustMetrics, ...trustMetrics].map((metric) => (
-          <span class="flex items-center gap-6 px-6 whitespace-nowrap text-sm font-medium text-slate-600 shrink-0">
+    <!-- Trust bar : défilement continu, avec bouton pause/lecture (WCAG 2.2.2).
+         La seconde copie ne sert qu'à boucler sans à-coup : masquée aux lecteurs d'écran. -->
+    <div class="relative border-y border-slate-200 bg-slate-50 py-3 overflow-hidden">
+      <ul id="trust-marquee" class="flex items-center gap-0 trust-marquee" aria-label="En bref">
+        {[...trustMetrics, ...trustMetrics].map((metric, index) => (
+          <li
+            class="flex items-center gap-6 px-6 whitespace-nowrap text-sm font-medium text-slate-600 shrink-0"
+            aria-hidden={index >= trustMetrics.length ? 'true' : undefined}
+            data-doublon={index >= trustMetrics.length ? '' : undefined}
+          >
             {metric === 'experience'
               ? <span><span data-annees-experience>{anneesExperience()}</span> ans d'expérience</span>
               : metric}
             <span class="text-primary-400 text-base" aria-hidden="true">◆</span>
-          </span>
+          </li>
         ))}
-      </div>
+      </ul>
+      <button
+        type="button"
+        id="trust-marquee-toggle"
+        class="marquee-toggle absolute right-2 top-1/2 -translate-y-1/2 rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 shadow-sm hover:border-primary-500 hover:text-primary-700"
+        hidden
+      >
+        <span aria-hidden="true" data-icone>❚❚</span>
+        <span data-libelle>Pause</span><span class="sr-only"> du défilement</span>
+      </button>
     </div>
 
     <!-- Le problème -->
@@ -150,7 +165,7 @@ const featuredProjects = [
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
           {problems.map((problem) => (
             <div class="flex items-start gap-4 glass-card p-6 stagger-item">
-              <span class="text-2xl shrink-0 mt-0.5">{problem.icon}</span>
+              <span class="text-2xl shrink-0 mt-0.5" aria-hidden="true">{problem.icon}</span>
               <p class="text-slate-600 leading-relaxed">{problem.text}</p>
             </div>
           ))}
@@ -159,7 +174,7 @@ const featuredProjects = [
         <div class="text-center reveal-fade-up">
           <p class="text-slate-500 mb-6">Si vous avez dit oui à au moins une — on a des choses à se dire.</p>
           <a href="/contact" class="btn-primary inline-block">
-            Parlons de votre projet →
+            Parlons de votre projet<span aria-hidden="true"> →</span>
           </a>
         </div>
       </div>
@@ -177,13 +192,13 @@ const featuredProjects = [
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service) => (
             <a href={service.link} class="glass-card lift p-8 hover:border-primary-500/40 group stagger-item block">
-              <div class="text-4xl mb-4">{service.icon}</div>
+              <div class="text-4xl mb-4" aria-hidden="true">{service.icon}</div>
               <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-primary-400 transition-colors">
                 {service.title}
               </h3>
               <p class="text-slate-500 text-sm leading-relaxed">{service.description}</p>
-              <span class="inline-block mt-4 text-primary-400 text-sm font-medium">
-                En savoir plus →
+              <span class="inline-block mt-4 text-primary-700 text-sm font-medium">
+                En savoir plus<span class="sr-only"> : {service.title}</span><span aria-hidden="true"> →</span>
               </span>
             </a>
           ))}
@@ -216,7 +231,7 @@ const featuredProjects = [
                   <h3 class="text-2xl font-bold text-primary-400 mb-1">{project.title}</h3>
                   <p class="text-slate-600 font-medium">{project.subtitle}</p>
                 </div>
-                <span class="px-3 py-1 bg-green-500/20 text-green-700 rounded-full text-sm border border-green-500/30 shrink-0 self-start">
+                <span class="px-3 py-1 bg-green-500/20 text-green-800 rounded-full text-sm border border-green-500/30 shrink-0 self-start">
                   {project.status}
                 </span>
               </div>
@@ -257,12 +272,12 @@ const featuredProjects = [
               </div>
 
               <div class="flex gap-4">
-                <a href="/projets" class="text-primary-400 hover:text-primary-600 transition-colors text-sm font-medium">
-                  Voir les détails →
+                <a href="/projets" class="text-primary-700 hover:text-primary-600 transition-colors text-sm font-medium">
+                  Voir les détails<span class="sr-only"> du projet {project.title}</span><span aria-hidden="true"> →</span>
                 </a>
                 {project.link && (
-                  <a href={project.link} target="_blank" rel="noopener noreferrer" class="text-slate-500 hover:text-primary-400 transition-colors text-sm">
-                    Visiter le site ↗
+                  <a href={project.link} target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-primary-700 transition-colors text-sm">
+                    Visiter le site<span class="sr-only"> de {project.title} (nouvel onglet)</span><span aria-hidden="true"> ↗</span>
                   </a>
                 )}
               </div>
@@ -292,7 +307,7 @@ const featuredProjects = [
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {processSteps.map((step) => (
             <div class="glass-card lift p-7 stagger-item relative overflow-hidden group hover:border-primary-500/30">
-              <div class="text-6xl font-black text-primary-500/10 absolute -top-2 -right-2 leading-none select-none group-hover:text-primary-500/15 transition-colors">
+              <div class="text-6xl font-black text-primary-500/10 absolute -top-2 -right-2 leading-none select-none group-hover:text-primary-500/15 transition-colors" aria-hidden="true">
                 {step.num}
               </div>
               <div class="relative z-10">
@@ -308,7 +323,7 @@ const featuredProjects = [
 
         <div class="text-center mt-10 reveal-fade-up">
           <a href="/contact" class="btn-primary inline-block">
-            Parlons de votre projet →
+            Parlons de votre projet<span aria-hidden="true"> →</span>
           </a>
         </div>
       </div>
@@ -319,7 +334,7 @@ const featuredProjects = [
       <div class="max-w-2xl mx-auto">
         <div class="reveal-fade-up">
           <h2 class="section-title text-center">Une question ?</h2>
-          <p class="section-subtitle text-center">Mon assistant répond en direct</p>
+          <p class="section-subtitle text-center">Un assistant d'intelligence artificielle vous répond — ce n'est pas moi qui écris</p>
         </div>
         <ChatBot client:visible />
       </div>
@@ -335,12 +350,12 @@ const featuredProjects = [
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           <div class="glass-card p-8 stagger-item border border-primary-500/20">
-            <div class="text-primary-400 text-4xl mb-4 leading-none">"</div>
+            <div class="text-primary-400 text-4xl mb-4 leading-none" aria-hidden="true">"</div>
             <p class="text-slate-600 leading-relaxed mb-6">
               Guy a construit notre site de A à Z et s'occupe de tout depuis. On n'a rien à faire — il gère les mises à jour, notre fiche Google, les photos. C'est exactement ce qu'on cherchait.
             </p>
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-500 font-bold shrink-0">
+              <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-600 font-bold shrink-0" aria-hidden="true">
                 GB
               </div>
               <div>
@@ -351,12 +366,12 @@ const featuredProjects = [
           </div>
 
           <div class="glass-card p-8 stagger-item border border-primary-500/20">
-            <div class="text-primary-400 text-4xl mb-4 leading-none">"</div>
+            <div class="text-primary-400 text-4xl mb-4 leading-none" aria-hidden="true">"</div>
             <p class="text-slate-600 leading-relaxed mb-6">
               Guy a créé un site à l'image de mon atelier — élégant, multilingue, avec une galerie que je gère seul. Depuis la mise en ligne, je reçois des demandes de clients anglophones et espagnols que je n'aurais jamais touchés avant.
             </p>
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-500 font-bold shrink-0">
+              <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-600 font-bold shrink-0" aria-hidden="true">
                 AJ
               </div>
               <div>
@@ -374,8 +389,8 @@ const featuredProjects = [
       <div class="max-w-4xl mx-auto text-center">
         <div class="glass-card p-10 border-2 border-green-500/30 reveal-scale">
           <div class="inline-flex items-center gap-3 mb-6">
-            <span class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></span>
-            <span class="text-green-600 text-xl font-semibold">Disponible pour de nouveaux projets</span>
+            <span class="w-3 h-3 bg-green-400 rounded-full animate-pulse" aria-hidden="true"></span>
+            <span class="text-green-700 text-xl font-semibold">Disponible pour de nouveaux projets</span>
           </div>
           <p class="text-slate-600 text-lg mb-8">
             Vous avez un projet en tête ? Je réponds sous 24h.
@@ -425,7 +440,7 @@ const featuredProjects = [
             },
           ].map((item) => (
             <div class="glass-card p-8 stagger-item text-center">
-              <div class="text-4xl mb-4">{item.icon}</div>
+              <div class="text-4xl mb-4" aria-hidden="true">{item.icon}</div>
               <h3 class="text-lg font-bold text-slate-800 mb-3">{item.title}</h3>
               <p class="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
             </div>
@@ -446,7 +461,7 @@ const featuredProjects = [
               </p>
             </div>
             <a href="/services" class="btn-primary shrink-0 inline-block text-center">
-              Simuler mon devis →
+              Simuler mon devis<span aria-hidden="true"> →</span>
             </a>
           </div>
         </div>
@@ -458,13 +473,13 @@ const featuredProjects = [
       <div class="max-w-4xl mx-auto">
         <div class="glass-card p-8 md:p-12 reveal-fade-up">
           <div class="flex flex-col md:flex-row gap-8 items-center">
-            <div class="text-6xl shrink-0">🖥️</div>
+            <div class="text-6xl shrink-0" aria-hidden="true">🖥️</div>
             <div>
               <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-3">
                 Besoin d'aide avec votre ordinateur ?
               </h2>
               <p class="text-slate-600 mb-4 text-lg">
-                Je propose aussi du <strong class="text-primary-400">dépannage informatique à distance</strong> pour les professionnels et particuliers.
+                Je propose aussi du <strong class="text-primary-600">dépannage informatique à distance</strong> pour les professionnels et particuliers.
                 Diagnostic et résolution rapide de vos problèmes.
               </p>
               <div class="flex flex-wrap gap-4 mb-6">
@@ -484,6 +499,7 @@ const featuredProjects = [
               <a href="/contact" class="btn-primary inline-block">
                 Demander un dépannage
               </a>
+              <MentionPrix class="mt-4" />
             </div>
           </div>
         </div>
@@ -494,6 +510,23 @@ const featuredProjects = [
 </BaseLayout>
 
 <script>
+  // Bandeau de confiance : bouton pause/lecture (WCAG 2.2.2). Il n'apparaît
+  // qu'une fois le script chargé ; en mouvement réduit, le CSS le masque et
+  // le bandeau ne défile pas.
+  const bandeau = document.getElementById('trust-marquee')
+  const basculeBandeau = document.getElementById('trust-marquee-toggle') as HTMLButtonElement | null
+
+  if (bandeau && basculeBandeau) {
+    const libelle = basculeBandeau.querySelector<HTMLElement>('[data-libelle]')
+    const icone = basculeBandeau.querySelector<HTMLElement>('[data-icone]')
+    basculeBandeau.hidden = false
+    basculeBandeau.addEventListener('click', () => {
+      const enPause = bandeau.classList.toggle('is-paused')
+      if (libelle) libelle.textContent = enPause ? 'Lecture' : 'Pause'
+      if (icone) icone.textContent = enPause ? '▶' : '❚❚'
+    })
+  }
+
   // Défilement horizontal des projets — le scroll vertical fait défiler les cartes
   // latéralement. Desktop large uniquement, désactivé en mouvement réduit : la
   // liste verticale reste le comportement par défaut, y compris sans JavaScript.

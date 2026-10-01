@@ -10,16 +10,16 @@ const title = 'Page introuvable | Guy Boireau'
 const description = "Cette page n'existe pas ou a été déplacée."
 ---
 
-<BaseLayout {title} {description}>
+<BaseLayout {title} {description} noindex>
   <Header />
-  <main>
+  <main id="contenu" tabindex="-1" class="focus:outline-none">
     <section class="section bg-slate-50 pt-32 min-h-screen">
       <div class="max-w-3xl mx-auto text-center">
         <p class="text-7xl md:text-8xl font-bold text-gradient mb-4">404</p>
         <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Page introuvable</h1>
         <p class="text-slate-600 leading-relaxed mb-10">
           Cette page n'existe pas, ou elle a été déplacée. Si vous êtes arrivé ici depuis un lien
-          de ce site, <a href="/contact" class="text-primary-400 hover:text-primary-600">dites-le moi</a> —
+          de ce site, <a href="/contact" class="text-primary-700 underline underline-offset-2 hover:text-primary-600">dites-le moi</a> —
           je le corrigerai.
         </p>
 

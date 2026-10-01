@@ -1,5 +1,7 @@
 ---
-const currentPath = Astro.url.pathname
+// Au build, les pages ont une barre finale (/services/) : sans normalisation,
+// aucun lien n'était jamais reconnu comme la page courante.
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/'
 
 const expertises = [
   { href: '/traitement-documentaire', label: 'Traitement documentaire' },
@@ -32,12 +34,12 @@ const isExpertise = expertises.some((link) => link.href === currentPath)
         />
         <span class="hidden sm:flex flex-col leading-none">
           <span class="font-display text-2xl font-semibold text-primary-600">Guy Boireau</span>
-          <span class="hidden lg:block text-[10px] tracking-[0.14em] uppercase text-slate-500 mt-1 whitespace-nowrap">Applications métier &amp; automatisation · Bordeaux</span>
+          <span class="hidden lg:block text-[10px] tracking-[0.14em] uppercase text-slate-600 mt-1 whitespace-nowrap">Applications métier &amp; automatisation · Bordeaux</span>
         </span>
       </a>
 
       <!-- Desktop nav -->
-      <nav class="hidden md:flex items-center space-x-6 lg:space-x-8">
+      <nav class="hidden md:flex items-center space-x-6 lg:space-x-8" aria-label="Menu principal">
         <details id="expertises-menu" class="relative">
           <summary
             class={`list-none cursor-pointer transition-colors duration-300 font-medium flex items-center gap-1 ${
@@ -51,6 +53,7 @@ const isExpertise = expertises.some((link) => link.href === currentPath)
             {expertises.map((link) => (
               <a
                 href={link.href}
+                aria-current={currentPath === link.href ? 'page' : undefined}
                 class={`block px-3 py-2 rounded-lg text-sm transition-colors ${
                   currentPath === link.href
                     ? 'text-primary-500 bg-primary-50'
@@ -65,6 +68,7 @@ const isExpertise = expertises.some((link) => link.href === currentPath)
         {navLinks.map((link) => (
           <a
             href={link.href}
+            aria-current={currentPath === link.href ? 'page' : undefined}
             class={`link-underline transition-colors duration-300 font-medium ${
               currentPath === link.href
                 ? 'text-primary-500'
@@ -82,13 +86,16 @@ const isExpertise = expertises.some((link) => link.href === currentPath)
       <!-- Mobile hamburger -->
       <button
         id="mobile-menu-btn"
+        type="button"
         class="md:hidden text-slate-600 hover:text-primary-500 transition-colors p-2"
         aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
       >
-        <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
-        <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
@@ -96,14 +103,16 @@ const isExpertise = expertises.some((link) => link.href === currentPath)
   </div>
 
   <!-- Mobile menu -->
-  <div
+  <nav
     id="mobile-menu"
+    aria-label="Menu principal"
     class="hidden md:hidden bg-white border-b border-slate-200 shadow-md mx-0 p-4 space-y-2"
   >
-    <p class="px-3 pt-1 pb-1 text-[10px] tracking-[0.18em] uppercase text-slate-400">Expertises</p>
+    <p class="px-3 pt-1 pb-1 text-[10px] tracking-[0.18em] uppercase text-slate-600">Expertises</p>
     {expertises.map((link) => (
       <a
         href={link.href}
+        aria-current={currentPath === link.href ? 'page' : undefined}
         class={`block py-2 px-3 rounded-lg transition-colors font-medium ${
           currentPath === link.href
             ? 'text-primary-500 bg-primary-50'
@@ -113,10 +122,11 @@ const isExpertise = expertises.some((link) => link.href === currentPath)
         {link.label}
       </a>
     ))}
-    <p class="px-3 pt-3 pb-1 text-[10px] tracking-[0.18em] uppercase text-slate-400">Navigation</p>
+    <p class="px-3 pt-3 pb-1 text-[10px] tracking-[0.18em] uppercase text-slate-600">Navigation</p>
     {navLinks.map((link) => (
       <a
         href={link.href}
+        aria-current={currentPath === link.href ? 'page' : undefined}
         class={`block py-2 px-3 rounded-lg transition-colors font-medium ${
           currentPath === link.href
             ? 'text-primary-500 bg-primary-50'
@@ -129,7 +139,7 @@ const isExpertise = expertises.some((link) => link.href === currentPath)
     <a href="/contact" class="btn-primary block text-center text-sm mt-2">
       Devis gratuit
     </a>
-  </div>
+  </nav>
 </header>
 
 <script>
@@ -164,11 +174,23 @@ const isExpertise = expertises.some((link) => link.href === currentPath)
     }
   })
 
-  // Mobile menu toggle
+  // Menu mobile : l'état ouvert/fermé est exposé aux technologies d'assistance
+  // (aria-expanded), et Échap le referme en rendant le focus au bouton.
+  const setMobileMenu = (open: boolean) => {
+    mobileMenu?.classList.toggle('hidden', !open)
+    iconOpen?.classList.toggle('hidden', open)
+    iconClose?.classList.toggle('hidden', !open)
+    mobileBtn?.setAttribute('aria-expanded', String(open))
+  }
+
   mobileBtn?.addEventListener('click', () => {
-    const isOpen = !mobileMenu?.classList.contains('hidden')
-    mobileMenu?.classList.toggle('hidden', isOpen)
-    iconOpen?.classList.toggle('hidden', !isOpen)
-    iconClose?.classList.toggle('hidden', isOpen)
+    setMobileMenu(mobileMenu?.classList.contains('hidden') ?? false)
+  })
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
+      setMobileMenu(false)
+      mobileBtn?.focus()
+    }
   })
 </script>
