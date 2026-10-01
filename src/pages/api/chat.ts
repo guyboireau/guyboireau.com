@@ -16,6 +16,13 @@ const chatBodySchema = z.object({
   messages: z.array(messageSchema).min(1).max(20),
 })
 
+/**
+ * Message montré au visiteur quand le fournisseur échoue. Le détail reste dans les
+ * journaux du serveur : il exposait l'état du compte (« credit balance is too low… »).
+ */
+const MESSAGE_INDISPONIBLE =
+  "L'assistant est momentanément indisponible. Réessayez plus tard, ou écrivez via le formulaire de contact."
+
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ip = clientAddress ?? 'unknown'
   if (chatRateLimiter(ip)) {
@@ -54,7 +61,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const client = new Anthropic({ apiKey })
 
   const stream = await client.messages.stream({
-    model: CLAUDE_MODEL,
+    // CHAT_MODEL vise un groupe du harnais LiteLLM du VPS (ANTHROPIC_BASE_URL), par
+    // exemple « assistant-site ». Sans lui, le nom Claude historique.
+    model: process.env.CHAT_MODEL || CLAUDE_MODEL,
     max_tokens: CHAT_MAX_TOKENS,
     system: SYSTEM_PROMPT,
     messages,
@@ -75,11 +84,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         }
         controller.enqueue(encoder.encode('data: [DONE]\n\n'))
       } catch (err) {
-        console.error('[chat API] Anthropic error:', err)
-        const message =
-          err instanceof Error ? err.message : 'Erreur API inconnue'
+        console.error('[chat API] erreur du fournisseur :', err)
         controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify({ error: message })}\n\n`)
+          encoder.encode(`data: ${JSON.stringify({ error: MESSAGE_INDISPONIBLE })}\n\n`)
         )
       } finally {
         controller.close()
