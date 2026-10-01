@@ -18,7 +18,7 @@ const sommaire = [
 ]
 ---
 
-<PageLegale {title} {description} titre="Politique de confidentialité" miseAJour="2026-09-25" {sommaire}>
+<PageLegale {title} {description} titre="Politique de confidentialité" miseAJour="2026-10-01" {sommaire}>
   <p>
     Cette page explique quelles données personnelles le site guyboireau.com traite, pourquoi, pendant combien de
     temps et avec quels prestataires. Elle couvre aussi les messages écrits directement à
@@ -29,7 +29,7 @@ const sommaire = [
   <h2 id="responsable">1. Responsable du traitement</h2>
   <p>
     Guy Boireau EI (entrepreneur individuel), 17 rue Beck, 33800 Bordeaux.<br />
-    Pour toute question sur vos données : <a href="mailto:me@guyboireau.com">me@guyboireau.com</a> —
+    Pour toute question sur vos données : <a href="mailto:me@guyboireau.com">me@guyboireau.com</a> ou
     <a href="tel:+33675751439">06 75 75 14 39</a>.
   </p>
 
@@ -52,7 +52,7 @@ const sommaire = [
     <dt>Destinataires et sous-traitants</dt>
     <dd>
       Guy Boireau EI est le seul destinataire. Le message est enregistré dans une base de données chez Supabase,
-      Inc. (région du projet : <span class="a-completer">[À COMPLÉTER : région du projet Supabase]</span>). Une
+      Inc., dans un projet hébergé en Irlande, dans l’Union européenne. Une
       notification qui reprend votre message est envoyée par Resend (États-Unis) vers la messagerie Gmail de Guy
       Boireau (Google), avec votre adresse e-mail comme adresse de réponse. Le site lui-même tourne sur un serveur
       loué à OVH, en France.
@@ -82,16 +82,15 @@ const sommaire = [
     <dt>Durée</dt>
     <dd>
       Le site ne conserve pas les conversations : elles n’existent que dans l’onglet de votre navigateur et
-      disparaissent quand vous rechargez ou fermez la page. Sur le relais :
-      <span class="a-completer">[À COMPLÉTER : le relais garde-t-il une trace des messages, et combien de temps ?]</span>.
-      Chez Google :
-      <span class="a-completer">[À COMPLÉTER : palier de l’API Gemini (gratuit ou payant) et durée de conservation — avec le palier gratuit, Google peut réutiliser les messages pour améliorer ses produits et les faire relire par des personnes]</span>.
+      disparaissent quand vous rechargez ou fermez la page. Le relais les transmet sans en garder de copie.
+      Mistral AI les conserve 30 jours pour détecter les abus, puis les efface, et ne s’en sert pas pour
+      entraîner ses modèles.
     </dd>
     <dt>Destinataires et sous-traitants</dt>
     <dd>
       Chaque message, avec l’historique de la conversation et les instructions données à l’assistant, passe
-      par un relais hébergé sur le serveur de l’éditeur, en France, puis est transmis à Google (API Gemini),
-      aux États-Unis, dont le modèle rédige la réponse.
+      par un relais hébergé sur le serveur de l’éditeur, en France, puis est transmis à Mistral AI, société
+      française, dont le modèle rédige la réponse. Mistral AI traite ces données dans l’Union européenne.
     </dd>
   </dl>
   <p>
@@ -159,16 +158,22 @@ const sommaire = [
     <dt>Base légale</dt>
     <dd>
       Mesures précontractuelles ou exécution du contrat (article 6.1.b du RGPD) quand votre message concerne une
-      prestation ; intérêt légitime (article 6.1.f) — répondre aux messages reçus — dans les autres cas.
+      prestation ; intérêt légitime (article 6.1.f : répondre aux messages reçus) dans les autres cas.
     </dd>
     <dt>Durée</dt>
-    <dd><span class="a-completer">[À COMPLÉTER : durée de conservation des e-mails reçus]</span></dd>
+    <dd>
+      3 ans après le dernier échange. Les échanges liés à une prestation sont gardés pendant toute la durée du
+      contrat, puis 5 ans (délai de prescription).
+    </dd>
     <dt>Destinataires et sous-traitants</dt>
     <dd>
-      Les messages sont reçus par ImprovMX, le service de messagerie du domaine (localisation :
-      <span class="a-completer">[À COMPLÉTER]</span>), puis transférés vers la messagerie Gmail de Guy Boireau
-      (Google). Un programme trie automatiquement le courrier reçu pour le classer et le résumer :
-      <span class="a-completer">[À COMPLÉTER : préciser s’il passe par Anthropic ou par un modèle local]</span>.
+      Les messages sont reçus par ImprovMX (ImprovMX Incorporation, États-Unis), le service de messagerie du
+      domaine. Ils arrivent sur ses serveurs en France, qui ne les gardent que le temps de les faire suivre, puis
+      sont transférés, éventuellement par des serveurs situés aux États-Unis, vers la messagerie Gmail de Guy
+      Boireau (Google). Un programme trie automatiquement le courrier reçu pour le classer et le résumer : il
+      passe par le relais du serveur de l’éditeur, en France, puis par l’API Gemini de Google, aux États-Unis.
+      Google ne se sert pas de ces messages pour entraîner ses modèles et ne les garde que pour une durée
+      limitée, afin de détecter les abus.
     </dd>
   </dl>
 
@@ -200,15 +205,18 @@ const sommaire = [
   <h2 id="transferts">3. Transferts hors de l’Union européenne</h2>
   <p>
     Certains prestataires sont établis aux États-Unis ou peuvent traiter les données hors de l’Union
-    européenne : Google (API Gemini pour l’assistant IA, Gmail et Google Drive), Resend (notification du
-    formulaire) et, selon la région du projet, Supabase (base du formulaire). ImprovMX est concerné selon sa localisation
-    (<span class="a-completer">[À COMPLÉTER]</span>).
+    européenne : Google (Gmail, Google Drive et l’API Gemini qui trie le courrier reçu), Resend (notification
+    du formulaire), Supabase (base du formulaire, hébergée en Irlande par une société américaine) et ImprovMX
+    (réception des e-mails). L’assistant IA passe par Mistral AI, qui traite les données dans l’Union
+    européenne.
   </p>
   <p>
-    Ces transferts reposent sur la décision d’adéquation de la Commission européenne pour les prestataires
-    certifiés au cadre de protection des données UE–États-Unis (Data Privacy Framework) ou, à défaut, sur les
-    clauses contractuelles types adoptées par la Commission européenne.
-    <span class="a-completer">[À COMPLÉTER : garantie retenue pour chaque prestataire — Google, Resend, Supabase, ImprovMX]</span>
+    Google et Resend sont certifiés au cadre de protection des données UE–États-Unis (Data Privacy Framework) :
+    leurs transferts reposent sur la décision d’adéquation de la Commission européenne du 10 juillet 2023.
+    L’accord de traitement des données de Resend comprend en outre les clauses contractuelles types adoptées par
+    la Commission européenne, sur lesquelles reposent aussi les transferts de Supabase. ImprovMX n’est pas
+    certifié au Data Privacy Framework : le transfert vers ce prestataire n’est pas couvert par la décision
+    d’adéquation.
   </p>
   <p>
     Vous pouvez obtenir des informations sur ces garanties, et une copie des clauses contractuelles types
@@ -256,7 +264,7 @@ const sommaire = [
   <h2 id="reclamation">6. Réclamation auprès de la CNIL</h2>
   <p>
     Vous pouvez à tout moment adresser une réclamation à la Commission nationale de l’informatique et des
-    libertés (CNIL) : 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 —
+    libertés (CNIL) : 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07,
     <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">cnil.fr<span class="sr-only"> (nouvel onglet)</span></a>.
   </p>
 

@@ -16,7 +16,16 @@ export interface Avis {
 }
 
 export const AVIS: Avis[] = [
-  // À AJOUTER quand Guy fournit le texte exact :
-  // - Arnault Janvier : son avis Google, recopié tel quel, avec sa date et le lien.
-  // - Gilles Boireau (La Lucarne Péniche, père de Guy) : texte validé par lui.
+  {
+    // Avis Google 5/5 laissé sur la fiche de Guy, lu « il y a 2 semaines »
+    // le 2026-10-01 et transmis par Guy. Texte recopié tel quel.
+    texte:
+      "J’ai confié la réalisation de mon site à Guy, qui a été très à l’écoute tout le long de la création de celui-là :) Je suis très content du résultat. Merci Guy !",
+    auteur: 'Arnault Janvier',
+    contexte: 'Maître verrier, client',
+    source: 'Avis Google, 5 sur 5, septembre 2026',
+    // lien : URL publique de la fiche Google de Guy, à ajouter quand il la fournit.
+  },
+  // À AJOUTER : Gilles Boireau (La Lucarne Péniche, père de Guy), texte validé
+  // par lui, avec la mention du lien familial dans `contexte`.
 ]

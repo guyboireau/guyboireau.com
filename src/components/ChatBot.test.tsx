@@ -35,14 +35,14 @@ describe('ChatBot', () => {
    * La mention est donc visible AVANT toute saisie, et reliée au champ.
    */
   describe('transparence avant la saisie', () => {
-    it('la mention dit : IA, Google (Gemini) via un relais, pas de données sensibles, réponses indicatives, pas un devis', () => {
+    it('la mention dit : IA, Mistral AI via un relais, pas de données sensibles, réponses indicatives, pas un devis', () => {
       render(<ChatBot />)
       const mention = document.getElementById('chat-avertissement')!
 
       expect(mention).toBeVisible()
-      expect(mention).toHaveTextContent(/assistant d'intelligence artificielle \(Gemini, de Google\), pas avec Guy/)
+      expect(mention).toHaveTextContent(/assistant d'intelligence artificielle \(Mistral AI\), pas avec Guy/)
       expect(mention).toHaveTextContent(/relais sur le serveur du site, en France/)
-      expect(mention).toHaveTextContent(/transmis à Google, aux États-Unis/)
+      expect(mention).toHaveTextContent(/transmis à Mistral AI, dans l'Union\s+européenne/)
       expect(mention).toHaveTextContent(/n'y saisissez pas de données sensibles/)
       expect(mention).toHaveTextContent(/peuvent contenir des erreurs/)
       expect(mention).toHaveTextContent(/ne\s+valent pas devis/)

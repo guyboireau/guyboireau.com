@@ -129,6 +129,31 @@ describe('/api/chat', () => {
     }
   })
 
+  describe('modèle demandé', () => {
+    /** Les options passées à messages.stream lors du dernier appel. */
+    async function optionsDuDernierAppel() {
+      const Anthropic = vi.mocked((await import('@anthropic-ai/sdk')).default)
+      const client = Anthropic.mock.results.at(-1)?.value as { messages: { stream: ReturnType<typeof vi.fn> } }
+      return client.messages.stream.mock.calls.at(-1)?.[0] as { model: string }
+    }
+
+    it('sans CHAT_MODEL, le nom Claude historique', async () => {
+      delete process.env.CHAT_MODEL
+      await POST(createChatRequest([{ role: 'user', content: 'Salut' }], '10.0.0.4'))
+      expect((await optionsDuDernierAppel()).model).toBe('claude-haiku-4-5-20251001')
+    })
+
+    it('CHAT_MODEL vise un groupe du harnais LiteLLM (« assistant-site »)', async () => {
+      process.env.CHAT_MODEL = 'assistant-site'
+      try {
+        await POST(createChatRequest([{ role: 'user', content: 'Salut' }], '10.0.0.5'))
+        expect((await optionsDuDernierAppel()).model).toBe('assistant-site')
+      } finally {
+        delete process.env.CHAT_MODEL
+      }
+    })
+  })
+
   it('retourne 400 si le corps de la requête est invalide', async () => {
     const ctx = {
       request: new Request('http://localhost/api/chat', {
@@ -202,8 +227,24 @@ describe('/api/chat', () => {
         await POST(createChatRequest([{ role: 'user', content: 'Salut' }]))
       )
 
-      expect(corps).toContain('"error":"Overloaded"')
+      expect(corps).toContain('"error":"L\'assistant est momentanément indisponible.')
       expect(espion).toHaveBeenCalled()
+      espion.mockRestore()
+    })
+
+    it('le message du fournisseur ne sort jamais vers le navigateur', async () => {
+      // Le 2026-10-01, le chat affichait aux visiteurs « Your credit balance is too
+      // low to access the Anthropic API… » : l'état du compte n'a rien à faire là.
+      const espion = vi.spyOn(console, 'error').mockImplementation(() => {})
+      erreurEnCoursDeFlux = new Error('400 Your credit balance is too low to access the Anthropic API')
+
+      const corps = await lireFlux(
+        await POST(createChatRequest([{ role: 'user', content: 'Salut' }]))
+      )
+
+      expect(corps).not.toContain('credit balance')
+      expect(corps).not.toContain('Anthropic')
+      expect(espion).toHaveBeenCalledWith('[chat API] erreur du fournisseur :', erreurEnCoursDeFlux)
       espion.mockRestore()
     })
 
@@ -227,7 +268,7 @@ describe('/api/chat', () => {
         await POST(createChatRequest([{ role: 'user', content: 'Salut' }]))
       )
 
-      expect(corps).toContain('Erreur API inconnue')
+      expect(corps).toContain('momentanément indisponible')
       vi.restoreAllMocks()
     })
 

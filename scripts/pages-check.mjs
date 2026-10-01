@@ -143,7 +143,7 @@ for (const page of ['index.html', 'services/index.html', 'automatisations/index.
 // Le bandeau défilant (et son bouton pause) a été retiré le 2026-10-01 : plus
 // aucune animation en boucle sur l'accueil (DESIGN.md, « Mouvement »).
 exiger('index.html', [
-  "assistant d'intelligence artificielle (Gemini, de Google), pas avec Guy", 'Assistant IA',
+  "assistant d'intelligence artificielle (Mistral AI), pas avec Guy", 'Assistant IA',
 ], ['En ligne', 'Mon assistant répond en direct', 'trust-marquee', '10+ projets']);
 
 exiger('contact/index.html', ['3 ans à compter de votre message', 'champ obligatoire', 'href="/confidentialite#formulaire-contact"']);
