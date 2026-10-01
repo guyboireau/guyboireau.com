@@ -2,122 +2,132 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
+import Icone from '../components/Icone.astro'
 import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
 import lalucarneDesktop from '../assets/lalucarne-desktop.png'
 import lalucarneMobile from '../assets/lalucarne-mobile.png'
 import niidoAdmin from '../assets/niido-admin.png'
 import niidoMobile from '../assets/niido-mobile.png'
 import arnaultDesktop from '../assets/arnault-desktop.webp'
 
-const title = 'Projets | Guy Boireau — Développeur Web Freelance Bordeaux'
+const title = 'Projets | Guy Boireau, développeur indépendant à Bordeaux'
 const description =
-  'Réalisations de Guy Boireau : Arnault Janvier — Maître Verrier, La Lucarne Péniche, Niido. Sites et applications qui génèrent des clients et du chiffre d\'affaires. Développeur freelance Bordeaux.'
+  "Les projets de Guy Boireau : le site multilingue d'Arnault Janvier, maître verrier, celui de La Lucarne Péniche et l'application Niido."
 
-const featuredProjects = [
+interface Projet {
+  title: string
+  subtitle: string
+  description: string
+  points: string[]
+  stack: Record<string, string[]>
+  images: { desktop: ImageMetadata; mobile?: ImageMetadata; legendeDesktop?: string; legendeMobile?: string }
+  link: string | null
+  infos: string[]
+}
+
+const projetsClients: Projet[] = [
   {
-    title: 'Arnault Janvier — Maître Verrier',
-    subtitle: 'Vitrine multilingue et galerie autonome',
+    title: 'Arnault Janvier, maître verrier',
+    subtitle: 'Un site en trois langues avec une galerie gérée par l’artisan',
     description:
-      "Un atelier d'art invisible hors de sa région. Site en trois langues (français, anglais, espagnol) avec une galerie que l'artisan gère seul — et des demandes entrantes de clients anglophones et hispanophones qu'il ne touchait pas avant. Artisan vitrailliste (Glassncraft Studio) basé à Paris, avec un second atelier à Moulins.",
-    highlights: [
-      'Arnault gère sa galerie et ses projets en toute autonomie depuis son espace de gestion',
-      'Visible dans 3 langues : clients français, anglais et hispanophones',
-      'Formulaire de contact protégé par Cloudflare Turnstile, avec pièces jointes',
-      'Galerie organisée par section : création sur mesure, restauration, art contemporain',
-      'SEO optimisé : données structurées Schema.org, hreflang, sitemap multilingue',
+      "Arnault Janvier est vitrailliste (Glassncraft Studio), à Paris avec un second atelier à Moulins. Son atelier était peu visible hors de sa région. Le site est en français, en anglais et en espagnol, et il reçoit depuis des demandes de clients anglophones et hispanophones.",
+    points: [
+      'Arnault gère seul sa galerie et ses projets, depuis son espace de gestion',
+      'Trois langues : français, anglais, espagnol',
+      'Galerie par thème : création, restauration, art contemporain',
+      'Formulaire de contact avec pièces jointes, protégé contre les robots par Cloudflare Turnstile',
+      'Référencement : données structurées, hreflang, plan du site par langue',
       'Hébergé en France depuis septembre 2026, sur un serveur privé virtuel (VPS) OVHcloud, avec sa base Supabase auto-hébergée',
     ],
-    techStack: {
-      Frontend: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS v4'],
-      Backend: ['Supabase', 'PostgreSQL', 'RLS', 'Supabase Storage'],
-      i18n: ['next-intl', 'FR / EN / ES'],
-      Qualité: ['React Hook Form', 'Zod', 'Resend'],
+    stack: {
+      Interface: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS 4'],
+      Données: ['Supabase', 'PostgreSQL', 'Supabase Storage'],
+      Langues: ['next-intl'],
+      Formulaires: ['React Hook Form', 'Zod', 'Resend'],
       Hébergement: ['VPS OVHcloud (France)', 'Supabase auto-hébergé'],
     },
     images: { desktop: arnaultDesktop },
     link: 'https://www.arnault-janvier-vitrail.fr',
-    linkLabel: 'Visiter le site',
-    metrics: { type: 'Mission freelance', date: 'Janvier 2026', status: 'En production' },
+    infos: ['Mission indépendante', 'Janvier 2026', 'En production'],
   },
   {
     title: 'La Lucarne Péniche',
-    subtitle: "Gestion autonome d'une programmation culturelle",
+    subtitle: 'Une programmation culturelle publiée par l’équipe elle-même',
     description:
-      "Une programmation qui change chaque semaine dépendait d'un prestataire à chaque modification. L'équipe de cette péniche culturelle de Saint-Léger-des-Vignes publie désormais ses événements, actualités et photos elle-même, en quelques minutes, sans intervention technique.",
-    highlights: [
-      'Site livré en 3 semaines, dans les délais convenus',
-      'Le client gère son contenu seul : événements, articles, photos',
-      'Visible sur Google dès le premier mois de mise en ligne',
-      'Aucune compétence technique requise pour les mises à jour',
-      'Hébergement, domaine et sécurité inclus — zéro surprise',
+      "La Lucarne est une péniche culturelle à Saint-Léger-des-Vignes. Sa programmation change chaque semaine, et chaque modification passait par un prestataire. L'équipe publie maintenant ses événements, ses actualités et ses photos seule.",
+    points: [
+      "L'équipe gère seule ses événements, ses articles et ses photos",
+      'Aucune compétence technique nécessaire pour mettre à jour le site',
+      "Formation de l'équipe à l'espace de gestion",
+      'Hébergé en France, sur un VPS OVHcloud, avec sa base Supabase auto-hébergée',
     ],
-    techStack: {
-      Frontend: ['React 19', 'React Router 7', 'Vite 7', 'JavaScript ES Modules'],
-      Backend: ['Supabase', 'PostgreSQL', 'Row Level Security'],
-      Hébergement: ['VPS OVHcloud (France)', 'Supabase auto-hébergé', 'Domaine personnalisé'],
+    stack: {
+      Interface: ['React 19', 'React Router 7', 'Vite 7'],
+      Données: ['Supabase', 'PostgreSQL', 'Row Level Security'],
+      Hébergement: ['VPS OVHcloud (France)', 'Supabase auto-hébergé'],
     },
     images: { desktop: lalucarneDesktop, mobile: lalucarneMobile },
     link: 'https://www.lalucarnepeniche.com',
-    linkLabel: 'Visiter le site',
-    metrics: { type: 'Mission freelance', date: 'Janvier 2026', status: 'En production' },
+    infos: ['Mission indépendante', 'Janvier 2026', 'En production'],
   },
-]
-
-const freelanceProjects = [
   {
-    title: 'Niido — Marketplace de services à domicile',
-    subtitle: 'Marketplace mobile avec validation documentaire automatisée',
+    title: 'Niido',
+    subtitle: 'Une application mobile qui vérifie les justificatifs des prestataires',
     description:
-      "Vérifier manuellement les pièces d'identité et justificatifs de chaque prestataire ne tient pas à l'échelle. L'application intègre un pipeline de lecture et de contrôle automatique des documents, avec score de confiance et reprise humaine sur les seuls cas douteux. Quatre rôles utilisateurs, espace d'administration, gestion de 250+ logements locatifs.",
-    highlights: [
-      'Pièces justificatives lues et contrôlées automatiquement, reprise humaine sur les seuls cas douteux',
-      'Particuliers trouvent un pro qualifié en moins de 2 minutes',
-      'Professionnels reçoivent leurs missions directement sur mobile',
-      'Conciergerie : gestion de 250 logements locatifs depuis un seul tableau de bord',
-      'Paiements sécurisés, commissions automatiques, parrainage',
-      'Messagerie temps réel entre clients et prestataires',
+      "Niido met en relation des prestataires du bâtiment et des services à domicile avec des particuliers et des gestionnaires de logements. Vérifier à la main les pièces de chaque prestataire ne tient pas quand le nombre grandit : l'application les lit et les contrôle, et une personne ne reprend que les cas douteux.",
+    points: [
+      "Pièces d'identité et justificatifs lus et contrôlés automatiquement, avec un score de confiance",
+      'Les prestataires reçoivent leurs missions sur leur téléphone',
+      'Messagerie en temps réel entre clients et prestataires',
+      "Quatre rôles d'utilisateurs, et un espace d'administration pour l'équipe Niido",
     ],
-    techStack: {
-      Mobile: ['React Native 0.74', 'Expo SDK 54', 'TypeScript', 'React Navigation v6'],
-      IA: ['API Anthropic', 'Lecture de documents', 'Score de confiance'],
-      Backend: ['Supabase', 'PostgreSQL', 'RLS', 'Edge Functions'],
-      Admin: ['React 19', 'Vite', 'TypeScript', 'TailwindCSS', 'Zustand'],
+    stack: {
+      Mobile: ['React Native 0.86', 'Expo SDK 57', 'TypeScript', 'React Navigation 7'],
+      'Lecture de documents': ['API Anthropic', 'Score de confiance'],
+      Données: ['Supabase', 'PostgreSQL', 'RLS', 'Edge Functions'],
+      Administration: ['React 19', 'Vite', 'TypeScript', 'Tailwind CSS'],
       Outillage: ['React Query 5', 'Zod', 'GitHub Actions', 'Sentry', 'Vitest'],
     },
-    images: { desktop: niidoAdmin, mobile: niidoMobile },
+    images: {
+      desktop: niidoAdmin,
+      mobile: niidoMobile,
+      legendeDesktop: "Espace d'administration",
+      legendeMobile: 'Application mobile',
+    },
     link: null,
-    metrics: { type: 'Mission freelance', date: '2025', status: 'En bêta privée — pas encore sur les stores' },
+    infos: ['Mission indépendante', 'Depuis 2025', 'En bêta privée, pas encore sur les stores'],
   },
 ]
 
-const sideProjects = [
+const projetsPersonnels = [
   {
     title: 'SkateDev',
-    description: 'Liste de skate-parks à Ottawa avec système de notation et commentaires.',
+    description: 'Les skate-parks d’Ottawa, avec notes et commentaires.',
     techs: ['TypeScript', 'React'],
     link: 'https://github.com/guyboireau/SkateDev',
   },
   {
     title: 'TriviaTrainer',
-    description: 'Application de quiz interactive.',
+    description: 'Une application de quiz.',
     techs: ['Vue.js', 'JavaScript'],
     link: 'https://github.com/guyboireau/TriviaTrainer',
   },
   {
     title: 'BioDesignLab',
-    description: 'Plateforme web collaborative avec GraphQL pour ressources pédagogiques.',
+    description: 'Une plateforme collaborative de ressources pédagogiques.',
     techs: ['TypeScript', 'GraphQL', 'React'],
     link: 'https://gitlab.com/guyboireau/BioDesignLab',
   },
   {
     title: 'LuxuryCar',
-    description: 'Catalogue de voitures de luxe en MVC PHP.',
+    description: 'Un catalogue de voitures en PHP, architecture MVC.',
     techs: ['PHP', 'MVC', 'MySQL'],
     link: 'https://github.com/guyboireau/LuxuryCar',
   },
   {
     title: 'OccasAuto',
-    description: 'Application de gestion d\'occasions automobiles en C#.',
+    description: "Une application de gestion de véhicules d'occasion en C#.",
     techs: ['C#', '.NET'],
     link: 'https://github.com/guyboireau/OccasAuto-C-',
   },
@@ -128,285 +138,167 @@ const sideProjects = [
   <Header />
   <main id="contenu" tabindex="-1" class="focus:outline-none">
     <!-- Intro -->
-    <section class="section bg-slate-50 pt-32">
-      <div class="max-w-4xl mx-auto text-center reveal-fade-up">
-        <h1 class="section-title">Mes projets</h1>
-        <p class="section-subtitle">Des réalisations concrètes pour de vrais clients</p>
+    <section class="bg-creme border-b border-ligne pt-28 pb-16 md:pt-36 md:pb-20 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto">
+        <p class="etiquette mb-6">Projets</p>
+        <h1 class="text-4xl md:text-6xl leading-[1.08] mb-6">Ce que j'ai construit, et pour qui</h1>
+        <p class="text-lg md:text-xl text-encre-2 leading-relaxed max-w-3xl">
+          Trois projets clients, présentés avec leur accord. Puis un outil personnel et des projets de formation.
+        </p>
       </div>
     </section>
 
-    <!-- Featured projects -->
-    <section class="section bg-slate-50">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-2xl font-bold text-slate-800 mb-8 reveal-fade-up">Projets clients phares</h2>
+    <!-- Projets clients -->
+    <section class="section">
+      <div class="max-w-6xl mx-auto space-y-12">
+        {projetsClients.map((project) => (
+          <article class="carte p-6 md:p-10 apparition">
+            <p class="font-mono text-[13px] text-encre-3 mb-4">{project.infos.join(' · ')}</p>
+            <h2 class="text-3xl md:text-4xl mb-2">{project.title}</h2>
+            <p class="text-encre-2 text-lg mb-6">{project.subtitle}</p>
 
-        <div class="space-y-12">
-          {featuredProjects.map((project) => (
-            <div class="glass-card p-8 border-2 border-primary-500/40 stagger-item">
-              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                <div>
-                  <h3 class="text-2xl font-bold text-primary-400 mb-1">{project.title}</h3>
-                  <p class="text-slate-600 text-lg">{project.subtitle}</p>
-                </div>
-                <div class="flex flex-wrap gap-2 shrink-0">
-                  <span class="px-3 py-1 bg-primary-500/20 text-primary-600 rounded-full text-sm border border-primary-500/30">{project.metrics.type}</span>
-                  <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm">{project.metrics.date}</span>
-                  <span class="px-3 py-1 bg-green-500/20 text-green-800 rounded-full text-sm border border-green-500/30">{project.metrics.status}</span>
-                </div>
-              </div>
+            <p class="text-encre leading-relaxed mb-8 max-w-3xl">{project.description}</p>
 
-              <p class="text-slate-600 mb-6">{project.description}</p>
-
-              {project.images && (
-                <div class="flex flex-col md:flex-row gap-4 mb-6">
-                  <Image
-                    src={project.images.desktop}
-                    alt={`${project.title} — desktop`}
-                    widths={project.images.mobile ? [480, 960] : [480, 960, 1440]}
-                    sizes={project.images.mobile ? '(max-width: 768px) 100vw, 640px' : '(max-width: 768px) 100vw, 960px'}
-                    format="webp"
-                    class={`w-full ${project.images.mobile ? 'md:w-2/3' : ''} rounded-lg border border-slate-200 shadow-lg object-cover`}
-                    loading="lazy"
-                  />
-                  {project.images.mobile && (
+            <div class="flex flex-col md:flex-row gap-4 mb-8">
+              <figure class={project.images.mobile ? 'md:w-2/3' : 'w-full'}>
+                <Image
+                  src={project.images.desktop}
+                  alt={`Capture d'écran de ${project.title}${project.images.legendeDesktop ? ` : ${project.images.legendeDesktop.toLowerCase()}` : ' sur ordinateur'}`}
+                  widths={project.images.mobile ? [480, 960] : [480, 960, 1440]}
+                  sizes={project.images.mobile ? '(max-width: 768px) 100vw, 640px' : '(max-width: 768px) 100vw, 960px'}
+                  format="webp"
+                  class="w-full rounded border border-ligne object-cover"
+                  loading="lazy"
+                />
+                {project.images.legendeDesktop && (
+                  <figcaption class="font-mono text-[13px] text-encre-3 mt-2">{project.images.legendeDesktop}</figcaption>
+                )}
+              </figure>
+              {project.images.mobile && (
+                <figure class="md:w-1/3">
                   <Image
                     src={project.images.mobile}
-                    alt={`${project.title} — mobile`}
+                    alt={`Capture d'écran de ${project.title} sur téléphone`}
                     widths={[320, 640]}
                     sizes="(max-width: 768px) 100vw, 320px"
                     format="webp"
-                    class="w-full md:w-1/3 rounded-lg border border-slate-200 shadow-lg object-cover"
+                    class="w-full rounded border border-ligne object-cover"
                     loading="lazy"
                   />
+                  {project.images.legendeMobile && (
+                    <figcaption class="font-mono text-[13px] text-encre-3 mt-2">{project.images.legendeMobile}</figcaption>
                   )}
-                </div>
-              )}
-
-              <div class="mb-6">
-                <h4 class="text-slate-800 font-semibold mb-3">Points clés</h4>
-                <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {project.highlights.map((h) => (
-                    <li class="flex items-start gap-2 text-slate-600 text-sm">
-                      <span class="text-primary-400 shrink-0 mt-0.5" aria-hidden="true">✓</span>
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div class="mb-6">
-                <h4 class="text-slate-800 font-semibold mb-3">Stack technique</h4>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {Object.entries(project.techStack).map(([label, techs]) => (
-                    <div>
-                      <div class="text-primary-700 text-sm font-medium mb-2">{label}</div>
-                      <div class="flex flex-wrap gap-1">
-                        {techs.map((tech: string) => (
-                          <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">{tech}</span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="btn-primary inline-block"
-                >
-                  {project.linkLabel}<span class="sr-only"> de {project.title} (nouvel onglet)</span><span aria-hidden="true"> →</span>
-                </a>
+                </figure>
               )}
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
 
-    <!-- Freelance projects -->
-    <section class="section bg-white">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-2xl font-bold text-slate-800 mb-8 reveal-fade-up">Réalisations freelance en cours</h2>
-
-        <div class="space-y-8">
-          {freelanceProjects.map((project) => (
-            <div class="glass-card p-8 border-2 border-primary-500/30 stagger-item">
-              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                <div>
-                  <h3 class="text-2xl font-bold text-primary-400 mb-1">{project.title}</h3>
-                  <p class="text-slate-600">{project.subtitle}</p>
-                </div>
-                <div class="flex flex-wrap gap-2 shrink-0">
-                  <span class="px-3 py-1 bg-primary-500/20 text-primary-600 rounded-full text-sm border border-primary-500/30">{project.metrics.type}</span>
-                  <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm">{project.metrics.date}</span>
-                  <span class="px-3 py-1 bg-yellow-500/20 text-yellow-800 rounded-full text-sm border border-yellow-500/30">{project.metrics.status}</span>
-                </div>
-              </div>
-
-              <p class="text-slate-600 mb-6">{project.description}</p>
-
-              {project.images && (
-                <div class="flex flex-col md:flex-row gap-4 mb-6">
-                  <div class="md:w-2/3">
-                    <p class="text-slate-500 text-xs uppercase tracking-wider mb-2">Dashboard Admin</p>
-                    <Image
-                      src={project.images.desktop}
-                      alt={`${project.title} — admin`}
-                      widths={[480, 960]}
-                      sizes="(max-width: 768px) 100vw, 640px"
-                      format="webp"
-                      class="w-full rounded-lg border border-slate-200 shadow-lg object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div class="md:w-1/3">
-                    <p class="text-slate-500 text-xs uppercase tracking-wider mb-2">Application Mobile</p>
-                    <Image
-                      src={project.images.mobile}
-                      alt={`${project.title} — mobile`}
-                      widths={[320, 640]}
-                      sizes="(max-width: 768px) 100vw, 320px"
-                      format="webp"
-                      class="w-full rounded-lg border border-slate-200 shadow-lg object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
-              )}
-
-              <div class="mb-4">
-                <h4 class="text-slate-800 font-semibold mb-3">Fonctionnalités clés</h4>
-                <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {project.highlights.map((h) => (
-                    <li class="flex items-start gap-2 text-slate-600 text-sm">
-                      <span class="text-primary-400 shrink-0 mt-0.5" aria-hidden="true">✓</span>{h}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
+            <div class="grid gap-8 md:grid-cols-2 mb-8">
               <div>
-                <h4 class="text-slate-800 font-semibold mb-3">Stack</h4>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {Object.entries(project.techStack).map(([label, techs]) => (
+                <h3 class="text-xl mb-4">Ce que fait le projet</h3>
+                <ul class="space-y-3">
+                  {project.points.map((point) => (
+                    <li class="flex items-start gap-3 text-encre-2">
+                      <Icone nom="check" class="text-primary-500 mt-0.5 shrink-0" />{point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h3 class="text-xl mb-4">Technique</h3>
+                <dl class="space-y-3">
+                  {Object.entries(project.stack).map(([label, techs]) => (
                     <div>
-                      <div class="text-primary-700 text-xs font-medium mb-2">{label}</div>
-                      <div class="flex flex-wrap gap-1">
-                        {techs.map((tech: string) => (
-                          <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">{tech}</span>
-                        ))}
-                      </div>
+                      <dt class="etiquette">{label}</dt>
+                      <dd class="font-mono text-sm text-encre-2">{techs.join(' · ')}</dd>
                     </div>
                   ))}
-                </div>
+                </dl>
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
 
-    <!-- Projets IA -->
-    <section class="section bg-slate-50">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-2xl font-bold text-slate-800 mb-8 reveal-fade-up">Projets IA & Automatisations</h2>
-
-        <div class="glass-card p-8 border-2 border-primary-500/30 stagger-item">
-          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-            <div>
-              <h3 class="text-2xl font-bold text-primary-400 mb-1">Agent Freelance</h3>
-              <p class="text-slate-600">Espace de gestion IA pour freelances — analyse de briefs, devis automatique, RAG</p>
-            </div>
-            <div class="flex flex-wrap gap-2 shrink-0">
-              <span class="px-3 py-1 bg-primary-500/20 text-primary-600 rounded-full text-sm border border-primary-500/30">Projet IA</span>
-              <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm">2025</span>
-              <span class="px-3 py-1 bg-blue-500/20 text-blue-700 rounded-full text-sm border border-blue-500/30">Open source</span>
-            </div>
-          </div>
-
-          <p class="text-slate-600 mb-6">
-            Agent IA qui automatise la gestion administrative d'un freelance : il analyse un brief entrant, génère un devis structuré, répond aux questions courantes via une base de connaissances personnelle (RAG), et suit les projets en cours. Conçu pour tourner sans supervision.
-          </p>
-
-          <div class="mb-6">
-            <h4 class="text-slate-800 font-semibold mb-3">Ce que ça fait concrètement</h4>
-            <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {[
-                'Brief entrant → analyse automatique + extraction des infos clés',
-                'Génération de devis structuré en moins de 30 secondes',
-                'RAG sur la base de connaissances personnelle du freelance',
-                'Suivi des projets en cours avec alertes de délai',
-                'Réponses automatiques aux questions récurrentes des clients',
-                'Export PDF des livrables directement depuis l\'agent',
-              ].map((h) => (
-                <li class="flex items-start gap-2 text-slate-600 text-sm">
-                  <span class="text-primary-400 shrink-0 mt-0.5" aria-hidden="true">✓</span>{h}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div class="mb-6">
-            <h4 class="text-slate-800 font-semibold mb-3">Stack</h4>
-            <div class="flex flex-wrap gap-2">
-              {['Claude API', 'Make (Integromat)', 'RAG / embeddings', 'TypeScript', 'Supabase pgvector', 'Node.js'].map((tech) => (
-                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs border border-slate-200">{tech}</span>
-              ))}
-            </div>
-          </div>
-
-          <div class="flex gap-4 flex-wrap">
-            <a href="https://github.com/guyboireau/agent-freelance" target="_blank" rel="noopener noreferrer" class="btn-secondary inline-block text-sm">
-              Voir le code GitHub<span class="sr-only"> d’Agent Freelance (nouvel onglet)</span><span aria-hidden="true"> →</span>
-            </a>
-            <a href="/contact" class="btn-primary inline-block text-sm">
-              Demander une démo
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Side projects -->
-    <section class="section bg-slate-50">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-2xl font-bold text-slate-800 mb-8 reveal-fade-up">Projets personnels & exercices</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sideProjects.map((project) => (
-            <div class="glass-card lift p-6 group stagger-item">
-              <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-primary-400 transition-colors">
-                {project.title}
-              </h3>
-              <p class="text-slate-500 text-sm mb-4">{project.description}</p>
-              <div class="flex flex-wrap gap-1 mb-4">
-                {project.techs.map((tech) => (
-                  <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">{tech}</span>
-                ))}
-              </div>
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-primary-700 hover:text-primary-600 transition-colors text-sm font-medium"
-              >
-                Voir le code<span class="sr-only"> de {project.title} (nouvel onglet)</span><span aria-hidden="true"> →</span>
+            {project.link && (
+              <a href={project.link} target="_blank" rel="noopener noreferrer" class="btn-secondary">
+                Voir le site<span class="sr-only"> de {project.title} (nouvel onglet)</span>
+                <Icone nom="external-link" taille={16} />
               </a>
-            </div>
-          ))}
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Outil personnel -->
+    <section class="section bg-creme border-y border-ligne">
+      <div class="max-w-6xl mx-auto">
+        <div class="apparition mb-8">
+          <p class="etiquette mb-4">Outil personnel</p>
+          <h2 class="section-title">Agent Freelance</h2>
+          <p class="text-lg text-encre-2 max-w-3xl">
+            Un espace de gestion pour développeur indépendant, construit pour tester l'intégration de modèles de langage dans un vrai outil.
+            Le code est public, et une démonstration tourne avec des données fictives.
+          </p>
+        </div>
+
+        <div class="carte p-6 md:p-8 apparition">
+          <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+            {[
+              "Analyse d'un brief client et proposition de devis structuré",
+              'Discussion avec un agent qui garde la mémoire des échanges',
+              'Rédaction de posts LinkedIn et d’e-mails',
+              'Documents rangés par client',
+              'Suivi des relances',
+              'Comparaison des réponses de plusieurs modèles',
+            ].map((point) => (
+              <li class="flex items-start gap-3 text-encre-2">
+                <Icone nom="check" class="text-primary-500 mt-0.5 shrink-0" />{point}
+              </li>
+            ))}
+          </ul>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="https://github.com/guyboireau/agent-freelance" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+              Voir le code<span class="sr-only"> d'Agent Freelance sur GitHub (nouvel onglet)</span>
+              <Icone nom="external-link" taille={16} />
+            </a>
+            <a href="https://agent-freelance.vercel.app" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+              Ouvrir la démonstration<span class="sr-only"> (nouvel onglet)</span>
+              <Icone nom="external-link" taille={16} />
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="section bg-white">
-      <div class="max-w-3xl mx-auto text-center reveal-scale">
-        <h2 class="text-3xl font-bold text-slate-800 mb-4">Votre projet sera le prochain</h2>
-        <p class="text-slate-500 mb-8">Discutons de vos besoins — premier échange gratuit, sans engagement.</p>
-        <a href="/contact" class="btn-primary inline-block">Prendre contact</a>
+    <!-- Projets de formation -->
+    <section class="section">
+      <div class="max-w-6xl mx-auto">
+        <div class="apparition mb-8">
+          <p class="etiquette mb-4">Formation</p>
+          <h2 class="section-title">Projets d'école et exercices</h2>
+        </div>
+
+        <ul class="divide-y divide-ligne border-y border-ligne">
+          {projetsPersonnels.map((project) => (
+            <li class="grid gap-2 md:grid-cols-[200px_minmax(0,1fr)_auto] md:items-baseline py-4 apparition">
+              <h3 class="text-xl">{project.title}</h3>
+              <p class="text-encre-2">
+                {project.description}
+                <span class="block font-mono text-[13px] text-encre-3 mt-1">{project.techs.join(' · ')}</span>
+              </p>
+              <a href={project.link} target="_blank" rel="noopener noreferrer" class="lien text-sm">
+                Code source<span class="sr-only"> de {project.title} (nouvel onglet)</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section bg-foret">
+      <div class="max-w-3xl mx-auto apparition">
+        <h2 class="text-3xl md:text-4xl text-creme mb-4">Un projet à me confier ?</h2>
+        <p class="text-creme-sourd text-lg mb-8">Le premier échange est gratuit et sans engagement.</p>
+        <a href="/contact" class="btn-primary">Me contacter</a>
       </div>
     </section>
   </main>

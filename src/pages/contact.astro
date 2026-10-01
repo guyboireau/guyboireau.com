@@ -3,78 +3,69 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import ContactForm from '../components/ContactForm'
+import Icone from '../components/Icone.astro'
 
-const title = 'Contact | Guy Boireau — Développeur Web Freelance Bordeaux'
+const title = 'Contact | Guy Boireau, développeur indépendant à Bordeaux'
 const description =
-  'Contactez Guy Boireau pour votre projet web, application mobile ou dépannage informatique. Réponse sous 24h. Premier échange gratuit.'
+  'Écrivez ou appelez Guy Boireau pour une application, un site ou un dépannage. Réponse sous 24 h, premier échange gratuit.'
 ---
 
 <BaseLayout {title} {description}>
   <Header />
   <main id="contenu" tabindex="-1" class="focus:outline-none">
-    <section class="section bg-slate-50 pt-32">
+    <section class="bg-creme border-b border-ligne pt-28 pb-16 md:pt-36 md:pb-24 px-4 sm:px-6 lg:px-8">
       <div class="max-w-5xl mx-auto">
-        <div class="reveal-fade-up mb-12 text-center">
-          <h1 class="section-title">Parlons de votre projet</h1>
-          <p class="section-subtitle">Premier échange gratuit — réponse sous 24h</p>
+        <div class="mb-12 max-w-2xl">
+          <p class="etiquette mb-6">Contact</p>
+          <h1 class="text-4xl md:text-6xl leading-[1.08] mb-6">Parlons de votre projet</h1>
+          <p class="text-lg md:text-xl text-encre-2">Le premier échange est gratuit. Je réponds sous 24 h.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <!-- Form (React island) -->
-          <div class="reveal-fade-up">
+        <div class="grid grid-cols-1 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] gap-8">
+          <div class="carte p-6 md:p-8">
             <h2 class="sr-only">Formulaire de contact</h2>
             <ContactForm client:load />
           </div>
 
-          <!-- Contact info -->
-          <div class="space-y-5 reveal-fade-right">
+          <div>
             <h2 class="sr-only">Coordonnées</h2>
-            <div class="glass-card p-6 hover-tilt">
-              <div class="text-primary-400 text-2xl mb-3" aria-hidden="true">📧</div>
-              <h3 class="text-lg font-semibold text-slate-800 mb-1">Email</h3>
-              <a href="mailto:me@guyboireau.com" class="text-slate-600 hover:text-primary-700 transition-colors">
-                me@guyboireau.com
-              </a>
-            </div>
-
-            <div class="glass-card p-6 hover-tilt">
-              <div class="text-primary-400 text-2xl mb-3" aria-hidden="true">📱</div>
-              <h3 class="text-lg font-semibold text-slate-800 mb-1">Téléphone</h3>
-              <a href="tel:+33675751439" class="text-slate-600 hover:text-primary-700 transition-colors">
-                06 75 75 14 39
-              </a>
-            </div>
-
-            <div class="glass-card p-6 hover-tilt">
-              <div class="text-primary-400 text-2xl mb-3" aria-hidden="true">📍</div>
-              <h3 class="text-lg font-semibold text-slate-800 mb-1">Localisation</h3>
-              <p class="text-slate-500">Bordeaux, France</p>
-              <p class="text-slate-500 text-sm mt-1">Disponible en remote partout en France</p>
-            </div>
-
-            <div class="glass-card p-6 hover-tilt">
-              <div class="text-primary-400 text-2xl mb-3" aria-hidden="true">💼</div>
-              <h3 class="text-lg font-semibold text-slate-800 mb-1">LinkedIn</h3>
-              <a
-                href="https://www.linkedin.com/in/guy-boireau"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-slate-600 hover:text-primary-700 transition-colors text-sm break-all"
-              >
-                linkedin.com/in/guy-boireau<span class="sr-only"> (nouvel onglet)</span>
-              </a>
-            </div>
-
-            <div class="glass-card p-6">
-              <div class="text-primary-400 text-2xl mb-3" aria-hidden="true">📞</div>
-              <h3 class="text-lg font-semibold text-slate-800 mb-2">Appel découverte</h3>
-              <p class="text-slate-500 text-sm mb-4">
-                Préférez un échange oral ? Appelez-moi directement ou envoyez un message, on fixe un créneau ensemble.
-              </p>
-              <a href="tel:+33675751439" class="btn-secondary text-sm inline-block">
-                06 75 75 14 39
-              </a>
-            </div>
+            <dl class="divide-y divide-ligne border-y border-ligne">
+              <div class="flex gap-4 py-5">
+                <Icone nom="mail" class="text-primary-500 shrink-0 mt-1" />
+                <div>
+                  <dt class="etiquette mb-1">E-mail</dt>
+                  <dd><a href="mailto:me@guyboireau.com" class="lien">me@guyboireau.com</a></dd>
+                </div>
+              </div>
+              <div class="flex gap-4 py-5">
+                <Icone nom="phone" class="text-primary-500 shrink-0 mt-1" />
+                <div>
+                  <dt class="etiquette mb-1">Téléphone</dt>
+                  <dd>
+                    <a href="tel:+33675751439" class="lien">06 75 75 14 39</a>
+                    <p class="text-encre-2 text-sm mt-1">Vous préférez parler ? Appelez, ou laissez un message pour fixer un créneau.</p>
+                  </dd>
+                </div>
+              </div>
+              <div class="flex gap-4 py-5">
+                <Icone nom="map-pin" class="text-primary-500 shrink-0 mt-1" />
+                <div>
+                  <dt class="etiquette mb-1">Où</dt>
+                  <dd class="text-encre-2">Bordeaux, et à distance partout en France</dd>
+                </div>
+              </div>
+              <div class="flex gap-4 py-5">
+                <Icone nom="user" class="text-primary-500 shrink-0 mt-1" />
+                <div>
+                  <dt class="etiquette mb-1">LinkedIn</dt>
+                  <dd>
+                    <a href="https://www.linkedin.com/in/guy-boireau" target="_blank" rel="noopener noreferrer" class="lien break-all">
+                      linkedin.com/in/guy-boireau<span class="sr-only"> (nouvel onglet)</span>
+                    </a>
+                  </dd>
+                </div>
+              </div>
+            </dl>
           </div>
         </div>
       </div>

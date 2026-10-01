@@ -14,7 +14,7 @@ describe('PricingSimulator', () => {
   it('affiche la mention des prix nets et le lien vers les CGV', () => {
     render(<PricingSimulator />)
 
-    expect(screen.getByText(/Prix nets — TVA non applicable, art\. 293 B du CGI/)).toBeInTheDocument()
+    expect(screen.getByText(/Prix nets\. TVA non applicable, art\. 293 B du CGI/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Conditions générales de vente' })).toHaveAttribute('href', '/cgv')
   })
 

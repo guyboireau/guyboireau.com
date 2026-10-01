@@ -26,48 +26,48 @@ const BLOCKS: BlockConfig[] = [
     title: 'Options à la création',
     subtitle: 'Ajoutez ce dont vous avez besoin',
     options: [
-      { id: 'opt-page', label: 'Page supplémentaire (Galerie, À propos, etc.)', price: 100, unit: '/page' },
+      { id: 'opt-page', label: 'Page supplémentaire (galerie, à propos…)', price: 100, unit: '/page' },
       { id: 'opt-contact', label: 'Formulaire de contact', price: 60 },
-      { id: 'opt-rdv', label: 'Prise de RDV en ligne (Calendly intégré)', price: 80 },
+      { id: 'opt-rdv', label: 'Prise de rendez-vous en ligne (Calendly)', price: 80 },
       { id: 'opt-shop', label: 'Boutique en ligne (jusqu\'à 20 produits)', price: 400 },
-      { id: 'opt-blog', label: 'Blog / actualités', price: 150 },
+      { id: 'opt-blog', label: 'Blog ou actualités', price: 150 },
       { id: 'opt-gallery', label: 'Galerie photos optimisée', price: 80 },
-      { id: 'opt-bilingue', label: 'Version bilingue FR/EN', price: 200 },
-      { id: 'opt-copy', label: 'Rédaction des textes (copywriting)', price: 150 },
+      { id: 'opt-bilingue', label: 'Version bilingue français et anglais', price: 200 },
+      { id: 'opt-copy', label: 'Rédaction des textes', price: 150 },
     ],
   },
   {
-    title: 'Présence en ligne (one shot)',
+    title: 'Présence en ligne (paiement unique)',
     subtitle: 'Être trouvé sur internet',
     options: [
-      { id: 'pres-gmb', label: 'Fiche Google Business (Maps + recherche)', price: 80 },
+      { id: 'pres-gmb', label: 'Fiche Google Business (Maps et recherche)', price: 80 },
       { id: 'pres-fb', label: 'Page Facebook pro', price: 60 },
       { id: 'pres-ig', label: 'Page Instagram pro', price: 60 },
-      { id: 'pres-pixel', label: 'Pixel Meta / Google Tag Manager', price: 60 },
+      { id: 'pres-pixel', label: 'Pixel Meta ou Google Tag Manager', price: 60 },
       { id: 'pres-ga', label: 'Google Analytics', price: 50 },
     ],
   },
   {
     title: 'Abonnement mensuel (engagement 12 mois)',
-    subtitle: 'Votre site reste en vie — premier mois offert, sans engagement +20 €/mois',
+    subtitle: 'Votre site reste à jour. Premier mois offert. Sans engagement : 20 € de plus par mois.',
     isSubscription: true,
     options: [
       { id: 'sub-host', label: 'Hébergement + domaine', price: 15, unit: '/mois' },
       { id: 'sub-backup', label: 'Sauvegardes automatiques', price: 10, unit: '/mois' },
-      { id: 'sub-security', label: 'Mises à jour sécurité', price: 15, unit: '/mois' },
-      { id: 'sub-edit', label: '1 modification/mois incluse', price: 15, unit: '/mois' },
+      { id: 'sub-security', label: 'Mises à jour de sécurité', price: 15, unit: '/mois' },
+      { id: 'sub-edit', label: 'Une modification de contenu par mois', price: 15, unit: '/mois' },
       { id: 'sub-report', label: 'Rapport de performance mensuel', price: 10, unit: '/mois' },
-      { id: 'sub-seo', label: 'SEO de base mensuel', price: 20, unit: '/mois' },
+      { id: 'sub-seo', label: 'Référencement de base, chaque mois', price: 20, unit: '/mois' },
     ],
   },
   {
-    title: 'Boosts ponctuels',
+    title: 'Interventions ponctuelles',
     subtitle: 'Quand vous avez un besoin précis',
     options: [
       { id: 'boost-hour', label: 'Modification hors abonnement', price: 60, unit: '/h' },
       { id: 'boost-redesign', label: 'Refonte graphique partielle', price: 200 },
-      { id: 'boost-speed', label: 'Optimisation vitesse / Core Web Vitals', price: 150 },
-      { id: 'boost-seo', label: 'Audit SEO complet', price: 200 },
+      { id: 'boost-speed', label: 'Optimisation de la vitesse (Core Web Vitals)', price: 150 },
+      { id: 'boost-seo', label: 'Audit complet du référencement', price: 200 },
     ],
   },
 ]
@@ -126,10 +126,10 @@ export default function PricingSimulator() {
     <div className="max-w-4xl mx-auto">
       <div className="space-y-8">
         {BLOCKS.map((block) => (
-          <div key={block.title} className="glass-card p-6 md:p-8">
+          <div key={block.title} className="carte p-6 md:p-8">
             <div className="mb-6">
-              <h3 className="text-xl font-bold text-slate-800">{block.title}</h3>
-              <p className="text-slate-500 text-sm">{block.subtitle}</p>
+              <h3 className="text-xl text-encre">{block.title}</h3>
+              <p className="text-encre-2 text-sm">{block.subtitle}</p>
             </div>
             <div className="space-y-3">
               {block.options.map((opt) => {
@@ -138,23 +138,23 @@ export default function PricingSimulator() {
                 return (
                   <label
                     key={opt.id}
-                    className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                    className={`flex items-center gap-4 p-4 rounded border cursor-pointer transition-colors ${
                       checked
-                        ? 'border-primary-500 bg-primary-500/5'
-                        : 'border-slate-200 hover:border-primary-300'
+                        ? 'border-primary-500 bg-creme'
+                        : 'border-ligne hover:border-primary-500'
                     } ${isBase ? 'opacity-100 cursor-default' : ''}`}
                   >
                     <input
                       type="checkbox"
-                      className="w-5 h-5 rounded border-slate-300 text-primary-500 focus:ring-primary-500 shrink-0"
+                      className="w-5 h-5 rounded border-ligne text-primary-500 focus:ring-primary-500 shrink-0"
                       checked={checked}
                       onChange={() => toggle(opt.id)}
                       disabled={isBase}
                     />
-                    <span className="flex-1 text-slate-700 text-sm md:text-base">{opt.label}</span>
-                    <span className="text-primary-600 font-semibold whitespace-nowrap text-sm md:text-base">
+                    <span className="flex-1 text-encre-2 text-sm md:text-base">{opt.label}</span>
+                    <span className="font-mono font-medium text-primary-700 whitespace-nowrap text-sm md:text-base">
                       +{formatPrice(opt.price)}
-                      {opt.unit && <span className="text-slate-600 font-normal text-xs ml-0.5">{opt.unit}</span>}
+                      {opt.unit && <span className="text-encre-2 font-normal text-xs ml-0.5">{opt.unit}</span>}
                     </span>
                   </label>
                 )
@@ -164,21 +164,21 @@ export default function PricingSimulator() {
             {/* Quantité pour options spéciales */}
             {isChecked('opt-page') && block.title === 'Options à la création' && (
               <div className="mt-4 flex items-center gap-4 pl-14" role="group" aria-labelledby="simulateur-pages">
-                <span id="simulateur-pages" className="text-slate-600 text-sm">Nombre de pages :</span>
+                <span id="simulateur-pages" className="text-encre-2 text-sm">Nombre de pages :</span>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     aria-label="Retirer une page"
-                    className="w-8 h-8 rounded-full border border-slate-500 text-slate-700 hover:bg-slate-50"
+                    className="w-8 h-8 rounded border border-encre-3 text-encre-2 hover:bg-creme"
                     onClick={() => setOptPages((p) => Math.max(1, p - 1))}
                   >
                     <span aria-hidden="true">−</span>
                   </button>
-                  <output aria-live="polite" className="w-8 text-center font-semibold text-slate-800">{optPages}</output>
+                  <output aria-live="polite" className="w-8 text-center font-semibold text-encre">{optPages}</output>
                   <button
                     type="button"
                     aria-label="Ajouter une page"
-                    className="w-8 h-8 rounded-full border border-slate-500 text-slate-700 hover:bg-slate-50"
+                    className="w-8 h-8 rounded border border-encre-3 text-encre-2 hover:bg-creme"
                     onClick={() => setOptPages((p) => p + 1)}
                   >
                     <span aria-hidden="true">+</span>
@@ -187,23 +187,23 @@ export default function PricingSimulator() {
               </div>
             )}
 
-            {isChecked('boost-hour') && block.title === 'Boosts ponctuels' && (
+            {isChecked('boost-hour') && block.title === 'Interventions ponctuelles' && (
               <div className="mt-4 flex items-center gap-4 pl-14" role="group" aria-labelledby="simulateur-heures">
-                <span id="simulateur-heures" className="text-slate-600 text-sm">Nombre d'heures :</span>
+                <span id="simulateur-heures" className="text-encre-2 text-sm">Nombre d'heures :</span>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     aria-label="Retirer une heure"
-                    className="w-8 h-8 rounded-full border border-slate-500 text-slate-700 hover:bg-slate-50"
+                    className="w-8 h-8 rounded border border-encre-3 text-encre-2 hover:bg-creme"
                     onClick={() => setBoostHours((p) => Math.max(1, p - 1))}
                   >
                     <span aria-hidden="true">−</span>
                   </button>
-                  <output aria-live="polite" className="w-8 text-center font-semibold text-slate-800">{boostHours}</output>
+                  <output aria-live="polite" className="w-8 text-center font-semibold text-encre">{boostHours}</output>
                   <button
                     type="button"
                     aria-label="Ajouter une heure"
-                    className="w-8 h-8 rounded-full border border-slate-500 text-slate-700 hover:bg-slate-50"
+                    className="w-8 h-8 rounded border border-encre-3 text-encre-2 hover:bg-creme"
                     onClick={() => setBoostHours((p) => p + 1)}
                   >
                     <span aria-hidden="true">+</span>
@@ -217,21 +217,21 @@ export default function PricingSimulator() {
 
       {/* Récapitulatif sticky */}
       <div className="sticky bottom-6 mt-8">
-        <div className="glass-card p-6 border-2 border-primary-500/30 shadow-xl shadow-primary-500/10">
+        <div className="carte p-6 border-primary-500">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               {/* Le total change à chaque case cochée : annoncé, sans interrompre. */}
               <div aria-live="polite" aria-atomic="true">
-                <p className="text-slate-600 text-sm">Total création + options</p>
-                <p className="text-3xl font-bold text-gradient">{formatPrice(oneTimeTotal)}</p>
+                <p className="text-encre-2 text-sm">Total création + options</p>
+                <p className="chiffre text-3xl">{formatPrice(oneTimeTotal)}</p>
                 {monthlyTotal > 0 && (
-                  <p className="text-slate-600 text-sm mt-1">
+                  <p className="text-encre-2 text-sm mt-1">
                     + {formatPrice(monthlyTotal)}/mois d'abonnement
                   </p>
                 )}
               </div>
-              <p className="text-slate-600 text-xs mt-2">
-                Prix nets — TVA non applicable, art. 293 B du CGI.{' '}
+              <p className="text-encre-2 text-xs mt-2">
+                Prix nets. TVA non applicable, art. 293 B du CGI.{' '}
                 <a href="/cgv" className="text-primary-700 underline underline-offset-2 hover:text-primary-600">
                   Conditions générales de vente
                 </a>
@@ -239,9 +239,9 @@ export default function PricingSimulator() {
             </div>
             <a
               href={`/contact?subject=Devis%20site%20web&budget=${oneTimeTotal}${monthlyTotal > 0 ? `&monthly=${monthlyTotal}` : ''}`}
-              className="btn-primary text-center block md:inline-block px-8 py-3"
+              className="btn-primary"
             >
-              Demander ce devis<span aria-hidden="true"> →</span>
+              Demander ce devis
             </a>
           </div>
         </div>
