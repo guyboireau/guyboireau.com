@@ -142,7 +142,7 @@ for (const page of ['index.html', 'services/index.html', 'automatisations/index.
 
 exiger('index.html', [
   'id="trust-marquee-toggle"', /data-doublon[^>]*aria-hidden="true"|aria-hidden="true"[^>]*data-doublon/,
-  "assistant d'intelligence artificielle (Gemini, de Google), pas avec Guy", 'Assistant IA',
+  "assistant d'intelligence artificielle (Mistral AI), pas avec Guy", 'Assistant IA',
 ], ['En ligne', 'Mon assistant répond en direct']);
 
 exiger('contact/index.html', ['3 ans à compter de votre message', 'champ obligatoire', 'href="/confidentialite#formulaire-contact"']);
