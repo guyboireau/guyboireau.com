@@ -25,6 +25,7 @@ done
 
 Au 2026-09-14 : **OPEN 2 · LANDED 0 · SHIPPED 0 · REFUTED 1**
 Au 2026-09-28 : **OPEN 3 · LANDED 2 · SHIPPED 0 · REFUTED 1**
+Au 2026-10-05 : **OPEN 4 · LANDED 1 · SHIPPED 2 · REFUTED 1**
 
 ---
 
@@ -60,6 +61,12 @@ curl -s https://api.github.com/repos/guyboireau/guyboireau.com/rules/branches/ma
 ```
 
 Reste OPEN. Correctif : ajouter `required_status_checks` (`ci`, `🔐 Détection de secrets`) au ruleset. Décision de Guy.
+
+**Relevé (2026-10-05).** Inchangé : toujours `deletion`, `non_fast_forward`,
+`pull_request` (0 approbation), aucune règle `required_status_checks` (même commande
+que ci-dessus). Les quatre PR mergées le 2026-10-01 (#56, #58, #59, #60) avaient
+leur `ci` vert avant la fusion — par discipline, pas par contrainte : #58 a été
+fusionnée 3 min après son ouverture, #59 6 min après. Ouvert depuis 21 jours.
 
 ---
 
@@ -134,6 +141,11 @@ for n in 55 56; do
 done
 ```
 
+**Relevé (2026-10-05).** #58 et #59 (ouvertes le 2026-10-01) ont reçu `ci`,
+`🔐 Détection de secrets` et `lien`, tous verts ; elles portent aussi encore
+`Vercel Preview Comments` (le projet Vercel reste relié). Le cas #38 reste isolé.
+Ouvert depuis 21 jours.
+
 ---
 
 ## B03 — PR #38 « astro 7.3.2 » : vulnérabilité déjà corrigée, et la PR faisait régresser le déploiement VPS
@@ -180,7 +192,7 @@ Clôturée sans merge le 2026-09-14, avec ce constat en commentaire.
 
 ## B04 — Limitation de débit : tous les visiteurs partagent le même quota derrière Caddy
 
-- [ ] **statut: LANDED** · ouvert le 2026-09-28 · sécurité, parcours utilisateur
+- [x] **statut: SHIPPED** · ouvert le 2026-09-28 · livré par #56 (eaed8aa, mergée le 2026-10-01) · re-prouvé sur `main` fa50d82 le 2026-10-05 · sécurité, parcours utilisateur
 
 En production (VPS, `astro.config.vps.mjs`), `security.allowedDomains` n'est pas
 configuré : l'adaptateur Node d'Astro ignore alors `X-Forwarded-For` et
@@ -217,11 +229,22 @@ npx vitest run src/lib/client-ip.test.ts
 
 Passe SHIPPED quand #56 est sur `main` et le test rejoué.
 
+**Re-preuve sur `main` (2026-10-05, fa50d82, après `npm ci`)** — `client-ip.ts` est
+sur `main` et branché sur les deux routes limitées :
+
+```sh
+npx vitest run src/lib/client-ip.test.ts          # → 1 fichier, vert
+git grep -n "adresseVisiteur" -- src/pages/api     # → chat.ts:8 et contact.ts:9 (import + appel)
+```
+
+Reste hors dépôt : l'hypothèse « Caddy sans `trusted_proxies` remplace
+`X-Forwarded-For` » (commentaire de `client-ip.ts`) n'a pas été rejouée contre le VPS.
+
 ---
 
 ## B05 — Simulateur de prix : l'abonnement mensuel est ajouté au prix de création, et part dans la demande de devis
 
-- [ ] **statut: LANDED** · ouvert le 2026-09-28 · argent, parcours utilisateur
+- [x] **statut: SHIPPED** · ouvert le 2026-09-28 · livré par #56 (eaed8aa) · re-prouvé sur `main` fa50d82 le 2026-10-05 · argent, parcours utilisateur
 
 Sur `/services`, `PricingSimulator.tsx` calcule `oneTimeTotal` en sommant **toutes**
 les options cochées, abonnements compris (aucun test sur `block.isSubscription`),
@@ -243,6 +266,16 @@ rm src/components/PricingSimulator.test.tsx
 
 **Correctif** — PR #56 (tête 5df7b8c, non mergée) ; le même test y est vert
 (`npx vitest run src/components/PricingSimulator.test.tsx` dans le worktree de B04).
+
+**Re-preuve sur `main` (2026-10-05, fa50d82)** — le test est désormais dans le dépôt,
+et la refonte #60 (qui a réécrit 84 lignes du simulateur) ne l'a pas cassé :
+
+```sh
+npx vitest run src/components/PricingSimulator.test.tsx -t "abonnement coché"
+# → Tests 1 passed | 8 skipped (filtre -t) ; fichier complet : 9 verts
+grep -n "isSubscription" src/components/PricingSimulator.tsx
+# → l. 102 : `if (opt && !block.isSubscription)` exclut l'abonnement du total création
+```
 
 ---
 
@@ -269,6 +302,94 @@ dans #56, **non appliquée** (le pipeline de ce site ne joue pas les migrations)
 Preuve de fermeture attendue : transcript `information_schema.role_table_grants`
 et `pg_policies` sur la base de prod, sans ligne pour `authenticated`.
 Décision de Guy requise : données personnelles / RLS / migration SQL.
+
+**Relevé (2026-10-05).** La migration de correction est **sur `main`** depuis #56,
+mais rien ne l'applique (le pipeline du site joue `npm ci` puis le build, pas les
+migrations) : la prod reste dans l'état de `20260901120000`. Ouvert depuis 7 jours.
+À noter avant de l'appliquer : le fichier contient `begin;` / `commit;`. Si elle passe
+un jour par un `migrer.sh` qui enveloppe déjà chaque fichier dans une transaction
+(cas des autres sites du VPS), le `commit;` interne casse l'atomicité avec
+l'enregistrement de la version.
+
+```sh
+git grep -nE '^(begin|commit);' -- supabase/migrations/20260925090000_portfolio_contacts_lecture_service_role.sql
+# → l. 18 begin; · l. 27 commit;
+```
+
+---
+
+## B07 — `http-cache-semantics` 4.2.0 (advisory high) dans l'arbre de production
+
+- [ ] **statut: LANDED** · ouvert le 2026-10-05 · sécurité
+
+`astro` 7.3.2 tire `http-cache-semantics` 4.2.0, visé par GHSA-ch52-4w7c-c8xp
+(« max-stale handling can disclose cross-user cached responses », high, `<=4.2.0`).
+C'est la seule vulnérabilité de `npm audit --omit=dev` sur `main` fa50d82. Astro s'en
+sert pour la politique de cache des images distantes ; le site n'en charge aucune à
+ce jour, l'exploitabilité réelle est donc faible — mais le paquet est livré en prod.
+
+**Preuve re-exécutable** (sur `main` fa50d82, après `npm ci`)
+
+```sh
+npm audit --omit=dev --json | jq -c .metadata.vulnerabilities
+# → {"info":0,"low":0,"moderate":0,"high":1,"critical":0,"total":1}
+npm ls http-cache-semantics   # → astro@7.3.2 └─ http-cache-semantics@4.2.0
+```
+
+**Correctif** — `npm audit fix` sans `--force` (lockfile seul, 4.2.0 → 4.3.0), PR de
+l'audit du 2026-10-05 sur `claude/eager-feynman-uc9cch`. Après correctif :
+`npm audit --omit=dev` → `"high":0,"total":0` ; lint, `tsc --noEmit`, 189 tests et
+build verts. Passe SHIPPED quand la PR est sur `main` et l'audit rejoué.
+
+Reste en arbre complet, **dev seulement** : 5 high via `eslint-plugin-astro` →
+`astro-eslint-parser` → `fast-glob` → `micromatch` → `braces` 3.0.3
+(GHSA-vfj7-8cjw-p6xm, aucune version 3.x corrigée ; `npm audit` ne propose qu'une
+rétrogradation majeure d'`eslint-plugin-astro`). Exécuté seulement au lint, sur du
+code du dépôt : non retenu comme constat.
+
+---
+
+## B08 — Assistant IA : le sous-traitant déclaré (Mistral AI, UE) ne dépend que d'une variable d'environnement ; le repli du code part chez Anthropic (États-Unis)
+
+- [ ] **statut: OPEN** · ouvert le 2026-10-05 · données personnelles
+
+Depuis #56 et #60, `confidentialite.astro`, le bandeau de `ChatBot.tsx` et
+`public/llms.txt` disent aux visiteurs que leurs messages au chatbot vont chez
+**Mistral AI, dans l'Union européenne**. Le code, lui, appelle le SDK Anthropic :
+`model: process.env.CHAT_MODEL || CLAUDE_MODEL`, avec `CLAUDE_MODEL =
+'claude-haiku-4-5-20251001'` et `ANTHROPIC_BASE_URL` facultative. La déclaration
+n'est vraie que si, en prod, `ANTHROPIC_BASE_URL` pointe le relais LiteLLM du VPS
+**et** `CHAT_MODEL` vise un groupe routé vers Mistral. Sans l'une des deux, les
+messages partent chez Anthropic, aux États-Unis — un transfert hors UE que la
+politique de confidentialité ne mentionne plus (art. 13 et 44 RGPD).
+
+Deux faits aggravent :
+1. le projet Vercel redéploie encore `main` à chaque push (README, « Hébergement ») et
+   `guyboireau-com.vercel.app` répond : `.env.example` ne fixe ni `CHAT_MODEL` ni
+   `ANTHROPIC_BASE_URL`, et un relais en `127.0.0.1:4000` n'existe pas chez Vercel ;
+2. en une semaine, trois fournisseurs ont été écrits pour la même fonction :
+   Gemini (#55, `f6ec101`), Mistral AI (#56, #60), Claude (code). Aucun test ne lie
+   la déclaration au code.
+
+Exploitabilité en prod **non mesurée** : cet audit n'a lu ni l'environnement du
+service `guyboireau.service` ni la configuration LiteLLM, et n'a pas interrogé le site.
+
+**Preuve re-exécutable**
+
+```sh
+git grep -n "CHAT_MODEL || CLAUDE_MODEL\|new Anthropic" -- src/pages/api/chat.ts
+git grep -n "CLAUDE_MODEL" -- src/data/ai-config.ts      # → 'claude-haiku-4-5-20251001'
+git grep -n "Mistral AI" -- src/pages/confidentialite.astro src/components/ChatBot.tsx public/llms.txt
+git grep -n "CHAT_MODEL\|ANTHROPIC_BASE_URL" -- .env.example   # → lignes commentées seulement
+# Fermeture attendue : transcript de l'environnement du service sur le VPS
+#   (CHAT_MODEL + ANTHROPIC_BASE_URL) et de la route LiteLLM du groupe → Mistral,
+#   ET soit l'arrêt du projet Vercel, soit l'absence d'ANTHROPIC_API_KEY valide chez lui.
+```
+
+**Correctif proposé** — décision de Guy (données personnelles, config de déploiement) :
+faire échouer `/api/chat` (503) quand `CHAT_MODEL` ou `ANTHROPIC_BASE_URL` manque en
+production au lieu de replier sur Claude, et un test qui lie le fournisseur déclaré
+à la configuration exigée.
 
 ---
 
