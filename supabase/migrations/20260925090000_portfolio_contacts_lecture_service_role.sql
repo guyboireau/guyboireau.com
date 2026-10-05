@@ -15,7 +15,9 @@
 --                     la purge à 3 ans, public.purge_portfolio_contacts()).
 -- ============================================================
 
-begin;
+-- Pas de begin; / commit; (B06) : `supabase db push`, comme migrer.sh sur le
+-- VPS, joue chaque fichier dans une transaction avec l'enregistrement de sa
+-- version, qu'un commit; interne casserait. À la main : psql --single-transaction.
 
 drop policy if exists "authenticated peut lire les messages" on public.portfolio_contacts;
 
@@ -23,8 +25,6 @@ revoke all on public.portfolio_contacts from authenticated;
 
 -- Explicite plutôt que de dépendre des privilèges par défaut du schéma public.
 grant select, delete on public.portfolio_contacts to service_role;
-
-commit;
 
 -- ============================================================
 -- VÉRIFICATION, après application :
