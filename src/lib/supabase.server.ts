@@ -1,20 +1,60 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let _client: SupabaseClient<any> | null = null
+/**
+ * Schéma des tables que le serveur touche, recopié de
+ * `supabase/migrations/20260901120000_portfolio_contacts.sql`. Le client était
+ * typé `SupabaseClient<any>` : une colonne mal nommée dans l'insertion de
+ * /api/contact passait `tsc` et n'échouait qu'en production, en silence (l'erreur
+ * est journalisée, le visiteur reçoit quand même un succès). À tenir à jour avec
+ * toute migration qui change ces colonnes.
+ */
+export type Database = {
+  public: {
+    Tables: {
+      portfolio_contacts: {
+        Row: {
+          id: string
+          name: string
+          email: string
+          message: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          email: string
+          message: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          email?: string
+          message?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+    }
+    Views: Record<never, never>
+    Functions: Record<never, never>
+    Enums: Record<never, never>
+    CompositeTypes: Record<never, never>
+  }
+}
+
+let _client: SupabaseClient<Database> | null = null
 
 /**
  * Client Supabase pour le serveur uniquement.
  * Utilise process.env pour éviter l'inlining de la clé dans les bundles SSR.
  * Ne pas importer dans du code client.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getSupabaseServer(): SupabaseClient<any> | null {
+export function getSupabaseServer(): SupabaseClient<Database> | null {
   if (_client) return _client
   const url = process.env.PUBLIC_SUPABASE_URL
   const key = process.env.PUBLIC_SUPABASE_ANON_KEY
   if (!url || !key) return null
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _client = createClient<any>(url, key)
+  _client = createClient<Database>(url, key)
   return _client
 }
