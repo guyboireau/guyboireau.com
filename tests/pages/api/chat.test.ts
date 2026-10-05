@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { POST } from '@/pages/api/chat'
 
 let mockStreamEvents: unknown[] = [
@@ -47,11 +47,22 @@ function createChatRequest(
   } as unknown as Parameters<typeof POST>[0]
 }
 
+/** Configuration de production : le relais LiteLLM du VPS et son groupe routé vers Mistral AI. */
+const RELAIS = 'http://127.0.0.1:4000'
+const GROUPE = 'assistant-site'
+
 describe('/api/chat', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockStreamEvents = [...EVENEMENTS_PAR_DEFAUT]
     erreurEnCoursDeFlux = null
+    process.env.ANTHROPIC_BASE_URL = RELAIS
+    process.env.CHAT_MODEL = GROUPE
+  })
+
+  afterEach(() => {
+    delete process.env.ANTHROPIC_BASE_URL
+    delete process.env.CHAT_MODEL
   })
 
   /** Lit tout le corps SSE d'une réponse. */
@@ -90,18 +101,72 @@ describe('/api/chat', () => {
     expect(autre.status).toBe(200)
   })
 
-  it('retourne 500 si la clé Anthropic est manquante', async () => {
-    const originalKey = import.meta.env.ANTHROPIC_API_KEY
-    import.meta.env.ANTHROPIC_API_KEY = ''
+  /**
+   * B08. La politique de confidentialité, le bandeau du chat et llms.txt déclarent
+   * Mistral AI (UE). Le SDK parle le protocole Anthropic : sans relais ni groupe,
+   * il partait chez Anthropic (États-Unis), transfert non déclaré. Configuration
+   * incomplète = aucun fournisseur contacté, 503, et le visiteur est renvoyé au
+   * formulaire de contact.
+   */
+  describe('configuration incomplète : aucun fournisseur contacté', () => {
+    async function constructeur() {
+      return vi.mocked((await import('@anthropic-ai/sdk')).default)
+    }
 
-    const ctx = createChatRequest([{ role: 'user', content: 'Hello' }], '10.0.0.2')
-    const response = await POST(ctx)
+    async function attendre503(ip: string) {
+      const espion = vi.spyOn(console, 'error').mockImplementation(() => {})
+      try {
+        const reponse = await POST(createChatRequest([{ role: 'user', content: 'Salut' }], ip))
+        expect(reponse.status).toBe(503)
+        const corps = await reponse.json()
+        expect(corps.error).toContain('formulaire de contact')
+        expect(corps.code).toBe('ASSISTANT_NON_CONFIGURE')
+        expect(await constructeur()).not.toHaveBeenCalled()
+        return { corps, espion }
+      } finally {
+        espion.mockRestore()
+      }
+    }
 
-    expect(response.status).toBe(500)
-    const body = await response.json()
-    expect(body.error).toBe('Configuration manquante')
+    it('sans CHAT_MODEL : 503, pas de repli sur un modèle par défaut', async () => {
+      delete process.env.CHAT_MODEL
+      await attendre503('10.0.1.1')
+    })
 
-    import.meta.env.ANTHROPIC_API_KEY = originalKey
+    it('sans ANTHROPIC_BASE_URL : 503, rien ne part chez Anthropic en direct', async () => {
+      delete process.env.ANTHROPIC_BASE_URL
+      await attendre503('10.0.1.2')
+    })
+
+    it('ANTHROPIC_BASE_URL vers l\'API Anthropic elle-même : 503', async () => {
+      process.env.ANTHROPIC_BASE_URL = 'https://api.anthropic.com'
+      await attendre503('10.0.1.3')
+    })
+
+    it('ANTHROPIC_BASE_URL illisible : 503', async () => {
+      process.env.ANTHROPIC_BASE_URL = 'pas une url'
+      await attendre503('10.0.1.4')
+    })
+
+    it('sans clé : 503', async () => {
+      const original = process.env.ANTHROPIC_API_KEY
+      process.env.ANTHROPIC_API_KEY = ''
+      try {
+        await attendre503('10.0.1.5')
+      } finally {
+        process.env.ANTHROPIC_API_KEY = original
+      }
+    })
+
+    it('le détail de la variable manquante va au journal, pas au navigateur', async () => {
+      delete process.env.CHAT_MODEL
+      const espion = vi.spyOn(console, 'error').mockImplementation(() => {})
+      const reponse = await POST(createChatRequest([{ role: 'user', content: 'Salut' }], '10.0.1.6'))
+      const texte = await reponse.text()
+      expect(texte).not.toContain('CHAT_MODEL')
+      expect(espion).toHaveBeenCalledWith(expect.stringContaining('CHAT_MODEL'))
+      espion.mockRestore()
+    })
   })
 
   it('retourne un stream SSE en cas de succès', async () => {
@@ -137,20 +202,15 @@ describe('/api/chat', () => {
       return client.messages.stream.mock.calls.at(-1)?.[0] as { model: string }
     }
 
-    it('sans CHAT_MODEL, le nom Claude historique', async () => {
-      delete process.env.CHAT_MODEL
+    it('le client vise le relais (ANTHROPIC_BASE_URL), jamais l\'URL par défaut du SDK', async () => {
       await POST(createChatRequest([{ role: 'user', content: 'Salut' }], '10.0.0.4'))
-      expect((await optionsDuDernierAppel()).model).toBe('claude-haiku-4-5-20251001')
+      const Anthropic = vi.mocked((await import('@anthropic-ai/sdk')).default)
+      expect(Anthropic).toHaveBeenCalledWith(expect.objectContaining({ baseURL: RELAIS }))
     })
 
     it('CHAT_MODEL vise un groupe du harnais LiteLLM (« assistant-site »)', async () => {
-      process.env.CHAT_MODEL = 'assistant-site'
-      try {
-        await POST(createChatRequest([{ role: 'user', content: 'Salut' }], '10.0.0.5'))
-        expect((await optionsDuDernierAppel()).model).toBe('assistant-site')
-      } finally {
-        delete process.env.CHAT_MODEL
-      }
+      await POST(createChatRequest([{ role: 'user', content: 'Salut' }], '10.0.0.5'))
+      expect((await optionsDuDernierAppel()).model).toBe(GROUPE)
     })
   })
 

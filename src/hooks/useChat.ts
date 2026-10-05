@@ -6,11 +6,15 @@ export function useChat() {
   const [messages, setMessages] = useState<Message[]>([])
   const [streaming, setStreaming] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // 503 : l'assistant n'est pas configuré côté serveur (aucun fournisseur contacté).
+  // Réessayer n'y change rien ; l'interface renvoie vers le formulaire de contact.
+  const [indisponible, setIndisponible] = useState(false)
 
   const send = useCallback(
     async (userText: string) => {
       if (streaming) return
       setError(null)
+      setIndisponible(false)
 
       const newMessages: Message[] = [
         ...messages,
@@ -29,6 +33,7 @@ export function useChat() {
 
         if (!res.ok || !res.body) {
           if (res.status === 429) throw new Error('RATE_LIMIT')
+          if (res.status === 503) throw new Error('INDISPONIBLE')
           throw new Error(`Erreur ${res.status}`)
         }
 
@@ -68,11 +73,14 @@ export function useChat() {
           }
         }
       } catch (_err) {
-        const isRateLimit = _err instanceof Error && _err.message === 'RATE_LIMIT'
+        const code = _err instanceof Error ? _err.message : ''
+        setIndisponible(code === 'INDISPONIBLE')
         setError(
-          isRateLimit
+          code === 'RATE_LIMIT'
             ? 'Trop de messages envoyés. Attendez une minute avant de réessayer.'
-            : 'Une erreur est survenue. Réessayez dans un instant.'
+            : code === 'INDISPONIBLE'
+              ? "L'assistant n'est pas disponible pour le moment. Pour toute question, passez par le formulaire de contact."
+              : 'Une erreur est survenue. Réessayez dans un instant.'
         )
         setMessages((prev) => prev.slice(0, -1))
       } finally {
@@ -85,7 +93,8 @@ export function useChat() {
   const reset = useCallback(() => {
     setMessages([])
     setError(null)
+    setIndisponible(false)
   }, [])
 
-  return { messages, send, streaming, error, reset }
+  return { messages, send, streaming, error, indisponible, reset }
 }

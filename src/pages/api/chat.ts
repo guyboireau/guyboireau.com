@@ -6,7 +6,8 @@ import { z } from 'zod'
 import { SYSTEM_PROMPT } from '@/data/system-prompt'
 import { chatRateLimiter } from '@/lib/rate-limit'
 import { adresseVisiteur } from '@/lib/client-ip'
-import { CLAUDE_MODEL, CHAT_MAX_TOKENS } from '@/data/ai-config'
+import { CHAT_MAX_TOKENS } from '@/data/ai-config'
+import { configurationAssistant } from '@/lib/assistant-config'
 
 const messageSchema = z.object({
   role: z.enum(['user', 'assistant']),
@@ -24,6 +25,13 @@ const chatBodySchema = z.object({
 const MESSAGE_INDISPONIBLE =
   "L'assistant est momentanément indisponible. Réessayez plus tard, ou écrivez via le formulaire de contact."
 
+/**
+ * Message montré quand l'assistant n'est pas configuré : le visiteur est renvoyé
+ * vers le formulaire de contact, sans détail sur la configuration du serveur.
+ */
+const MESSAGE_NON_CONFIGURE =
+  "L'assistant n'est pas disponible pour le moment. Pour toute question, écrivez à Guy via le formulaire de contact."
+
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ip = adresseVisiteur(request, clientAddress)
   if (chatRateLimiter(ip)) {
@@ -33,12 +41,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     })
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY
-  if (!apiKey) {
-    return new Response(JSON.stringify({ error: 'Configuration manquante' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    })
+  const configuration = configurationAssistant()
+  if ('manquantes' in configuration) {
+    console.error(
+      `[chat API] assistant non configuré, aucun fournisseur contacté : ${configuration.manquantes.join(', ')}`
+    )
+    return new Response(
+      JSON.stringify({ error: MESSAGE_NON_CONFIGURE, code: 'ASSISTANT_NON_CONFIGURE' }),
+      { status: 503, headers: { 'Content-Type': 'application/json' } }
+    )
   }
 
   let messages: z.infer<typeof messageSchema>[]
@@ -59,12 +70,12 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     )
   }
 
-  const client = new Anthropic({ apiKey })
+  // Le relais LiteLLM du VPS (ANTHROPIC_BASE_URL) route le groupe CHAT_MODEL, par
+  // exemple « assistant-site », vers Mistral AI.
+  const client = new Anthropic({ apiKey: configuration.apiKey, baseURL: configuration.baseURL })
 
   const stream = await client.messages.stream({
-    // CHAT_MODEL vise un groupe du harnais LiteLLM du VPS (ANTHROPIC_BASE_URL), par
-    // exemple « assistant-site ». Sans lui, le nom Claude historique.
-    model: process.env.CHAT_MODEL || CLAUDE_MODEL,
+    model: configuration.model,
     max_tokens: CHAT_MAX_TOKENS,
     system: SYSTEM_PROMPT,
     messages,

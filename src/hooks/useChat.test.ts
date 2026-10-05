@@ -225,6 +225,34 @@ describe('useChat', () => {
             expect(result.current.error).toMatch(/attendez une minute/i)
         })
 
+        it('un 503 (assistant non configuré) renvoie au formulaire de contact', async () => {
+            // B08 : sans relais ni groupe configurés, /api/chat ne contacte aucun
+            // fournisseur et répond 503. Réessayer ne changera rien : on oriente
+            // vers le contact au lieu de « réessayez dans un instant ».
+            global.fetch = vi.fn().mockResolvedValue(reponseFlux([], { ok: false, status: 503 })) as never
+
+            const { result } = renderHook(() => useChat())
+            await act(async () => {
+                await result.current.send('Salut')
+            })
+
+            expect(result.current.indisponible).toBe(true)
+            expect(result.current.error).toMatch(/formulaire de contact/i)
+            expect(result.current.error).not.toMatch(/réessayez/i)
+            expect(result.current.messages).toEqual([{ role: 'user', content: 'Salut' }])
+        })
+
+        it('un autre échec ne marque pas l’assistant indisponible', async () => {
+            global.fetch = vi.fn().mockResolvedValue(reponseFlux([], { ok: false, status: 500 })) as never
+
+            const { result } = renderHook(() => useChat())
+            await act(async () => {
+                await result.current.send('Salut')
+            })
+
+            expect(result.current.indisponible).toBe(false)
+        })
+
         it('un autre statut d’erreur donne un message générique', async () => {
             global.fetch = vi.fn().mockResolvedValue(reponseFlux([], { ok: false, status: 500 })) as never
 

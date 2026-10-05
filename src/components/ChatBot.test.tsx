@@ -285,6 +285,35 @@ describe('ChatBot', () => {
     })
   })
 
+  describe('assistant non configuré (503)', () => {
+    it('affiche un repli qui renvoie vers la page de contact', async () => {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({ ok: false, status: 503, body: null } as unknown as Response)
+      )
+
+      render(<ChatBot />)
+      fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Bonjour' } })
+      fireEvent.submit(screen.getByRole('textbox').closest('form')!)
+
+      const alerte = await screen.findByRole('alert')
+      expect(alerte).toHaveTextContent(/formulaire de contact/i)
+      const lien = screen.getByRole('link', { name: /écrire à guy/i })
+      expect(lien).toHaveAttribute('href', '/contact')
+    })
+
+    it('une erreur passagère ne propose pas ce lien', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Failed to fetch')))
+
+      render(<ChatBot />)
+      fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Bonjour' } })
+      fireEvent.submit(screen.getByRole('textbox').closest('form')!)
+
+      await screen.findByRole('alert')
+      expect(screen.queryByRole('link', { name: /écrire à guy/i })).not.toBeInTheDocument()
+    })
+  })
+
   /**
    * Lecteurs d'écran : la réponse arrive par fragments. Les annoncer un par un
    * serait inaudible ; la zone polie annonce le début puis la réponse entière.

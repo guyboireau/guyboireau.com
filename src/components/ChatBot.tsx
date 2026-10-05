@@ -21,7 +21,7 @@ const sansMarkdown = (texte: string) => texte.replace(/[*_`#>]+/g, '').replace(/
  * et que les réponses sont indicatives.
  */
 export default function ChatBot() {
-  const { messages, send, streaming, error, reset } = useChat()
+  const { messages, send, streaming, error, indisponible, reset } = useChat()
   const [input, setInput] = useState('')
   const [annonce, setAnnonce] = useState('')
   const messagesRef = useRef<HTMLDivElement>(null)
@@ -159,7 +159,17 @@ export default function ChatBot() {
               </div>
             ))}
             {error && (
-              <p role="alert" className="text-xs text-red-700 text-center">{error}</p>
+              <p role="alert" className="text-xs text-red-700 text-center">
+                {error}
+                {indisponible && (
+                  <>
+                    {' '}
+                    <a href="/contact" className="text-primary-700 underline underline-offset-2 hover:text-primary-600">
+                      Écrire à Guy
+                    </a>
+                  </>
+                )}
+              </p>
             )}
           </>
         )}

@@ -21,7 +21,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 ## Fonctionnalités
 
-- **Chatbot IA** — Assistant conversationnel propulsé par Claude Haiku 4.5 via streaming SSE
+- **Chatbot IA** — Assistant conversationnel en streaming SSE ; modèle Mistral AI (UE) par le relais LiteLLM du VPS. Sans relais configuré, `/api/chat` répond 503 et ne contacte aucun fournisseur (B08)
 - **Formulaire de contact** — Validation Zod, persistance Supabase et envoi d'email via Resend
 - **SEO avancé** — JSON-LD (Person / LocalBusiness), sitemap auto-généré, balises Open Graph, métadonnées géographiques
 - **Animations CSS** — Animations légères avec prise en charge de `prefers-reduced-motion`
@@ -53,7 +53,7 @@ remplir avant la mise en production.
 
 | Route | Méthode | Description |
 |-------|---------|-------------|
-| `/api/chat` | `POST` | Streaming SSE vers Claude Haiku 4.5 avec rate limiting (10 req/min par IP) |
+| `/api/chat` | `POST` | Streaming SSE vers Mistral AI par le relais LiteLLM (`ANTHROPIC_BASE_URL` + `CHAT_MODEL`, obligatoires, sinon 503), rate limiting 10 req/min par IP |
 | `/api/contact` | `POST` | Validation Zod, insertion Supabase, envoi Resend avec rate limiting (5 req/min par IP) |
 
 ### Sécurité des API
@@ -130,10 +130,12 @@ Créer un fichier `.env` à la racine :
 |----------|------|---------------------|-------------|
 | `PUBLIC_SUPABASE_URL` | Publique | oui | URL du projet Supabase |
 | `PUBLIC_SUPABASE_ANON_KEY` | Publique | oui | Clé anonyme Supabase |
-| `ANTHROPIC_API_KEY` | Privée | oui | Clé API Anthropic (Claude) |
+| `ANTHROPIC_API_KEY` | Privée | oui | Clé du relais LiteLLM du VPS (le SDK parle le protocole Anthropic) |
+| `ANTHROPIC_BASE_URL` | Privée | oui | URL du relais LiteLLM (`http://127.0.0.1:4000` sur le VPS). Obligatoire : sans elle, ou si elle vise `anthropic.com`, `/api/chat` répond 503 |
+| `CHAT_MODEL` | Privée | oui | Groupe du relais routé vers Mistral AI (ex. `assistant-site`). Obligatoire, aucun modèle par défaut |
 | `RESEND_API_KEY` | Privée | oui | Clé API Resend (envoi d'emails) |
 
-> `cp .env.example .env` suffit désormais : les quatre variables réellement lues par le
+> `cp .env.example .env` suffit désormais : les six variables réellement lues par le
 > code y figurent. Sans `RESEND_API_KEY`, `src/pages/api/contact.ts` journalise
 > `[contact] RESEND_API_KEY manquante` et répond en 500 — l'insertion Supabase a bien eu
 > lieu, mais aucun email n'est parti.
