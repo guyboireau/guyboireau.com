@@ -47,6 +47,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Seul l'arbre de production est opposé : les alertes high restantes sont dans
+      # des outils de lint (voir B07 dans BLOCKERS.md), jamais livrées.
+      - name: Audit des dépendances de production
+        run: npm audit --omit=dev --audit-level=high
+
       - name: Lint
         run: npm run lint
 
@@ -76,3 +81,58 @@ jobs:
 
       - name: Pages — mentions légales, confidentialité, CGV, accessibilité, agents IA
         run: npm run test:pages
+
+  # La production (VPS) est construite avec astro.config.vps.mjs (adaptateur Node),
+  # pas avec la config Vercel du job `ci`. Ce job construit exactement ce build-là,
+  # contrôle son HTML, puis démarre le serveur et l'interroge.
+  build-vps:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (config de production, astro.config.vps.mjs)
+        run: npx astro build --config astro.config.vps.mjs
+        env:
+          PUBLIC_SUPABASE_URL: https://mock-url.supabase.co
+          PUBLIC_SUPABASE_ANON_KEY: mock-anon-key
+
+      - name: CSP — sur dist/client
+        run: node scripts/csp-check.mjs dist/client/
+
+      - name: Pages — sur dist/client
+        run: node scripts/pages-check.mjs dist/client/
+
+      # Le serveur de production démarre, sert l'accueil, et /api/chat refuse de
+      # contacter un fournisseur quand le relais n'est pas configuré (B08).
+      - name: Démarrage du serveur Node et fumée
+        env:
+          HOST: 127.0.0.1
+          PORT: 4321
+          ANTHROPIC_API_KEY: mock-anthropic-key
+        run: |
+          set -euo pipefail
+          unset ANTHROPIC_BASE_URL CHAT_MODEL
+          node dist/server/entry.mjs > serveur.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf -o /dev/null http://127.0.0.1:4321/ && break
+            sleep 1
+          done
+          accueil=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4321/)
+          chat=$(curl -s -o chat.json -w '%{http_code}' -X POST \
+            -H 'Content-Type: application/json' -H 'Origin: http://127.0.0.1:4321' \
+            -d '{"messages":[{"role":"user","content":"Bonjour"}]}' \
+            http://127.0.0.1:4321/api/chat)
+          cat serveur.log; cat chat.json; echo
+          test "$accueil" = 200
+          test "$chat" = 503
+          grep -q ASSISTANT_NON_CONFIGURE chat.json

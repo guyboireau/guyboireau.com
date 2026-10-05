@@ -150,12 +150,18 @@ Le workflow GitHub Actions (`.github/workflows/ci.yml`) s'exécute à chaque pus
 2. Setup Node.js 22 avec cache `npm`
 3. Cache du build Astro (`.astro`, `.vite`)
 4. Installation des dépendances (`npm ci`)
-5. **Lint** (`npm run lint`)
-6. **Type check** (`npm run check`)
-7. **Tests** (`npm run test -- --coverage`)
-8. **Upload du rapport de couverture**
-9. **Build** (`npm run build`, version Vercel : voir la note sous « Scripts »)
-10. **CSP** (`npm run test:csp`) — après le build, sur le HTML produit
+5. **Audit** (`npm audit --omit=dev --audit-level=high`) — arbre de production seulement
+6. **Lint** (`npm run lint`)
+7. **Type check** (`npm run check`)
+8. **Tests** (`npm run test -- --coverage`)
+9. **Upload du rapport de couverture**
+10. **Build** (`npm run build`, version Vercel : voir la note sous « Scripts »)
+11. **CSP** (`npm run test:csp`) puis **Pages** (`npm run test:pages`) — après le build, sur le HTML produit
+
+Un second job, `build-vps`, construit la configuration de production
+(`npx astro build --config astro.config.vps.mjs`), passe les mêmes contrôles CSP et pages
+sur `dist/client/`, puis démarre `dist/server/entry.mjs` : l'accueil doit répondre 200 et
+`/api/chat`, sans relais configuré, 503 `ASSISTANT_NON_CONFIGURE` (B08).
 
 ---
 
