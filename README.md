@@ -106,14 +106,14 @@ Le projet utilise deux clients Supabase, tous deux basés sur un `createClient(u
 
 | Client | Fichier | Usage |
 |--------|---------|-------|
-| Browser | `src/lib/supabase.ts` | `getSupabase()` — lit `import.meta.env`. Appelé seulement par `src/components/PricingGrid.tsx` (lecture de `pricing_tiers`) et `src/lib/contact.ts` (insertion dans `contacts`), **deux fichiers importés nulle part** : ce client ne sert pas sur le site en ligne |
+| Browser | `src/lib/supabase.ts` | `getSupabase()` — lit `import.meta.env`, typé sur `src/lib/database.types.ts`. **Importé nulle part** depuis le retrait de `src/lib/contact.ts` (2026-10-05, code mort qui insérait dans une table `contacts` inexistante) : ce client ne sert pas sur le site en ligne |
 | Server | `src/lib/supabase.server.ts` | `getSupabaseServer()` — lit `process.env` pour éviter d'inliner la clé dans le bundle SSR. Utilisé par `/api/contact` (insertion dans `portfolio_contacts`) |
 
 Le projet ne contient aucun code d'authentification : les deux clients ne servent qu'à lire et écrire de la donnée.
 
 La seule écriture réelle en base est celle de `/api/contact` dans `portfolio_contacts`
 (`supabase/migrations/20260901120000_portfolio_contacts.sql`). Aucune migration du dépôt
-ne crée `pricing_tiers` ni `contacts`.
+ne crée `pricing_tiers` ni `contacts`, et plus aucun code ne les vise.
 
 `supabase/migrations/20260925090000_portfolio_contacts_lecture_service_role.sql` retire
 la lecture de `portfolio_contacts` au rôle `authenticated` : seule la clé de service lit.
