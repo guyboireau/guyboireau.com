@@ -26,6 +26,7 @@ done
 Au 2026-09-14 : **OPEN 2 · LANDED 0 · SHIPPED 0 · REFUTED 1**
 Au 2026-09-28 : **OPEN 3 · LANDED 2 · SHIPPED 0 · REFUTED 1**
 Au 2026-10-05 : **OPEN 4 · LANDED 1 · SHIPPED 2 · REFUTED 1**
+Au 2026-10-05 (PR #62) : **OPEN 2 · LANDED 2 · SHIPPED 3 · REFUTED 1**
 
 ---
 
@@ -67,6 +68,11 @@ Reste OPEN. Correctif : ajouter `required_status_checks` (`ci`, `🔐 Détection
 que ci-dessus). Les quatre PR mergées le 2026-10-01 (#56, #58, #59, #60) avaient
 leur `ci` vert avant la fusion — par discipline, pas par contrainte : #58 a été
 fusionnée 3 min après son ouverture, #59 6 min après. Ouvert depuis 21 jours.
+
+**Relevé (2026-10-05, PR #62).** Toujours `["deletion","non_fast_forward","pull_request"]`
+(même commande). Hors de portée d'un agent : l'ajout de `required_status_checks` (`ci`,
+`build-vps`, `🔐 Détection de secrets`) au ruleset 23932480 est une décision de Guy.
+Reste OPEN.
 
 ---
 
@@ -145,6 +151,12 @@ done
 `🔐 Détection de secrets` et `lien`, tous verts ; elles portent aussi encore
 `Vercel Preview Comments` (le projet Vercel reste relié). Le cas #38 reste isolé.
 Ouvert depuis 21 jours.
+
+**Relevé (2026-10-05, PR #62).** Relu : le constat ne relève pas du code. Les deux
+workflows déclarent bien `pull_request: branches: [main]` sans filtre qui exclurait
+une PR de code, et la cause du cas #38 est côté plateforme (jeton ou compte Actions).
+La parade au motif décrit (« une PR verte d'aperçu ressemble à une PR validée ») est
+B01 : des checks requis. Rien à corriger dans le dépôt. Reste OPEN.
 
 ---
 
@@ -281,7 +293,7 @@ grep -n "isSubscription" src/components/PricingSimulator.tsx
 
 ## B06 — `portfolio_contacts` lisible par tout compte `authenticated`
 
-- [ ] **statut: OPEN** · ouvert le 2026-09-28 · données personnelles
+- [ ] **statut: LANDED** · ouvert le 2026-09-28 · `begin;`/`commit;` retirés par #62 (non mergée) · migration **non appliquée** · données personnelles
 
 La migration `20260901120000_portfolio_contacts.sql` accorde `select` à
 `authenticated` avec une policy `using (true)`. Le site n'a aucun écran
@@ -316,11 +328,32 @@ git grep -nE '^(begin|commit);' -- supabase/migrations/20260925090000_portfolio_
 # → l. 18 begin; · l. 27 commit;
 ```
 
+**Correctif (2026-10-05, PR #62, branche `claude/eager-feynman-uc9cch`).** `begin;` et
+`commit;` retirés de la migration de correction **et** de `20260901140000_contacts_retention.sql`,
+qui portait le même défaut ; SQL inchangé par ailleurs. Garde : `tests/migrations.test.ts`
+(nom `<chiffres>_<nom>.sql`, aucune instruction de transaction hors commentaires).
+
+```sh
+git fetch origin claude/eager-feynman-uc9cch && git checkout origin/claude/eager-feynman-uc9cch
+git grep -niE '^\s*(begin|commit);' -- supabase/migrations     # → rien
+npx vitest run tests/migrations.test.ts                         # → 7 verts
+# Rouge avant : sur ab8c8d4, le même test échoue sur les deux fichiers
+git show ab8c8d4:supabase/migrations/20260925090000_portfolio_contacts_lecture_service_role.sql \
+  | grep -nE '^(begin|commit);'                                 # → l. 18, l. 27
+```
+
+**LANDED ne ferme pas la fuite** : la prod reste dans l'état de `20260901120000` tant que
+la migration n'est pas jouée. Passe SHIPPED quand #62 est sur `main` **et** que le
+transcript de vérification (`role_table_grants`, `pg_policies`, en fin de fichier) est
+collé ici, sans ligne pour `authenticated`. Application par Guy : `supabase db push`
+(projet lié), ou `psql "$URL_DB" --single-transaction -f supabase/migrations/20260925090000_portfolio_contacts_lecture_service_role.sql`
+puis les deux requêtes de vérification.
+
 ---
 
 ## B07 — `http-cache-semantics` 4.2.0 (advisory high) dans l'arbre de production
 
-- [ ] **statut: LANDED** · ouvert le 2026-10-05 · sécurité
+- [x] **statut: SHIPPED** · ouvert le 2026-10-05 · livré par #61 (ab8c8d4) · re-prouvé sur `main` ab8c8d4 le 2026-10-05 · sécurité
 
 `astro` 7.3.2 tire `http-cache-semantics` 4.2.0, visé par GHSA-ch52-4w7c-c8xp
 (« max-stale handling can disclose cross-user cached responses », high, `<=4.2.0`).
@@ -347,11 +380,23 @@ Reste en arbre complet, **dev seulement** : 5 high via `eslint-plugin-astro` →
 rétrogradation majeure d'`eslint-plugin-astro`). Exécuté seulement au lint, sur du
 code du dépôt : non retenu comme constat.
 
+**Re-preuve sur `main` (2026-10-05, ab8c8d4)** — worktree détaché de `origin/main` :
+
+```sh
+git worktree add --detach /tmp/main-ab8 origin/main && cd /tmp/main-ab8
+npm audit --omit=dev --json | jq -c .metadata.vulnerabilities
+# → {"info":0,"low":0,"moderate":0,"high":0,"critical":0,"total":0}
+node -e "console.log(require('./package-lock.json').packages['node_modules/http-cache-semantics'].version)"
+# → 4.3.0
+```
+
+Garde ajoutée par #62 : étape CI `npm audit --omit=dev --audit-level=high` (job `ci`).
+
 ---
 
 ## B08 — Assistant IA : le sous-traitant déclaré (Mistral AI, UE) ne dépend que d'une variable d'environnement ; le repli du code part chez Anthropic (États-Unis)
 
-- [ ] **statut: OPEN** · ouvert le 2026-10-05 · données personnelles
+- [ ] **statut: LANDED** · ouvert le 2026-10-05 · corrigé par #62 (non mergée) · données personnelles
 
 Depuis #56 et #60, `confidentialite.astro`, le bandeau de `ChatBot.tsx` et
 `public/llms.txt` disent aux visiteurs que leurs messages au chatbot vont chez
@@ -390,6 +435,41 @@ git grep -n "CHAT_MODEL\|ANTHROPIC_BASE_URL" -- .env.example   # → lignes comm
 faire échouer `/api/chat` (503) quand `CHAT_MODEL` ou `ANTHROPIC_BASE_URL` manque en
 production au lieu de replier sur Claude, et un test qui lie le fournisseur déclaré
 à la configuration exigée.
+
+**Correctif (2026-10-05, PR #62, branche `claude/eager-feynman-uc9cch`).** Le code honore
+la déclaration ou se ferme :
+- `src/lib/assistant-config.ts` : `ANTHROPIC_API_KEY`, `ANTHROPIC_BASE_URL` et
+  `CHAT_MODEL` obligatoires ; base URL illisible ou visant `anthropic.com` refusée ;
+- `/api/chat` : configuration incomplète → **503** `ASSISTANT_NON_CONFIGURE`, aucun client
+  SDK construit, détail au journal seulement ; le client vise `baseURL` ;
+- modèle par défaut supprimé de `src/data/ai-config.ts` ;
+- `useChat`/`ChatBot` : sur 503, message de repli et lien « Écrire à Guy » (`/contact`) ;
+- `src/lib/assistant-config.test.ts` lie la déclaration (confidentialité 2.2 et
+  transferts, bandeau, `llms.txt` : Mistral AI et aucun autre) à la configuration exigée ;
+- job CI `build-vps` : serveur Node de prod démarré sans relais → `/api/chat` en 503.
+
+```sh
+git fetch origin claude/eager-feynman-uc9cch && git checkout origin/claude/eager-feynman-uc9cch && npm ci
+npx vitest run tests/pages/api/chat.test.ts src/lib/assistant-config.test.ts \
+  src/hooks/useChat.test.ts src/components/ChatBot.test.tsx      # → 4 fichiers, verts
+git grep -nE "CHAT_MODEL\s*(\|\||\?\?)" -- src                    # → rien
+# Rouge avant : les tests de chat.test.ts sur le chat.ts de ab8c8d4 → 7 échecs
+git show ab8c8d4:src/pages/api/chat.ts > src/pages/api/chat.ts
+git show ab8c8d4:src/data/ai-config.ts > src/data/ai-config.ts
+npx vitest run tests/pages/api/chat.test.ts                      # → 7 failed | 14 passed
+git checkout -- src
+# Fumée, build de prod :
+npx astro build --config astro.config.vps.mjs
+env -u ANTHROPIC_BASE_URL -u CHAT_MODEL HOST=127.0.0.1 PORT=4321 ANTHROPIC_API_KEY=x node dist/server/entry.mjs &
+curl -s -w ' %{http_code}\n' -X POST -H 'Content-Type: application/json' -H 'Origin: http://127.0.0.1:4321' \
+  -d '{"messages":[{"role":"user","content":"Bonjour"}]}' http://127.0.0.1:4321/api/chat
+# → {"error":"L'assistant n'est pas disponible…","code":"ASSISTANT_NON_CONFIGURE"} 503
+```
+
+Passe SHIPPED quand #62 est sur `main` et que : (1) l'environnement de
+`guyboireau.service` montre `ANTHROPIC_BASE_URL` = relais LiteLLM et `CHAT_MODEL` = groupe
+routé vers Mistral (transcript de la route LiteLLM collé ici) ; (2) le projet Vercel est
+coupé, ou y sert un `/api/chat` en 503. Hors dépôt, décision et accès de Guy.
 
 ---
 

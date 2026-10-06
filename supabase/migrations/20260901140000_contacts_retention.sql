@@ -10,7 +10,9 @@
 -- une requête.
 -- ============================================================
 
-begin;
+-- Pas de begin; / commit; (B06) : `supabase db push`, comme migrer.sh sur le
+-- VPS, joue chaque fichier dans une transaction avec l'enregistrement de sa
+-- version, qu'un commit; interne casserait. À la main : psql --single-transaction.
 
 create or replace function public.purge_portfolio_contacts()
 returns integer
@@ -38,8 +40,6 @@ comment on function public.purge_portfolio_contacts() is
 revoke all on function public.purge_portfolio_contacts() from public;
 revoke all on function public.purge_portfolio_contacts() from anon;
 revoke all on function public.purge_portfolio_contacts() from authenticated;
-
-commit;
 
 -- ============================================================
 -- PLANIFICATION — une seule fois, après activation de pg_cron

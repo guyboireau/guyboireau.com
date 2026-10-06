@@ -1,15 +1,15 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import type { Database } from './database.types'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let _client: SupabaseClient<any> | null = null
+// Typé sur le schéma réel (src/lib/database.types.ts) : une table ou une colonne
+// absente des migrations ne passe plus `tsc`.
+let _client: SupabaseClient<Database> | null = null
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getSupabase(): SupabaseClient<any> | null {
+export function getSupabase(): SupabaseClient<Database> | null {
   if (_client) return _client
   const url = import.meta.env.PUBLIC_SUPABASE_URL
   const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY
   if (!url || !key) return null
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _client = createClient<any>(url, key)
+  _client = createClient<Database>(url, key)
   return _client
 }

@@ -21,7 +21,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 
 ## Fonctionnalités
 
-- **Chatbot IA** — Assistant conversationnel propulsé par Claude Haiku 4.5 via streaming SSE
+- **Chatbot IA** — Assistant conversationnel en streaming SSE ; modèle Mistral AI (UE) par le relais LiteLLM du VPS. Sans relais configuré, `/api/chat` répond 503 et ne contacte aucun fournisseur (B08)
 - **Formulaire de contact** — Validation Zod, persistance Supabase et envoi d'email via Resend
 - **SEO avancé** — JSON-LD (Person / LocalBusiness), sitemap auto-généré, balises Open Graph, métadonnées géographiques
 - **Animations CSS** — Animations légères avec prise en charge de `prefers-reduced-motion`
@@ -53,7 +53,7 @@ remplir avant la mise en production.
 
 | Route | Méthode | Description |
 |-------|---------|-------------|
-| `/api/chat` | `POST` | Streaming SSE vers Claude Haiku 4.5 avec rate limiting (10 req/min par IP) |
+| `/api/chat` | `POST` | Streaming SSE vers Mistral AI par le relais LiteLLM (`ANTHROPIC_BASE_URL` + `CHAT_MODEL`, obligatoires, sinon 503), rate limiting 10 req/min par IP |
 | `/api/contact` | `POST` | Validation Zod, insertion Supabase, envoi Resend avec rate limiting (5 req/min par IP) |
 
 ### Sécurité des API
@@ -106,14 +106,14 @@ Le projet utilise deux clients Supabase, tous deux basés sur un `createClient(u
 
 | Client | Fichier | Usage |
 |--------|---------|-------|
-| Browser | `src/lib/supabase.ts` | `getSupabase()` — lit `import.meta.env`. Appelé seulement par `src/components/PricingGrid.tsx` (lecture de `pricing_tiers`) et `src/lib/contact.ts` (insertion dans `contacts`), **deux fichiers importés nulle part** : ce client ne sert pas sur le site en ligne |
+| Browser | `src/lib/supabase.ts` | `getSupabase()` — lit `import.meta.env`, typé sur `src/lib/database.types.ts`. **Importé nulle part** depuis le retrait de `src/lib/contact.ts` (2026-10-05, code mort qui insérait dans une table `contacts` inexistante) : ce client ne sert pas sur le site en ligne |
 | Server | `src/lib/supabase.server.ts` | `getSupabaseServer()` — lit `process.env` pour éviter d'inliner la clé dans le bundle SSR. Utilisé par `/api/contact` (insertion dans `portfolio_contacts`) |
 
 Le projet ne contient aucun code d'authentification : les deux clients ne servent qu'à lire et écrire de la donnée.
 
 La seule écriture réelle en base est celle de `/api/contact` dans `portfolio_contacts`
 (`supabase/migrations/20260901120000_portfolio_contacts.sql`). Aucune migration du dépôt
-ne crée `pricing_tiers` ni `contacts`.
+ne crée `pricing_tiers` ni `contacts`, et plus aucun code ne les vise.
 
 `supabase/migrations/20260925090000_portfolio_contacts_lecture_service_role.sql` retire
 la lecture de `portfolio_contacts` au rôle `authenticated` : seule la clé de service lit.
@@ -130,10 +130,12 @@ Créer un fichier `.env` à la racine :
 |----------|------|---------------------|-------------|
 | `PUBLIC_SUPABASE_URL` | Publique | oui | URL du projet Supabase |
 | `PUBLIC_SUPABASE_ANON_KEY` | Publique | oui | Clé anonyme Supabase |
-| `ANTHROPIC_API_KEY` | Privée | oui | Clé API Anthropic (Claude) |
+| `ANTHROPIC_API_KEY` | Privée | oui | Clé du relais LiteLLM du VPS (le SDK parle le protocole Anthropic) |
+| `ANTHROPIC_BASE_URL` | Privée | oui | URL du relais LiteLLM (`http://127.0.0.1:4000` sur le VPS). Obligatoire : sans elle, ou si elle vise `anthropic.com`, `/api/chat` répond 503 |
+| `CHAT_MODEL` | Privée | oui | Groupe du relais routé vers Mistral AI (ex. `assistant-site`). Obligatoire, aucun modèle par défaut |
 | `RESEND_API_KEY` | Privée | oui | Clé API Resend (envoi d'emails) |
 
-> `cp .env.example .env` suffit désormais : les quatre variables réellement lues par le
+> `cp .env.example .env` suffit désormais : les six variables réellement lues par le
 > code y figurent. Sans `RESEND_API_KEY`, `src/pages/api/contact.ts` journalise
 > `[contact] RESEND_API_KEY manquante` et répond en 500 — l'insertion Supabase a bien eu
 > lieu, mais aucun email n'est parti.
@@ -148,12 +150,18 @@ Le workflow GitHub Actions (`.github/workflows/ci.yml`) s'exécute à chaque pus
 2. Setup Node.js 22 avec cache `npm`
 3. Cache du build Astro (`.astro`, `.vite`)
 4. Installation des dépendances (`npm ci`)
-5. **Lint** (`npm run lint`)
-6. **Type check** (`npm run check`)
-7. **Tests** (`npm run test -- --coverage`)
-8. **Upload du rapport de couverture**
-9. **Build** (`npm run build`, version Vercel : voir la note sous « Scripts »)
-10. **CSP** (`npm run test:csp`) — après le build, sur le HTML produit
+5. **Audit** (`npm audit --omit=dev --audit-level=high`) — arbre de production seulement
+6. **Lint** (`npm run lint`)
+7. **Type check** (`npm run check`)
+8. **Tests** (`npm run test -- --coverage`)
+9. **Upload du rapport de couverture**
+10. **Build** (`npm run build`, version Vercel : voir la note sous « Scripts »)
+11. **CSP** (`npm run test:csp`) puis **Pages** (`npm run test:pages`) — après le build, sur le HTML produit
+
+Un second job, `build-vps`, construit la configuration de production
+(`npx astro build --config astro.config.vps.mjs`), passe les mêmes contrôles CSP et pages
+sur `dist/client/`, puis démarre `dist/server/entry.mjs` : l'accueil doit répondre 200 et
+`/api/chat`, sans relais configuré, 503 `ASSISTANT_NON_CONFIGURE` (B08).
 
 ---
 
