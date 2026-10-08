@@ -27,6 +27,7 @@ Au 2026-09-14 : **OPEN 2 · LANDED 0 · SHIPPED 0 · REFUTED 1**
 Au 2026-09-28 : **OPEN 3 · LANDED 2 · SHIPPED 0 · REFUTED 1**
 Au 2026-10-05 : **OPEN 4 · LANDED 1 · SHIPPED 2 · REFUTED 1**
 Au 2026-10-05 (PR #62) : **OPEN 2 · LANDED 2 · SHIPPED 3 · REFUTED 1**
+Au 2026-10-07 : **OPEN 2 · LANDED 3 · SHIPPED 3 · REFUTED 1**
 
 ---
 
@@ -470,6 +471,41 @@ Passe SHIPPED quand #62 est sur `main` et que : (1) l'environnement de
 `guyboireau.service` montre `ANTHROPIC_BASE_URL` = relais LiteLLM et `CHAT_MODEL` = groupe
 routé vers Mistral (transcript de la route LiteLLM collé ici) ; (2) le projet Vercel est
 coupé, ou y sert un `/api/chat` en 503. Hors dépôt, décision et accès de Guy.
+
+---
+
+## B09 — `source-map-js` et `sharp` (advisories high) dans l'arbre de production : CI de `main` rouge
+
+- [ ] **statut: LANDED** · ouvert le 2026-10-07 · corrigé sur `claude/epic-johnson-zn50u2` (non mergée) · sécurité
+
+Depuis le 2026-10-06, l'étape `npm audit --omit=dev --audit-level=high` (garde de B07)
+fait échouer `ci` sur `main` 8267ff2. Trois paquets livrés en prod :
+`source-map-js` 1.2.1 (GHSA-68fv-2mgg-jv7q, high, DoS par offsets de sections indexées ;
+via `@tailwindcss/node` et `svgo` → `css-tree`), `sharp` 0.35.4 (GHSA-wq5f-xc86-pv6w,
+high, librsvg ; via `astro`), `smol-toml` 1.8.0 (GHSA-r4xh-jqrq-34v2, moderate).
+
+**Preuve re-exécutable** (sur `main` 8267ff2, après `npm ci`)
+
+```sh
+npm audit --omit=dev --json | jq -c .metadata.vulnerabilities
+# → {"info":0,"low":0,"moderate":1,"high":2,"critical":0,"total":3}
+```
+
+**Correctif** — `npm audit fix` sans `--force`, lockfile seul, aucune `overrides` :
+sharp 0.35.4 → 0.35.5, source-map-js 1.2.1 → 1.2.2, smol-toml 1.8.0 → 1.9.0.
+`@astrojs/node` conservé (B03).
+
+```sh
+npm ci && npm audit --omit=dev --json | jq -c .metadata.vulnerabilities
+# → {"info":0,"low":0,"moderate":0,"high":0,"critical":0,"total":0}
+npm ls sharp source-map-js smol-toml | grep -oE '(sharp|source-map-js|smol-toml)@[0-9.]+' | sort -u
+# → sharp@0.35.5 · smol-toml@1.9.0 · source-map-js@1.2.2
+```
+
+Lint, `astro check`, 189 tests, build Vercel, `test:csp`, `test:pages`, build
+`astro.config.vps.mjs` et fumée du serveur Node (accueil 200, `/api/chat` 503) verts.
+Les 5 high restants en arbre complet sont ceux de `braces`, dev seulement (voir B07).
+Passe SHIPPED quand la PR est sur `main` et l'audit rejoué.
 
 ---
 
