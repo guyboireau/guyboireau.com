@@ -71,8 +71,6 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          PUBLIC_SUPABASE_URL: https://mock-url.supabase.co
-          PUBLIC_SUPABASE_ANON_KEY: mock-anon-key
           ANTHROPIC_API_KEY: mock-anthropic-key
           RESEND_API_KEY: mock-resend-key
 
@@ -102,9 +100,6 @@ jobs:
 
       - name: Build (config de production, astro.config.vps.mjs)
         run: npx astro build --config astro.config.vps.mjs
-        env:
-          PUBLIC_SUPABASE_URL: https://mock-url.supabase.co
-          PUBLIC_SUPABASE_ANON_KEY: mock-anon-key
 
       - name: CSP — sur dist/client
         run: node scripts/csp-check.mjs dist/client/
