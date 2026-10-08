@@ -22,7 +22,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 ## Fonctionnalités
 
 - **Chatbot IA** — Assistant conversationnel en streaming SSE ; modèle Mistral AI (UE) par le relais LiteLLM du VPS. Sans relais configuré, `/api/chat` répond 503 et ne contacte aucun fournisseur (B08)
-- **Formulaire de contact** — Validation Zod, persistance Supabase et envoi d'email via Resend
+- **Formulaire de contact** — Validation Zod et envoi d'email via Resend. Aucune base de données : l'email reçu par Guy est le seul enregistrement de la demande
 - **SEO avancé** — JSON-LD (Person / LocalBusiness), sitemap auto-généré, balises Open Graph, métadonnées géographiques
 - **Animations CSS** — Animations légères avec prise en charge de `prefers-reduced-motion`
 - **Analytics** — Umami auto-hébergé sur le VPS (`stats.guyboireau.com`) depuis le 2026-09-17, en remplacement de Vercel Analytics. Sans cookie ni identifiant persistant : aucune bannière requise, mais la mesure **est déclarée** dans les mentions légales (art. 13 RGPD). Google Tag Manager a été retiré le 2026-09-01 : il se chargeait au premier octet, sans bannière ni Consent Mode.
@@ -54,7 +54,7 @@ remplir avant la mise en production.
 | Route | Méthode | Description |
 |-------|---------|-------------|
 | `/api/chat` | `POST` | Streaming SSE vers Mistral AI par le relais LiteLLM (`ANTHROPIC_BASE_URL` + `CHAT_MODEL`, obligatoires, sinon 503), rate limiting 10 req/min par IP |
-| `/api/contact` | `POST` | Validation Zod, insertion Supabase, envoi Resend avec rate limiting (5 req/min par IP) |
+| `/api/contact` | `POST` | Validation Zod, envoi Resend avec rate limiting (5 req/min par IP). Rien n'est stocké côté site |
 
 ### Sécurité des API
 
@@ -70,8 +70,6 @@ Les deux endpoints utilisent un rate limiter en mémoire (Map côté serveur Ast
 > ce qu'il fait tant qu'aucun `trusted_proxies` n'est configuré. Avant, tous les
 > visiteurs partageaient le même quota (10 messages de chat et 5 envois de contact par
 > minute pour tout le site).
-
-Le client Supabase server (`src/lib/supabase.server.ts`) est utilisé par `/api/contact`. Il instancie un `createClient(url, anonKey)` simple, **sans gestion de cookies ni de session** : les requêtes partent avec la clé anonyme et restent donc soumises aux Row Level Security policies.
 
 ---
 
@@ -100,25 +98,13 @@ npm run test:csp # Empreintes CSP du HTML produit — exige un `npm run build` p
 
 ---
 
-## Supabase
+## Pas de base de données
 
-Le projet utilise deux clients Supabase, tous deux basés sur un `createClient(url, anonKey)` simple (pas de `@supabase/ssr`, pas d'authentification) :
-
-| Client | Fichier | Usage |
-|--------|---------|-------|
-| Browser | `src/lib/supabase.ts` | `getSupabase()` — lit `import.meta.env`, typé sur `src/lib/database.types.ts`. **Importé nulle part** depuis le retrait de `src/lib/contact.ts` (2026-10-05, code mort qui insérait dans une table `contacts` inexistante) : ce client ne sert pas sur le site en ligne |
-| Server | `src/lib/supabase.server.ts` | `getSupabaseServer()` — lit `process.env` pour éviter d'inliner la clé dans le bundle SSR. Utilisé par `/api/contact` (insertion dans `portfolio_contacts`) |
-
-Le projet ne contient aucun code d'authentification : les deux clients ne servent qu'à lire et écrire de la donnée.
-
-La seule écriture réelle en base est celle de `/api/contact` dans `portfolio_contacts`
-(`supabase/migrations/20260901120000_portfolio_contacts.sql`). Aucune migration du dépôt
-ne crée `pricing_tiers` ni `contacts`, et plus aucun code ne les vise.
-
-`supabase/migrations/20260925090000_portfolio_contacts_lecture_service_role.sql` retire
-la lecture de `portfolio_contacts` au rôle `authenticated` : seule la clé de service lit.
-**Écrite le 2026-09-25, pas encore appliquée** — la purge à 3 ans
-(`20260901140000_contacts_retention.sql`) attend elle aussi sa planification pg_cron.
+Le site n'a plus de base de données depuis le 2026-10-08. `/api/contact` écrivait dans une
+table Supabase `portfolio_contacts` qui n'a jamais existé en production (les migrations
+n'étaient jamais appliquées) : chaque insertion échouait, seul l'email partait. Le client
+Supabase, ses types et ses migrations ont été retirés, et la demande de contact ne vit plus
+que dans l'email envoyé par Resend (voir BLOCKERS.md, B06).
 
 ---
 
@@ -128,17 +114,15 @@ Créer un fichier `.env` à la racine :
 
 | Variable | Type | Dans `.env.example` | Description |
 |----------|------|---------------------|-------------|
-| `PUBLIC_SUPABASE_URL` | Publique | oui | URL du projet Supabase |
-| `PUBLIC_SUPABASE_ANON_KEY` | Publique | oui | Clé anonyme Supabase |
 | `ANTHROPIC_API_KEY` | Privée | oui | Clé du relais LiteLLM du VPS (le SDK parle le protocole Anthropic) |
 | `ANTHROPIC_BASE_URL` | Privée | oui | URL du relais LiteLLM (`http://127.0.0.1:4000` sur le VPS). Obligatoire : sans elle, ou si elle vise `anthropic.com`, `/api/chat` répond 503 |
 | `CHAT_MODEL` | Privée | oui | Groupe du relais routé vers Mistral AI (ex. `assistant-site`). Obligatoire, aucun modèle par défaut |
 | `RESEND_API_KEY` | Privée | oui | Clé API Resend (envoi d'emails) |
 
-> `cp .env.example .env` suffit désormais : les six variables réellement lues par le
-> code y figurent. Sans `RESEND_API_KEY`, `src/pages/api/contact.ts` journalise
-> `[contact] RESEND_API_KEY manquante` et répond en 500 — l'insertion Supabase a bien eu
-> lieu, mais aucun email n'est parti.
+> `cp .env.example .env` suffit : les quatre variables réellement lues par le code y
+> figurent. Sans `RESEND_API_KEY`, `src/pages/api/contact.ts` journalise
+> `[contact] RESEND_API_KEY manquante` et répond en 500 : la demande n'est alors
+> enregistrée nulle part, le visiteur voit l'erreur et doit écrire à me@guyboireau.com.
 
 ---
 

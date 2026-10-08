@@ -28,6 +28,7 @@ Au 2026-09-28 : **OPEN 3 · LANDED 2 · SHIPPED 0 · REFUTED 1**
 Au 2026-10-05 : **OPEN 4 · LANDED 1 · SHIPPED 2 · REFUTED 1**
 Au 2026-10-05 (PR #62) : **OPEN 2 · LANDED 2 · SHIPPED 3 · REFUTED 1**
 Au 2026-10-07 : **OPEN 2 · LANDED 3 · SHIPPED 3 · REFUTED 1**
+Au 2026-10-08 : **OPEN 2 · LANDED 2 · SHIPPED 3 · REFUTED 2**
 
 ---
 
@@ -294,7 +295,7 @@ grep -n "isSubscription" src/components/PricingSimulator.tsx
 
 ## B06 — `portfolio_contacts` lisible par tout compte `authenticated`
 
-- [ ] **statut: LANDED** · ouvert le 2026-09-28 · `begin;`/`commit;` retirés par #62 (non mergée) · migration **non appliquée** · données personnelles
+- [x] **statut: REFUTED** · ouvert le 2026-09-28 · `begin;`/`commit;` retirés par #62 · clos le 2026-10-08 : la table n'a jamais existé en prod, Supabase retiré du site · données personnelles
 
 La migration `20260901120000_portfolio_contacts.sql` accorde `select` à
 `authenticated` avec une policy `using (true)`. Le site n'a aucun écran
@@ -349,6 +350,45 @@ transcript de vérification (`role_table_grants`, `pg_policies`, en fin de fichi
 collé ici, sans ligne pour `authenticated`. Application par Guy : `supabase db push`
 (projet lié), ou `psql "$URL_DB" --single-transaction -f supabase/migrations/20260925090000_portfolio_contacts_lecture_service_role.sql`
 puis les deux requêtes de vérification.
+
+
+**Clôture (2026-10-08) — REFUTED : la fuite décrite n'a jamais pu avoir lieu.**
+
+Le projet Supabase de prod (celui de `PUBLIC_SUPABASE_URL`) a été relevé le 2026-10-08,
+au niveau du schéma et en lecture seule : son schéma `public` ne contient **aucune**
+table, vue ni fonction, et le projet n'a **aucun** utilisateur Auth (base vide, ~9,7 Mo).
+`portfolio_contacts` n'a jamais été créée : le pipeline du site n'applique pas les
+migrations, et `20260901120000` n'a jamais été jouée à la main. Il n'y a donc jamais eu de
+demande de contact en base à lire, par `authenticated` ou par qui que ce soit. Corollaire :
+l'insertion de `/api/contact` échouait à chaque envoi (journal
+`[contact] échec insertion portfolio_contacts`) ; l'email Resend partait, et c'était le
+seul canal réel. Le projet était en pause au moins du 2026-09-08 au 2026-10-08.
+
+Décision de Guy (2026-10-08) : retirer Supabase du site, garder la demande de contact
+dans l'email seulement, puis supprimer le projet. Fait par la PR de cette date (branche
+`claude/epic-johnson-zn50u2`) : bloc d'insertion retiré de `/api/contact`, clients
+`src/lib/supabase*.ts` et `database.types.ts` supprimés, dossier `supabase/migrations/`
+(les trois fichiers `portfolio_contacts`) et `tests/migrations.test.ts` supprimés,
+`@supabase/supabase-js` désinstallé, `*.supabase.co` retiré de la CSP, variables
+`PUBLIC_SUPABASE_*` retirées de `.env.example` et de la CI, politique de confidentialité
+mise à jour (plus de base, Supabase retiré des sous-traitants et des transferts).
+
+**Preuve re-exécutable** (côté dépôt, après la fusion)
+
+```sh
+git ls-files supabase                                   # → rien
+git grep -n "portfolio_contacts\|getSupabase\|@supabase/" -- src tests package.json  # → rien
+git grep -niE 'supabase' -- src csp.mjs .env.example .github
+# → seulement des mentions de compétences / projets clients (system-prompt.ts,
+#   BaseLayout.astro, a-propos, index, projets, traitement-documentaire) ; aucune dans
+#   confidentialite.astro, contact.ts, csp.mjs, .env.example ni la CI
+node -e "console.log(require('./package-lock.json').packages['node_modules/@supabase/supabase-js'])"  # → undefined
+npx vitest run tests/pages/api/contact.test.ts          # → vert, aucun mock Supabase
+```
+
+Reste hors dépôt, à Guy : retirer `PUBLIC_SUPABASE_URL` / `PUBLIC_SUPABASE_ANON_KEY` de
+l'environnement de `guyboireau.service` (et, au choix, du projet Vercel), puis supprimer
+le projet Supabase.
 
 ---
 

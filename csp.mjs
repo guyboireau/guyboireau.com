@@ -26,8 +26,8 @@ export const csp = {
   directives: [
     "default-src 'self'",
     "font-src 'self'",
-    "img-src 'self' data: https://*.supabase.co",
-    `connect-src 'self' https://*.supabase.co ${UMAMI}`,
+    "img-src 'self' data:",
+    `connect-src 'self' ${UMAMI}`,
     "frame-src 'none'",
     "object-src 'none'",
     "base-uri 'self'",

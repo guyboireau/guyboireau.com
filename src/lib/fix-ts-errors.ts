@@ -1,5 +1,4 @@
 import type { HTMLAttributes } from 'react';
-import type { PostgrestError } from '@supabase/supabase-js';
 
 // ============================================================================
 // Core Type Guards
@@ -34,38 +33,6 @@ export function hasProperty<K extends string>(
   key: K
 ): value is Record<K, unknown> {
   return isObject(value) && key in value;
-}
-
-// ============================================================================
-// Supabase Type-Safe Helpers
-// ============================================================================
-
-export interface SupabaseResult<T> {
-  data: T | null;
-  error: PostgrestError | null;
-}
-
-export function assertSupabaseData<T>(
-  result: SupabaseResult<T>
-): asserts result is { data: T; error: null } {
-  if (result.error !== null) {
-    throw new Error(`Supabase error: ${result.error.message}`);
-  }
-  if (result.data === null) {
-    throw new Error('Supabase returned null data unexpectedly');
-  }
-}
-
-export function getSupabaseData<T>(result: SupabaseResult<T>): T {
-  assertSupabaseData(result);
-  return result.data;
-}
-
-export function safeSupabaseData<T>(result: SupabaseResult<T>): T | null {
-  if (result.error !== null || result.data === null) {
-    return null;
-  }
-  return result.data;
 }
 
 // ============================================================================

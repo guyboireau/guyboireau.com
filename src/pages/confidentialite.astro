@@ -18,7 +18,7 @@ const sommaire = [
 ]
 ---
 
-<PageLegale {title} {description} titre="Politique de confidentialité" miseAJour="2026-10-01" {sommaire}>
+<PageLegale {title} {description} titre="Politique de confidentialité" miseAJour="2026-10-08" {sommaire}>
   <p>
     Cette page explique quelles données personnelles le site guyboireau.com traite, pourquoi, pendant combien de
     temps et avec quels prestataires. Elle couvre aussi les messages écrits directement à
@@ -48,14 +48,13 @@ const sommaire = [
     <dt>Base légale</dt>
     <dd>Mesures précontractuelles prises à votre demande (article 6.1.b du RGPD).</dd>
     <dt>Durée</dt>
-    <dd>3 ans à compter de votre message.</dd>
+    <dd>3 ans à compter de votre message, dans la messagerie de Guy Boireau.</dd>
     <dt>Destinataires et sous-traitants</dt>
     <dd>
-      Guy Boireau EI est le seul destinataire. Le message est enregistré dans une base de données chez Supabase,
-      Inc., dans un projet hébergé en Irlande, dans l’Union européenne. Une
-      notification qui reprend votre message est envoyée par Resend (États-Unis) vers la messagerie Gmail de Guy
-      Boireau (Google), avec votre adresse e-mail comme adresse de réponse. Le site lui-même tourne sur un serveur
-      loué à OVH, en France.
+      Guy Boireau EI est le seul destinataire. Le site n’enregistre pas votre message dans une base de données :
+      il le transmet par e-mail, envoyé par Resend (États-Unis), vers la messagerie Gmail de Guy Boireau
+      (Google), avec votre adresse e-mail comme adresse de réponse. C’est dans cette messagerie que votre demande
+      est conservée. Le site lui-même tourne sur un serveur loué à OVH, en France.
     </dd>
   </dl>
   <p>
@@ -182,8 +181,8 @@ const sommaire = [
     <dt>Données</dt>
     <dd>
       Une copie des données du serveur de l’éditeur (bases de données, fichiers, configurations), y compris celles
-      des traitements ci-dessus qui y sont stockées. Les messages du formulaire de contact, stockés chez Supabase,
-      n’en font pas partie.
+      des traitements ci-dessus qui y sont stockées. Les messages du formulaire de contact, qui ne sont pas
+      conservés sur ce serveur mais dans la messagerie de Guy Boireau, n’en font pas partie.
     </dd>
     <dt>Finalité</dt>
     <dd>Pouvoir restaurer le site et ses données après une panne, une erreur ou une attaque.</dd>
@@ -205,16 +204,15 @@ const sommaire = [
   <h2 id="transferts">3. Transferts hors de l’Union européenne</h2>
   <p>
     Certains prestataires sont établis aux États-Unis ou peuvent traiter les données hors de l’Union
-    européenne : Google (Gmail, Google Drive et l’API Gemini qui trie le courrier reçu), Resend (notification
-    du formulaire), Supabase (base du formulaire, hébergée en Irlande par une société américaine) et ImprovMX
-    (réception des e-mails). L’assistant IA passe par Mistral AI, qui traite les données dans l’Union
-    européenne.
+    européenne : Google (Gmail, Google Drive et l’API Gemini qui trie le courrier reçu), Resend (envoi par
+    e-mail des demandes du formulaire) et ImprovMX (réception des e-mails). L’assistant IA passe par Mistral AI,
+    qui traite les données dans l’Union européenne.
   </p>
   <p>
     Google et Resend sont certifiés au cadre de protection des données UE–États-Unis (Data Privacy Framework) :
     leurs transferts reposent sur la décision d’adéquation de la Commission européenne du 10 juillet 2023.
     L’accord de traitement des données de Resend comprend en outre les clauses contractuelles types adoptées par
-    la Commission européenne, sur lesquelles reposent aussi les transferts de Supabase. ImprovMX n’est pas
+    la Commission européenne. ImprovMX n’est pas
     certifié au Data Privacy Framework : le transfert vers ce prestataire n’est pas couvert par la décision
     d’adéquation.
   </p>

@@ -4,7 +4,6 @@ import type { APIRoute } from 'astro'
 import { randomUUID } from 'node:crypto'
 import { Resend } from 'resend'
 import { z } from 'zod'
-import { getSupabaseServer } from '@/lib/supabase.server'
 import { contactRateLimiter } from '@/lib/rate-limit'
 import { adresseVisiteur } from '@/lib/client-ip'
 
@@ -64,42 +63,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     }
     const { name, email, project_type, message } = parsed.data
 
-    // Sauvegarde Supabase. L'échec n'interrompt pas la requête — l'email reste
-    // le canal principal — mais il doit être visible dans les logs, sinon la
-    // perte du prospect en base passe totalement inaperçue.
-    const supabase = getSupabaseServer()
-    if (!supabase) {
-      console.error(
-        '[contact] persistance ignorée : client Supabase indisponible',
-        JSON.stringify({
-          requestId,
-          reason: 'missing_env',
-          hasUrl: Boolean(process.env.PUBLIC_SUPABASE_URL),
-          hasAnonKey: Boolean(process.env.PUBLIC_SUPABASE_ANON_KEY),
-        })
-      )
-    } else {
-      const { error: dbError } = await supabase.from('portfolio_contacts').insert({
-        name,
-        email,
-        message: `[${project_type || 'Non précisé'}] ${message}`,
-      })
-      if (dbError) {
-        // `details` est volontairement exclu : Postgres y recopie la ligne
-        // rejetée ("Failing row contains ..."), donc les données du prospect.
-        console.error(
-          '[contact] échec insertion portfolio_contacts',
-          JSON.stringify({
-            requestId,
-            code: dbError.code,
-            message: dbError.message,
-            hint: dbError.hint,
-          })
-        )
-      }
-    }
-
-    // Envoi email via Resend
+    // Envoi email via Resend : c'est le seul enregistrement de la demande, le site
+    // ne la conserve dans aucune base (retirée le 2026-10-08, voir B06).
     const resendApiKey = process.env.RESEND_API_KEY
     if (!resendApiKey) {
       console.error('[contact] RESEND_API_KEY manquante')
