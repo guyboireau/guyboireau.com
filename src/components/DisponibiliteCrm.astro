@@ -1,0 +1,15 @@
+---
+// Îlot serveur (server:defer) : la disponibilité de Guy, déduite de ses
+// contrats en cours dans le CRM ou fixée par le message de ses réglages.
+// Rien d'affiché si le CRM ne répond pas : mieux vaut aucune phrase qu'une
+// phrase fausse.
+import { lireDisponibilite, phraseDisponibilite } from '@/lib/crm'
+
+const d = await lireDisponibilite()
+---
+{d && (
+  <p class="inline-flex items-center gap-2 text-sm text-encre-2 mt-4">
+    <span aria-hidden="true" class={`inline-block w-2 h-2 rounded-full ${d.statut === 'disponible' ? 'bg-foret' : 'bg-primary-400'}`}></span>
+    {phraseDisponibilite(d)}
+  </p>
+)}

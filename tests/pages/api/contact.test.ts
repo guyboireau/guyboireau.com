@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { POST } from '@/pages/api/contact'
 
 const send = vi.hoisted(() => vi.fn())
@@ -186,5 +186,75 @@ describe('/api/contact', () => {
 
     const response = await POST(ctx)
     expect(response.status).toBe(200)
+  })
+  describe('dépôt dans le CRM', () => {
+    const corps = {
+      name: 'Jean Dupont',
+      email: 'jean@example.com',
+      project_type: 'site-vitrine',
+      message: 'Bonjour, je souhaite un devis pour un site vitrine.',
+    }
+    const fetchMock = vi.fn()
+
+    beforeEach(() => {
+      process.env.CRM_URL = 'http://crm.test'
+      process.env.CRM_APIKEY = 'cle-anon'
+      process.env.CRM_JWT = 'jeton-site-web'
+      vi.stubGlobal('fetch', fetchMock)
+      fetchMock.mockReset()
+    })
+    afterEach(() => {
+      vi.unstubAllGlobals()
+      delete process.env.CRM_URL
+      delete process.env.CRM_APIKEY
+      delete process.env.CRM_JWT
+    })
+
+    it('dépose la demande dans crm.demandes, puis envoie l’email', async () => {
+      fetchMock.mockResolvedValue(new Response(null, { status: 201 }))
+      const response = await POST(createContactRequest(corps, '10.0.0.1'))
+
+      expect(response.status).toBe(200)
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({
+        nom: 'Jean Dupont',
+        email: 'jean@example.com',
+        message: 'Bonjour, je souhaite un devis pour un site vitrine.',
+        type_projet: 'site-vitrine',
+      })
+      expect(send).toHaveBeenCalledTimes(1)
+    })
+
+    it('répond 200 si seul l’email échoue : la demande est dans le CRM', async () => {
+      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+      fetchMock.mockResolvedValue(new Response(null, { status: 201 }))
+      send.mockResolvedValue({ data: null, error: { name: 'application_error', message: 'panne' } })
+
+      const response = await POST(createContactRequest(corps, '10.0.0.2'))
+      expect(response.status).toBe(200)
+      consoleError.mockRestore()
+    })
+
+    it('répond 200 si seul le CRM échoue, et le journal ne contient aucune donnée personnelle', async () => {
+      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+      fetchMock.mockRejectedValue(new Error('ECONNREFUSED'))
+
+      const response = await POST(createContactRequest(corps, '10.0.0.3'))
+      expect(response.status).toBe(200)
+      const journal = JSON.stringify(consoleError.mock.calls)
+      expect(journal).toContain('[contact] dépôt dans le CRM impossible')
+      expect(journal).not.toContain('jean@example.com')
+      consoleError.mockRestore()
+    })
+
+    it('répond 500 si le CRM et l’email échouent tous les deux', async () => {
+      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+      fetchMock.mockResolvedValue(new Response(null, { status: 500 }))
+      send.mockResolvedValue({ data: null, error: { name: 'application_error', message: 'panne' } })
+
+      const response = await POST(createContactRequest(corps, '10.0.0.4'))
+      expect(response.status).toBe(500)
+      consoleError.mockRestore()
+    })
   })
 })
