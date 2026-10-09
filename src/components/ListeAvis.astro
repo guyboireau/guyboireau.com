@@ -1,0 +1,38 @@
+---
+// Section « Avis » de l'accueil. Rendue deux fois au plus : au build avec
+// data/avis.ts (repli), puis par l'îlot serveur AvisClients avec les avis
+// publiés dans le CRM. Même balisage dans les deux cas : pas de saut de page.
+interface Props {
+  avis: { texte: string; auteur: string; contexte: string; source: string; lien?: string | null }[]
+}
+const { avis } = Astro.props
+---
+{avis.length > 0 && (
+  <section class="section">
+    <div class="max-w-5xl mx-auto">
+      <div class="apparition mb-12">
+        <p class="etiquette mb-4">Avis</p>
+        <h2 class="section-title">Ce qu'en disent les clients</h2>
+      </div>
+
+      <div class={`grid grid-cols-1 gap-6 ${avis.length > 1 ? 'md:grid-cols-2' : 'max-w-3xl'}`}>
+        {avis.map((a) => (
+          <figure class="carte p-6 md:p-8 apparition">
+            <blockquote class="font-display text-2xl leading-snug text-encre mb-6">
+              « {a.texte} »
+            </blockquote>
+            <figcaption>
+              <p class="font-medium text-encre">{a.auteur}</p>
+              <p class="text-encre-2 text-sm">{a.contexte}</p>
+              <p class="font-mono text-[13px] text-encre-3 mt-2">
+                {a.lien
+                  ? <a href={a.lien} target="_blank" rel="noopener noreferrer" class="lien">{a.source}<span class="sr-only"> (nouvel onglet)</span></a>
+                  : a.source}
+              </p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

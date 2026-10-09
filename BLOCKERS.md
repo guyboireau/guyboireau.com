@@ -390,6 +390,15 @@ Reste hors dépôt, à Guy : retirer `PUBLIC_SUPABASE_URL` / `PUBLIC_SUPABASE_AN
 l'environnement de `guyboireau.service` (et, au choix, du projet Vercel), puis supprimer
 le projet Supabase.
 
+**Correction (2026-10-09).** Le relevé ci-dessus est faux : la table existe et n'est pas
+vide. Mesuré sur le projet `dvtrprdongexycflyyir` (celui de `PUBLIC_SUPABASE_URL` en prod,
+nommé « caltounian ») par le MCP Supabase : `select count(*) from public.portfolio_contacts`
+→ **15**. Le même projet porte aussi les tables de l'ancien projet CAltounian (`User` 2
+lignes, `Appointment` 12, RLS désactivée). **Ne pas supprimer le projet** avant d'avoir
+repris les 15 demandes (dans `crm.demandes`, voir README « Lien avec le CRM ») et décidé du
+sort des données CAltounian. Le formulaire, lui, dépose de nouveau ses demandes dans une
+base depuis le 2026-10-09, celle du CRM sur le VPS.
+
 ---
 
 ## B07 — `http-cache-semantics` 4.2.0 (advisory high) dans l'arbre de production

@@ -7,6 +7,8 @@ import ChatBot from '../components/ChatBot.tsx'
 import MentionPrix from '../components/MentionPrix.astro'
 import Icone from '../components/Icone.astro'
 import { AVIS } from '../data/avis'
+import AvisClients from '../components/AvisClients.astro'
+import ListeAvis from '../components/ListeAvis.astro'
 import { Image } from 'astro:assets'
 import lalucarneDesktop from '../assets/lalucarne-desktop.png'
 import lalucarneMobile from '../assets/lalucarne-mobile.png'
@@ -264,36 +266,11 @@ const offreSite = [
       </div>
     </section>
 
-    <!-- Avis : n'apparaît que si data/avis.ts contient des avis vérifiés -->
-    {AVIS.length > 0 && (
-      <section class="section">
-        <div class="max-w-5xl mx-auto">
-          <div class="apparition mb-12">
-            <p class="etiquette mb-4">Avis</p>
-            <h2 class="section-title">Ce qu'en disent les clients</h2>
-          </div>
-
-          <div class={`grid grid-cols-1 gap-6 ${AVIS.length > 1 ? 'md:grid-cols-2' : 'max-w-3xl'}`}>
-            {AVIS.map((avis) => (
-              <figure class="carte p-6 md:p-8 apparition">
-                <blockquote class="font-display text-2xl leading-snug text-encre mb-6">
-                  « {avis.texte} »
-                </blockquote>
-                <figcaption>
-                  <p class="font-medium text-encre">{avis.auteur}</p>
-                  <p class="text-encre-2 text-sm">{avis.contexte}</p>
-                  <p class="font-mono text-[13px] text-encre-3 mt-2">
-                    {avis.lien
-                      ? <a href={avis.lien} target="_blank" rel="noopener noreferrer" class="lien">{avis.source}<span class="sr-only"> (nouvel onglet)</span></a>
-                      : avis.source}
-                  </p>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      </section>
-    )}
+    <!-- Avis : ceux publiés dans le CRM, lus à la demande (îlot serveur).
+         Repli rendu au build : les avis vérifiés de data/avis.ts. -->
+    <AvisClients server:defer>
+      <ListeAvis slot="fallback" avis={AVIS} />
+    </AvisClients>
 
     <!-- Offre artisans et commerces -->
     <section class="section" id="artisans">

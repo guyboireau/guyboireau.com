@@ -22,7 +22,8 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 ## Fonctionnalités
 
 - **Chatbot IA** — Assistant conversationnel en streaming SSE ; modèle Mistral AI (UE) par le relais LiteLLM du VPS. Sans relais configuré, `/api/chat` répond 503 et ne contacte aucun fournisseur (B08)
-- **Formulaire de contact** — Validation Zod et envoi d'email via Resend. Aucune base de données : l'email reçu par Guy est le seul enregistrement de la demande
+- **Formulaire de contact** — Validation Zod, dépôt de la demande dans le CRM (`crm.demandes`, base du VPS partagée avec l'appli agent-freelance) et email via Resend. L'un peut échouer sans perdre la demande : voir « Lien avec le CRM »
+- **Disponibilité et avis** — îlots serveur (`server:defer`) qui lisent le CRM à la demande, gardés 5 minutes en mémoire : la disponibilité sur /contact, les avis publiés sur l'accueil (repli : `src/data/avis.ts`)
 - **SEO avancé** — JSON-LD (Person / LocalBusiness), sitemap auto-généré, balises Open Graph, métadonnées géographiques
 - **Animations CSS** — Animations légères avec prise en charge de `prefers-reduced-motion`
 - **Analytics** — Umami auto-hébergé sur le VPS (`stats.guyboireau.com`) depuis le 2026-09-17, en remplacement de Vercel Analytics. Sans cookie ni identifiant persistant : aucune bannière requise, mais la mesure **est déclarée** dans les mentions légales (art. 13 RGPD). Google Tag Manager a été retiré le 2026-09-01 : il se chargeait au premier octet, sans bannière ni Consent Mode.
@@ -98,13 +99,29 @@ npm run test:csp # Empreintes CSP du HTML produit — exige un `npm run build` p
 
 ---
 
-## Pas de base de données
+## Lien avec le CRM
 
-Le site n'a plus de base de données depuis le 2026-10-08. `/api/contact` écrivait dans une
-table Supabase `portfolio_contacts` qui n'a jamais existé en production (les migrations
-n'étaient jamais appliquées) : chaque insertion échouait, seul l'email partait. Le client
-Supabase, ses types et ses migrations ont été retirés, et la demande de contact ne vit plus
-que dans l'email envoyé par Resend (voir BLOCKERS.md, B06).
+Depuis le 2026-10-09, le site partage la base de l'appli de gestion de Guy
+(`agent-freelance`) : la pile Supabase auto-hébergée du VPS, schéma `crm`. Il y entre
+avec un rôle Postgres à lui, `site_web`, par un jeton signé par la pile (`CRM_JWT`,
+émis pour 5 ans, gardé dans `/srv/apps/guyboireau/.env`, jamais côté navigateur).
+
+Ce rôle peut seulement :
+
+- déposer une demande dans `crm.demandes` (nom, email, message, type de projet) ;
+- lire `crm.vitrine_avis` (avis publiés) et `crm.vitrine_disponibilite`.
+
+Tout le reste (clients, factures, demandes déjà reçues) lui est refusé par la base.
+`src/lib/crm.ts` porte les trois appels, avec un délai de 2,5 s et un cache de 5 minutes
+pour les lectures ; en cas d'échec il rend la dernière valeur connue, ou rien.
+
+`/api/contact` dépose la demande puis envoie l'email. Si l'un des deux échoue, la
+demande n'est pas perdue et le visiteur reçoit une confirmation ; si les deux échouent,
+il voit l'erreur.
+
+Historique : la table `portfolio_contacts` du projet Supabase cloud `dvtr…` a reçu les
+demandes jusqu'au 2026-09-21 (15 lignes au 2026-10-09, contrairement à ce qu'affirmait
+#64). Le site n'y écrit plus depuis #64 ; ces lignes sont reprises dans `crm.demandes`.
 
 ---
 
@@ -118,11 +135,15 @@ Créer un fichier `.env` à la racine :
 | `ANTHROPIC_BASE_URL` | Privée | oui | URL du relais LiteLLM (`http://127.0.0.1:4000` sur le VPS). Obligatoire : sans elle, ou si elle vise `anthropic.com`, `/api/chat` répond 503 |
 | `CHAT_MODEL` | Privée | oui | Groupe du relais routé vers Mistral AI (ex. `assistant-site`). Obligatoire, aucun modèle par défaut |
 | `RESEND_API_KEY` | Privée | oui | Clé API Resend (envoi d'emails) |
+| `CRM_URL` | Privée | oui | API de la pile Supabase du VPS (`http://127.0.0.1:8003` en production) |
+| `CRM_APIKEY` | Privée | oui | Clé `anon` de la pile (exigée par la passerelle, sans droit sur `crm`) |
+| `CRM_JWT` | Privée | oui | Jeton du rôle `site_web` (voir « Lien avec le CRM ») |
 
-> `cp .env.example .env` suffit : les quatre variables réellement lues par le code y
-> figurent. Sans `RESEND_API_KEY`, `src/pages/api/contact.ts` journalise
-> `[contact] RESEND_API_KEY manquante` et répond en 500 : la demande n'est alors
-> enregistrée nulle part, le visiteur voit l'erreur et doit écrire à me@guyboireau.com.
+> `cp .env.example .env` suffit : les variables réellement lues par le code y
+> figurent. Sans les trois `CRM_*` (dev local, aperçus), le formulaire n'envoie que
+> l'email et les îlots retombent sur leur repli. Sans `RESEND_API_KEY` ni CRM,
+> `src/pages/api/contact.ts` répond en 500 : la demande n'est enregistrée nulle part,
+> le visiteur voit l'erreur et doit écrire à me@guyboireau.com.
 
 ---
 

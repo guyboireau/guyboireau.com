@@ -6,6 +6,7 @@ import { Resend } from 'resend'
 import { z } from 'zod'
 import { contactRateLimiter } from '@/lib/rate-limit'
 import { adresseVisiteur } from '@/lib/client-ip'
+import { deposerDemande } from '@/lib/crm'
 
 // Messages en français : ils sont affichés sous le champ concerné par le
 // formulaire (aria-describedby), ils doivent dire au visiteur quoi corriger.
@@ -32,6 +33,15 @@ function escapeHtml(unsafe: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;')
+}
+
+function succes(requestId: string, resendId: string | null, crm: string): Response {
+  // Journal sans donnée personnelle : identifiants techniques seulement.
+  console.info('[contact] message traité', JSON.stringify({ requestId, resendId, crm }))
+  return new Response(JSON.stringify({ success: true }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' },
+  })
 }
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
@@ -63,11 +73,19 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     }
     const { name, email, project_type, message } = parsed.data
 
-    // Envoi email via Resend : c'est le seul enregistrement de la demande, le site
-    // ne la conserve dans aucune base (retirée le 2026-10-08, voir B06).
+    // 1. La demande entre dans le CRM (crm.demandes, base du VPS), où Guy la
+    //    suit et la convertit en prospect. Jamais bloquant : l'email suit.
+    const depot = await deposerDemande({ nom: name, email, message, type_projet: project_type || null })
+    if (depot === 'echec') {
+      console.error('[contact] dépôt dans le CRM impossible', JSON.stringify({ requestId }))
+    }
+
+    // 2. L'email, pour être prévenu tout de suite. Si lui seul échoue alors que
+    //    le CRM a la demande, elle n'est pas perdue : on répond quand même oui.
     const resendApiKey = process.env.RESEND_API_KEY
     if (!resendApiKey) {
       console.error('[contact] RESEND_API_KEY manquante')
+      if (depot === 'deposee') return succes(requestId, null, depot)
       throw new Error('Clé API Resend manquante')
     }
 
@@ -111,18 +129,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
     if (error) {
       console.error('[contact] Resend error:', JSON.stringify({ requestId, error }))
+      if (depot === 'deposee') return succes(requestId, null, depot)
       throw new Error("Erreur lors de l'envoi de l'email")
     }
 
-    console.info(
-      '[contact] message traité',
-      JSON.stringify({ requestId, resendId: _data?.id ?? null })
-    )
-
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    })
+    return succes(requestId, _data?.id ?? null, depot)
   } catch (err) {
     console.error('[contact] Error:', requestId, err)
     return new Response(JSON.stringify({ error: "Une erreur est survenue lors de l'envoi du message." }), {

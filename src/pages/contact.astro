@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import ContactForm from '../components/ContactForm'
+import DisponibiliteCrm from '../components/DisponibiliteCrm.astro'
 import Icone from '../components/Icone.astro'
 
 const title = 'Contact | Guy Boireau, développeur indépendant à Bordeaux'
@@ -19,6 +20,7 @@ const description =
           <p class="etiquette mb-6">Contact</p>
           <h1 class="text-4xl md:text-6xl leading-[1.08] mb-6">Parlons de votre projet</h1>
           <p class="text-lg md:text-xl text-encre-2">Le premier échange est gratuit. Je réponds sous 24 h.</p>
+          <DisponibiliteCrm server:defer />
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] gap-8">

@@ -1,0 +1,12 @@
+---
+// Îlot serveur (server:defer) : les avis publiés dans le CRM, lus à la
+// demande et gardés 5 minutes en mémoire. Publier ou retirer un avis dans le
+// CRM suffit, sans reconstruire le site. CRM injoignable ou non configuré :
+// les avis vérifiés de data/avis.ts.
+import ListeAvis from './ListeAvis.astro'
+import { lireAvis } from '@/lib/crm'
+import { AVIS } from '@/data/avis'
+
+const avis = (await lireAvis()) ?? AVIS
+---
+<ListeAvis avis={avis} />
