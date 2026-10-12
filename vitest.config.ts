@@ -14,6 +14,11 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html', 'json'],
       reportsDirectory: './coverage',
+      // Sans `include`, v8 ne compte que les fichiers importés par un test : un
+      // module jamais testé (ou mort) n'apparaît pas et la couverture affichée
+      // est surestimée (98,5 % au lieu de 86,6 % le 2026-10-12, à cause d'un
+      // module de 178 lignes importé nulle part). Tout TS/TSX de src/ compte.
+      include: ['src/**/*.{ts,tsx}'],
       exclude: [
         'node_modules/',
         'dist/',

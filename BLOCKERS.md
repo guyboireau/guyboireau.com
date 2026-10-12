@@ -29,6 +29,7 @@ Au 2026-10-05 : **OPEN 4 · LANDED 1 · SHIPPED 2 · REFUTED 1**
 Au 2026-10-05 (PR #62) : **OPEN 2 · LANDED 2 · SHIPPED 3 · REFUTED 1**
 Au 2026-10-07 : **OPEN 2 · LANDED 3 · SHIPPED 3 · REFUTED 1**
 Au 2026-10-08 : **OPEN 2 · LANDED 2 · SHIPPED 3 · REFUTED 2**
+Au 2026-10-12 : **OPEN 3 · LANDED 1 · SHIPPED 4 · REFUTED 2**
 
 ---
 
@@ -75,6 +76,10 @@ fusionnée 3 min après son ouverture, #59 6 min après. Ouvert depuis 21 jours.
 (même commande). Hors de portée d'un agent : l'ajout de `required_status_checks` (`ci`,
 `build-vps`, `🔐 Détection de secrets`) au ruleset 23932480 est une décision de Guy.
 Reste OPEN.
+
+**Relevé (2026-10-12).** Inchangé : `["deletion","non_fast_forward","pull_request"]`
+(ruleset 23932480, 0 approbation), `"protected": true`, toujours aucune règle
+`required_status_checks` (même commande). Ouvert depuis 28 jours. Décision de Guy.
 
 ---
 
@@ -159,6 +164,10 @@ workflows déclarent bien `pull_request: branches: [main]` sans filtre qui exclu
 une PR de code, et la cause du cas #38 est côté plateforme (jeton ou compte Actions).
 La parade au motif décrit (« une PR verte d'aperçu ressemble à une PR validée ») est
 B01 : des checks requis. Rien à corriger dans le dépôt. Reste OPEN.
+
+**Relevé (2026-10-12).** Aucune PR ouverte ; les trois PR fusionnées depuis le dernier
+relevé (#63, #64, #65) ont toutes reçu `ci` et `Secret Scan` sur `main` (runs 146, 148,
+150, verts). Le cas #38 reste isolé. Ouvert depuis 28 jours.
 
 ---
 
@@ -521,11 +530,25 @@ Passe SHIPPED quand #62 est sur `main` et que : (1) l'environnement de
 routé vers Mistral (transcript de la route LiteLLM collé ici) ; (2) le projet Vercel est
 coupé, ou y sert un `/api/chat` en 503. Hors dépôt, décision et accès de Guy.
 
+**Relevé (2026-10-12) — le code est sur `main` (#62, 8267ff2), re-prouvé sur 813314d.**
+
+```sh
+git checkout 813314d && npm ci
+npx vitest run tests/pages/api/chat.test.ts src/lib/assistant-config.test.ts \
+  src/hooks/useChat.test.ts src/components/ChatBot.test.tsx      # → 4 fichiers, 75 verts
+git grep -nE "CHAT_MODEL\s*(\|\||\?\?)" -- src                    # → rien
+# Fumée du build de prod : job `build-vps` vert sur main 813314d (run CI 150).
+```
+
+Reste LANDED : les deux conditions de fermeture sont hors dépôt (environnement de
+`guyboireau.service` et route LiteLLM ; projet Vercel coupé ou en 503). Aucun agent n'y a
+accès. Décision et accès de Guy.
+
 ---
 
 ## B09 — `source-map-js` et `sharp` (advisories high) dans l'arbre de production : CI de `main` rouge
 
-- [ ] **statut: LANDED** · ouvert le 2026-10-07 · corrigé sur `claude/epic-johnson-zn50u2` (non mergée) · sécurité
+- [x] **statut: SHIPPED** · ouvert le 2026-10-07 · livré par #63 (94440dc, mergée le 2026-10-08) · re-prouvé sur `main` 813314d le 2026-10-12 · sécurité
 
 Depuis le 2026-10-06, l'étape `npm audit --omit=dev --audit-level=high` (garde de B07)
 fait échouer `ci` sur `main` 8267ff2. Trois paquets livrés en prod :
@@ -555,6 +578,71 @@ Lint, `astro check`, 189 tests, build Vercel, `test:csp`, `test:pages`, build
 `astro.config.vps.mjs` et fumée du serveur Node (accueil 200, `/api/chat` 503) verts.
 Les 5 high restants en arbre complet sont ceux de `braces`, dev seulement (voir B07).
 Passe SHIPPED quand la PR est sur `main` et l'audit rejoué.
+
+**Re-preuve sur `main` (2026-10-12, 813314d, après `npm ci`)**
+
+```sh
+npm audit --omit=dev --json | jq -c .metadata.vulnerabilities
+# → {"info":0,"low":0,"moderate":0,"high":0,"critical":0,"total":0}
+npm ls sharp source-map-js smol-toml | grep -oE '(sharp|source-map-js|smol-toml)@[0-9.]+' | sort -u
+# → sharp@0.35.5 · smol-toml@1.9.0 · source-map-js@1.2.2
+```
+
+L'étape CI `npm audit --omit=dev --audit-level=high` est verte sur `main` depuis le run 146
+(94440dc). En arbre complet, toujours les 5 high de `braces` (dev seulement, B07).
+
+---
+
+## B10 — Ancien projet Supabase cloud : 15 demandes de contact et des tables CAltounian sans RLS, toujours en ligne
+
+- [ ] **statut: OPEN** · ouvert le 2026-10-12 · données personnelles, sécurité
+
+Ce constat reprend ce que la correction datée du 2026-10-09 de B06 a établi, et que
+B06 (classé REFUTED le 2026-10-08 sur un relevé reconnu faux depuis) ne porte plus :
+le projet `dvtrprdongexycflyyir` (« caltounian »), celui de `PUBLIC_SUPABASE_URL`,
+contient **15 lignes dans `public.portfolio_contacts`** (nom, e-mail, message de
+prospects) et les tables de l'ancien projet CAltounian, **`User` (2 lignes) et
+`Appointment` (12 lignes), RLS désactivée**. Sur Supabase, une table du schéma `public`
+sans RLS est lisible et modifiable par le rôle `anon` tant que les droits par défaut
+n'ont pas été retirés ; la clé `anon` n'est pas un secret (préfixe `PUBLIC_`, livrée
+au navigateur par conception). Le site ne lit plus ce projet depuis #64, mais le projet,
+lui, reste en ligne.
+
+Ni le reclassement de B06 (REFUTED contredit par sa propre correction) ni la décision
+sur ces données ne sont du ressort d'un agent : l'identifiant B06 reste figé, ce
+constat-ci porte l'action.
+
+Exploitabilité **non mesurée** : le MCP Supabase de l'audit du 2026-10-12 répond
+« You do not have permission to perform this action » sur ce projet (`execute_sql` et
+`get_advisors`). Rien dans le dépôt à corriger (Supabase en est retiré, B06).
+
+**Preuve re-exécutable** (SQL en lecture, métadonnées seulement, aucune donnée lue)
+
+```sql
+begin read only;
+select c.relname, c.relrowsecurity as rls,
+       has_table_privilege('anon', c.oid, 'select')          as anon_select,
+       has_table_privilege('anon', c.oid, 'insert')          as anon_insert,
+       has_table_privilege('authenticated', c.oid, 'select') as auth_select,
+       (select count(*) from pg_policies p
+         where p.schemaname = 'public' and p.tablename = c.relname) as policies
+from pg_class c join pg_namespace n on n.oid = c.relnamespace
+where n.nspname = 'public' and c.relkind = 'r' order by 1;
+rollback;
+-- Ouvert si une ligne a rls = false et anon_select = true (attendu : User, Appointment),
+-- ou si portfolio_contacts est lisible par anon/authenticated.
+```
+
+```sh
+# Côté dépôt : la clé anon a bien été livrée sous préfixe PUBLIC_ jusqu'à #64
+git show c66ca9b^:src/lib/supabase.ts | grep -n PUBLIC_SUPABASE_ANON_KEY
+```
+
+**Correctif attendu — décision de Guy** (données personnelles, RLS) : reprendre les 15
+demandes dans `crm.demandes` (README, « Lien avec le CRM »), décider du sort des données
+CAltounian (export puis suppression, ou `alter table … enable row level security` en
+attendant), puis supprimer le projet. Fermeture : transcript de la requête ci-dessus sans
+ligne exposée, ou projet supprimé (capture de la liste des projets).
 
 ---
 
