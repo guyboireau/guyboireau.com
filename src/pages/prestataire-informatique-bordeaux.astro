@@ -9,7 +9,8 @@ import Icone from '../components/Icone.astro'
 // septembre 2026 : « prestataire informatique bordeaux » (100 affichages,
 // position 11,9), « prestataire informatique gironde » (8,0). Elle décrit la
 // partie logicielle de l'informatique d'une PME, la seule que Guy prend en
-// charge : rien ici ne promet de maintenance de matériel ou de réseau.
+// charge : rien ici ne promet de maintenance de matériel ou de réseau, et la
+// page le dit (ligne « Ce que je ne fais pas », décision de Guy du 2026-10-12).
 // Le groupe Chandioux (Lusigny, Allier) est cité sans son nom (accord de Guy
 // du 2026-10-12, en attendant un accord écrit du client). Forfait démarré le
 // 2026-10-01, sites surveillés par veille.timer (toutes les 30 minutes).
@@ -76,7 +77,7 @@ const raisons = [
 const faq = [
   {
     q: 'Intervenez-vous dans nos locaux ?',
-    a: "Oui, à Bordeaux et dans toute la Gironde, sur rendez-vous. Le dépannage se fait à distance, avec votre accord : c'est plus rapide pour vous.",
+    a: "Oui, à Bordeaux et dans toute la Gironde, sur rendez-vous. Le premier rendez-vous est gratuit, sur place comme en visio. Le dépannage se fait à distance, avec votre accord : c'est plus rapide pour vous.",
   },
   {
     q: 'Proposez-vous un contrat de maintenance ?',
@@ -151,6 +152,10 @@ const faq = [
             </div>
           ))}
         </div>
+        <p class="apparition mt-8 max-w-3xl text-encre-2 leading-relaxed">
+          <span class="font-medium text-encre">Ce que je ne fais pas :</span>
+          le matériel. Remplacement de postes, câblage réseau, imprimantes et téléphonie relèvent d'un technicien de parc informatique.
+        </p>
         <MentionPrix class="mt-8" />
       </div>
     </section>
