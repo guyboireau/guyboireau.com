@@ -30,6 +30,7 @@ Au 2026-10-05 (PR #62) : **OPEN 2 · LANDED 2 · SHIPPED 3 · REFUTED 1**
 Au 2026-10-07 : **OPEN 2 · LANDED 3 · SHIPPED 3 · REFUTED 1**
 Au 2026-10-08 : **OPEN 2 · LANDED 2 · SHIPPED 3 · REFUTED 2**
 Au 2026-10-12 : **OPEN 3 · LANDED 1 · SHIPPED 4 · REFUTED 2**
+Au 2026-10-12, relevés VPS et projets (session locale) : **OPEN 2 · LANDED 0 · SHIPPED 6 · REFUTED 2** (B08 et B10 → SHIPPED ; B06 : reclassement proposé, décision de Guy ; B01 : prérequis du ruleset dans cette PR)
 
 ---
 
@@ -455,7 +456,7 @@ Garde ajoutée par #62 : étape CI `npm audit --omit=dev --audit-level=high` (jo
 
 ## B08 — Assistant IA : le sous-traitant déclaré (Mistral AI, UE) ne dépend que d'une variable d'environnement ; le repli du code part chez Anthropic (États-Unis)
 
-- [ ] **statut: LANDED** · ouvert le 2026-10-05 · corrigé par #62 (non mergée) · données personnelles
+- [x] **statut: SHIPPED** · ouvert le 2026-10-05 · code sur `main` (#62, 8267ff2) · re-prouvé en prod le 2026-10-12 : `/api/chat` en 503 sur le VPS et sur Vercel, aucun fournisseur appelé · données personnelles
 
 Depuis #56 et #60, `confidentialite.astro`, le bandeau de `ChatBot.tsx` et
 `public/llms.txt` disent aux visiteurs que leurs messages au chatbot vont chez
@@ -595,7 +596,7 @@ L'étape CI `npm audit --omit=dev --audit-level=high` est verte sur `main` depui
 
 ## B10 — Ancien projet Supabase cloud : 15 demandes de contact et des tables CAltounian sans RLS, toujours en ligne
 
-- [ ] **statut: OPEN** · ouvert le 2026-10-12 · données personnelles, sécurité
+- [x] **statut: SHIPPED** · ouvert le 2026-10-12 · fermé par la suppression du projet `dvtrprdongexycflyyir` (Guy, 2026-10-09), constatée le 2026-10-12 · données personnelles, sécurité
 
 Ce constat reprend ce que la correction datée du 2026-10-09 de B06 a établi, et que
 B06 (classé REFUTED le 2026-10-08 sur un relevé reconnu faux depuis) ne porte plus :
@@ -643,6 +644,84 @@ demandes dans `crm.demandes` (README, « Lien avec le CRM »), décider du sort 
 CAltounian (export puis suppression, ou `alter table … enable row level security` en
 attendant), puis supprimer le projet. Fermeture : transcript de la requête ci-dessus sans
 ligne exposée, ou projet supprimé (capture de la liste des projets).
+
+---
+
+## Relevés du 2026-10-12 (session locale, accès VPS et comptes) — B10, B08, B06, B01
+
+### B10 → SHIPPED — le projet n'existe plus
+
+Le constat a été écrit le 2026-10-12 sans pouvoir interroger le projet (« You do not have
+permission » du MCP). Mesure du même jour, depuis le poste de Guy :
+
+```sh
+dig dvtrprdongexycflyyir.supabase.co +noall +comments | grep status
+# → status: NXDOMAIN
+curl -s -o /dev/null -w '%{http_code}\n' --max-time 15 https://dvtrprdongexycflyyir.supabase.co/rest/v1/
+# → 000 (aucune résolution)
+# MCP Supabase list_projects (compte de la CLI) → un seul projet, vrxgquddqqbrwbdycpco (Niido) ;
+# dvtrprdongexycflyyir absent.
+ssh ovh-vps 'docker exec agent-freelance-db psql -U postgres -Atc "select origine, statut, count(*) from crm.demandes group by 1,2"'
+# → import|traitee|14
+```
+
+Le projet a été **supprimé par Guy le 2026-10-09** après la reprise de 14 des 15 demandes
+dans `crm.demandes` (origine `import`) ; la 15ᵉ était un essai de 8 caractères. Les tables
+CAltounian (`User` 2 lignes, `Appointment` 12) ont disparu avec le projet : il n'y a plus
+rien à exporter, à protéger par RLS ni à supprimer. Le plan (a)–(d) proposé pour ce constat
+est donc sans objet. Fermeture conforme au critère de l'entrée : « projet supprimé (liste des
+projets) ».
+
+### B08 → SHIPPED — l'assistant est coupé, aucun message ne part
+
+```sh
+ssh ovh-vps 'systemctl show guyboireau.service -p EnvironmentFiles'
+# → EnvironmentFiles=/srv/apps/guyboireau/.env
+ssh ovh-vps 'PID=$(systemctl show guyboireau.service -p MainPID --value);
+  sudo cat /proc/$PID/environ | tr "\0" "\n" | grep -oE "^(ANTHROPIC_BASE_URL|CHAT_MODEL|ANTHROPIC_API_KEY)="'
+# → ANTHROPIC_API_KEY=   (seule des trois ; ni ANTHROPIC_BASE_URL ni CHAT_MODEL)
+curl -s -w ' %{http_code}\n' -X POST -H 'Content-Type: application/json' -H 'Origin: https://guyboireau.com' \
+  -d '{"messages":[{"role":"user","content":"Bonjour"}]}' https://guyboireau.com/api/chat
+# → {"error":"L'assistant n'est pas disponible…","code":"ASSISTANT_NON_CONFIGURE"} 503
+curl -s -w ' %{http_code}\n' -X POST -H 'Content-Type: application/json' -H 'Origin: https://guyboireau-com.vercel.app' \
+  -d '{"messages":[{"role":"user","content":"Bonjour"}]}' https://guyboireau-com.vercel.app/api/chat
+# → {"error":"L'assistant n'est pas disponible…","code":"ASSISTANT_NON_CONFIGURE"} 503
+ssh ovh-vps 'sudo sed -n "/model_name: assistant-site/,+1p" /srv/agents/litellm/config.yaml | sed -E "s/api_key: [^,}]*/api_key: …/"'
+# → model_name: assistant-site · model: mistral/mistral-small-latest (groupe sans repli)
+```
+
+Condition (2) de l'entrée remplie : le projet Vercel sert un `/api/chat` en 503. Condition (1)
+remplie **autrement** : au lieu d'un `CHAT_MODEL` routé vers Mistral, la prod n'a pas de
+relais configuré et le code (#62) refuse de répondre — aucun message de visiteur ne part, ni
+chez Anthropic ni ailleurs. C'est l'état voulu tant que la bascule Mistral attend l'offre API
+et la désactivation de l'entraînement. Pour réactiver : `ANTHROPIC_BASE_URL=http://127.0.0.1:4000`,
+`CHAT_MODEL=assistant-site` et la clé **du harnais** dans `ANTHROPIC_API_KEY`.
+
+**Hors registre, à décider par Guy** : `ANTHROPIC_API_KEY` du `.env` du VPS a la forme d'une
+vraie clé Anthropic (`sk-ant-…`), inutilisée depuis #62 ; le projet Vercel en porte une aussi
+(Development, Preview…). Les retirer (et révoquer la clé) ne casse rien.
+
+### B06 — reclassement proposé (statut inchangé, décision de Guy)
+
+B06 est `REFUTED` depuis le 2026-10-08 sur un relevé reconnu faux par sa propre correction du
+2026-10-09 (`portfolio_contacts` existait, 15 lignes). Le motif « la table n'a jamais existé »
+ne tient donc plus, et REFUTED exige un faux positif **prouvé**. Le risque décrit (toute
+session `authenticated` du projet lit les demandes) n'a jamais été mesuré sur la prod, et ne
+peut plus l'être. Il a pris fin avec le projet : retrait de Supabase du site (#64), reprise des
+demandes dans `crm.demandes` (#65), suppression du projet le 2026-10-09 (preuves de B10
+ci-dessus). Proposition : **B06 → SHIPPED**, fermé par la suppression du projet. Le motif du
+2026-10-08 resterait au registre, barré par cette correction. Le statut ne bouge pas sans
+l'accord de Guy (pas de reclassement sans lui).
+
+### B01 — prérequis du ruleset levé dans cette PR
+
+`ci.yml` ignorait les PR qui ne touchent que `**/*.md`, `docs/**`, `LICENSE` ou `.gitignore`.
+Un workflow sauté par filtre de chemins ne rapporte aucun statut : avec `ci` et `build-vps`
+requis, une PR de documentation serait restée bloquée « en attente ». Cette PR retire le
+`paths-ignore` du déclencheur `pull_request` (celui de `push` reste : il n'a aucun check
+requis). Après sa fusion : `required_status_checks` (`ci`, `build-vps`,
+`🔐 Détection de secrets`) sur le ruleset 23932480 et `allow_auto_merge`, puis re-preuve
+(`gh api repos/guyboireau/guyboireau.com/rulesets/23932480`) et B01 → SHIPPED.
 
 ---
 
