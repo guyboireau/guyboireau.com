@@ -347,4 +347,63 @@ describe('ContactForm', () => {
       )
     })
   })
+  /**
+   * Mesure d'audience : l'envoi réussi part dans Umami sous un nom fixe. Rien
+   * de ce que le visiteur a saisi ne doit l'accompagner (exemption CNIL).
+   */
+  describe('mesure d’audience', () => {
+    const remplirEtEnvoyer = () => {
+      fireEvent.change(screen.getByLabelText(/Nom/i), { target: { name: 'name', value: 'Jean Dupont' } })
+      fireEvent.change(screen.getByLabelText(/Email/i), { target: { name: 'email', value: 'jean@example.com' } })
+      fireEvent.change(screen.getByLabelText(/Message/i), { target: { name: 'message', value: 'Bonjour, un projet.' } })
+      fireEvent.submit(screen.getByRole('button', { name: /Envoyer le message/i }).closest('form')!)
+    }
+
+    afterEach(() => {
+      delete window.umami
+    })
+
+    it('un envoi réussi compte « contact-envoye », sans aucune donnée saisie', async () => {
+      const track = vi.fn()
+      window.umami = { track }
+      global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) }) as unknown as typeof fetch
+
+      render(<ContactForm />)
+      remplirEtEnvoyer()
+
+      await waitFor(() => expect(screen.getByText(/Message envoyé/i)).toBeInTheDocument())
+      expect(track).toHaveBeenCalledTimes(1)
+      expect(track.mock.calls[0]).toEqual(['contact-envoye'])
+    })
+
+    it('un envoi refusé ne compte rien', async () => {
+      const track = vi.fn()
+      window.umami = { track }
+      global.fetch = vi.fn().mockResolvedValue({ ok: false, status: 500 }) as unknown as typeof fetch
+
+      render(<ContactForm />)
+      remplirEtEnvoyer()
+
+      await waitFor(() => expect(screen.getByText(/Erreur lors de l'envoi/i)).toBeInTheDocument())
+      expect(track).not.toHaveBeenCalled()
+    })
+
+    it('sans script de mesure (bloqueur), ou s’il lève, le succès s’affiche quand même', async () => {
+      global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) }) as unknown as typeof fetch
+
+      const { unmount } = render(<ContactForm />)
+      remplirEtEnvoyer()
+      await waitFor(() => expect(screen.getByText(/Message envoyé/i)).toBeInTheDocument())
+      unmount()
+
+      window.umami = {
+        track: () => {
+          throw new Error('bloqué')
+        },
+      }
+      render(<ContactForm />)
+      remplirEtEnvoyer()
+      await waitFor(() => expect(screen.getByText(/Message envoyé/i)).toBeInTheDocument())
+    })
+  })
 })
