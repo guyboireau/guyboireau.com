@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { ContactFormData } from '@/lib/types'
+import { mesurer } from '@/lib/mesure'
 
 const PROJECT_TYPES: Array<{ value: string; label: string }> = [
   { value: '', label: 'Type de projet' },
@@ -87,6 +88,7 @@ export default function ContactForm({ defaultType = '' }: Props) {
 
       setSubmitStatus('success')
       setFormData({ name: '', email: '', project_type: '', message: '' })
+      mesurer('contact-envoye')
     } catch (err) {
       console.error(err)
       setSubmitStatus('error')
@@ -124,7 +126,7 @@ export default function ContactForm({ defaultType = '' }: Props) {
           <p className="mb-6 p-4 bg-red-50 border border-red-700 rounded text-red-800">
             Erreur lors de l'envoi.{hasFieldErrors ? ' Vérifiez les champs signalés.' : ''} Réessayez ou
             écrivez-moi directement à{' '}
-            <a href="mailto:me@guyboireau.com" className="underline">
+            <a href="mailto:me@guyboireau.com" className="underline" data-umami-event="clic-email" data-umami-event-emplacement="formulaire">
               me@guyboireau.com
             </a>
             .

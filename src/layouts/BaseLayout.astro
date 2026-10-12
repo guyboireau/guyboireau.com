@@ -14,6 +14,12 @@ import '../styles/global.css'
 // dans /confidentialite, opposable par la clé localStorage `umami.disabled`.
 // L'identifiant de site est public par nature.
 //
+// data-domains : le script ne mesure que sur guyboireau.com. Sans lui, les
+// aperçus locaux (localhost, 127.0.0.1) entraient dans les statistiques de
+// production (57 vues le 2026-10-01). Évènements de conversion : attributs
+// data-umami-event sur les liens tel:, mailto: et LinkedIn, et src/lib/mesure.ts
+// pour l'envoi réussi du formulaire. Un nom fixe, jamais une donnée saisie.
+//
 // Ces notes étaient des commentaires HTML : ils partaient dans chaque page
 // publiée. Ici, en frontmatter, ils ne quittent pas le dépôt.
 
@@ -203,7 +209,7 @@ const jsonLd = [
     <slot />
 
     {/* Umami : voir la note en tête de fichier. */}
-    <script is:inline defer src="https://stats.guyboireau.com/stats.js" data-website-id="533f0180-52f1-43b3-971d-8ce5521fceb8"></script>
+    <script is:inline defer src="https://stats.guyboireau.com/stats.js" data-website-id="533f0180-52f1-43b3-971d-8ce5521fceb8" data-domains="guyboireau.com"></script>
 
     <!-- Années d'expérience : le HTML porte la valeur du build, le navigateur la recalcule -->
     <script>
