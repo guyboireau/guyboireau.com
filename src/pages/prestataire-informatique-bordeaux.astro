@@ -1,0 +1,236 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import MentionPrix from '../components/MentionPrix.astro'
+import Icone from '../components/Icone.astro'
+
+// Page locale, ouverte le 2026-10-12 sur les requêtes Search Console de
+// septembre 2026 : « prestataire informatique bordeaux » (100 affichages,
+// position 11,9), « prestataire informatique gironde » (8,0). Elle décrit la
+// partie logicielle de l'informatique d'une PME, la seule que Guy prend en
+// charge : rien ici ne promet de maintenance de matériel ou de réseau.
+// Le groupe Chandioux (Lusigny, Allier) est cité sans son nom (accord de Guy
+// du 2026-10-12, en attendant un accord écrit du client). Forfait démarré le
+// 2026-10-01, sites surveillés par veille.timer (toutes les 30 minutes).
+const title = 'Prestataire informatique à Bordeaux pour les PME | Guy Boireau'
+const description =
+  "Prestataire informatique à Bordeaux pour les PME : applications métier, hébergement, facturation électronique, dépannage à distance. Sur place en Gironde."
+
+const prestations = [
+  {
+    icone: 'app-window',
+    titre: 'Applications métier et automatisations',
+    texte: "L'outil qui manque entre votre ERP et vos tableurs, et les saisies répétitives en moins. Premier outil en service de 6 000 à 10 000 €.",
+    lien: '/services',
+    libelle: 'Les applications métier',
+  },
+  {
+    icone: 'server',
+    titre: 'Hébergement, sauvegardes et surveillance',
+    texte: "Vos applications et votre site hébergés en France, sauvegardés chaque nuit et surveillés toutes les 30 minutes. Compris dès 79 € par mois.",
+    lien: '/hebergement-exploitation',
+    libelle: "L'hébergement et le suivi",
+  },
+  {
+    icone: 'receipt',
+    titre: 'Facturation électronique',
+    texte: "La réception est obligatoire depuis le 1er septembre 2026, l'émission le sera en septembre 2027 pour les PME. Diagnostic de conformité à 900 €.",
+    lien: '/facturation-electronique',
+    libelle: 'La mise en conformité',
+  },
+  {
+    icone: 'file-text',
+    titre: 'Traitement de documents',
+    texte: 'Bons de livraison, certificats matière, factures : lus, contrôlés et classés sans ressaisie.',
+    lien: '/traitement-documentaire',
+    libelle: 'Le traitement documentaire',
+  },
+  {
+    icone: 'monitor',
+    titre: 'Dépannage à distance',
+    texte: "Lenteur, virus, connexion, installation d'un logiciel. Diagnostic gratuit, puis 35 € de l'heure, y compris le soir et le week-end.",
+    lien: '/services',
+    libelle: 'Le dépannage informatique',
+  },
+] as const
+
+const raisons = [
+  {
+    icone: 'phone',
+    titre: 'Une seule personne à appeler',
+    texte: "Je développe, j'héberge et je dépanne. Personne ne vous renvoie vers un autre prestataire.",
+  },
+  {
+    icone: 'map-pin',
+    titre: 'Sur place en Gironde',
+    texte: 'Je suis installé à Bordeaux. Je viens dans vos locaux pour comprendre comment vous travaillez.',
+  },
+  {
+    icone: 'receipt',
+    titre: 'Des prix publiés',
+    texte: 'Mes tarifs sont sur ce site. Chaque projet fait l\'objet d\'un devis à prix fixe.',
+  },
+] as const
+
+const faq = [
+  {
+    q: 'Intervenez-vous dans nos locaux ?',
+    a: "Oui, à Bordeaux et dans toute la Gironde, sur rendez-vous. Le dépannage se fait à distance, avec votre accord : c'est plus rapide pour vous.",
+  },
+  {
+    q: 'Proposez-vous un contrat de maintenance ?',
+    a: "Oui. Les formules de suivi vont de 79 à 299 € par mois. Elles comprennent l'hébergement, les sauvegardes et la surveillance. L'engagement est de 12 mois, ou sans engagement pour 20 € de plus par mois.",
+  },
+  {
+    q: "Que se passe-t-il si vous n'êtes plus disponible ?",
+    a: "Le code est sur un dépôt dont vous pouvez être propriétaire. La configuration du serveur est écrite et rejouable, les sauvegardes sont récupérables. Un autre prestataire reprend la main sans tout reconstruire.",
+  },
+  {
+    q: 'Travaillez-vous avec des entreprises hors de Gironde ?',
+    a: "Oui. Plusieurs de mes clients sont à Paris, dans la Nièvre et dans l'Allier. Tout se fait alors en visio, par téléphone et par e-mail.",
+  },
+]
+---
+
+<BaseLayout {title} {description}>
+  <script slot="jsonld" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Prestataire informatique pour les PME à Bordeaux',
+    serviceType: 'Applications métier, hébergement, maintenance applicative et dépannage informatique',
+    provider: { '@id': 'https://guyboireau.com/#business' },
+    areaServed: [
+      { '@type': 'City', name: 'Bordeaux' },
+      { '@type': 'AdministrativeArea', name: 'Gironde' },
+    ],
+    url: 'https://guyboireau.com/prestataire-informatique-bordeaux/',
+  })} />
+  <script slot="jsonld" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  })} />
+  <Header />
+  <main id="contenu" tabindex="-1" class="focus:outline-none">
+    <!-- Intro -->
+    <section class="bg-creme border-b border-ligne pt-28 pb-16 md:pt-36 md:pb-20 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto">
+        <p class="etiquette mb-6">Prestataire informatique à Bordeaux</p>
+        <h1 class="text-4xl md:text-6xl leading-[1.08] mb-6">Prestataire informatique pour les PME de Bordeaux et de Gironde</h1>
+        <p class="text-lg md:text-xl text-encre-2 leading-relaxed max-w-3xl">
+          Je prends en charge la partie logicielle de votre informatique : vos applications, votre site, leurs données et leur hébergement.
+          Je suis installé à Bordeaux et je me déplace en Gironde.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 mt-8">
+          <a href="/contact?subject=Prestataire%20informatique" class="btn-primary">Me décrire votre besoin</a>
+          <a href="/services" class="btn-secondary">Voir les services et les tarifs</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Prestations -->
+    <section class="section">
+      <div class="max-w-5xl mx-auto">
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Ce que je prends en charge</p>
+          <h2 class="section-title">Vos logiciels, de leur écriture à leur suivi</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {prestations.map((item) => (
+            <div class="carte p-6 apparition flex flex-col">
+              <Icone nom={item.icone} taille={24} class="text-primary-500 mb-4" />
+              <h3 class="text-xl mb-3">{item.titre}</h3>
+              <p class="text-encre-2 text-[15px] leading-relaxed mb-4">{item.texte}</p>
+              <a href={item.lien} class="lien mt-auto">{item.libelle}</a>
+            </div>
+          ))}
+        </div>
+        <MentionPrix class="mt-8" />
+      </div>
+    </section>
+
+    <!-- Preuve -->
+    <section class="section bg-creme border-y border-ligne">
+      <div class="max-w-4xl mx-auto">
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">En production</p>
+          <h2 class="section-title">Ce que je maintiens aujourd'hui</h2>
+        </div>
+
+        <div class="apparition">
+          <p class="text-encre-2 text-lg leading-relaxed mb-6">
+            Depuis octobre 2026, je maintiens au forfait mensuel quatre sites pour un groupe de mécanique industrielle de l'Allier.
+            Ils sont surveillés toutes les 30 minutes : disponibilité, certificat de sécurité, échéance du nom de domaine.
+          </p>
+          <p class="text-encre-2 text-lg leading-relaxed mb-8">
+            Depuis septembre 2026, j'héberge aussi le site d'un atelier de vitrail et celui d'une péniche culturelle, sur un serveur en France.
+          </p>
+          <a href="/projets" class="lien">Le détail des projets</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Raisons -->
+    <section class="section">
+      <div class="max-w-5xl mx-auto">
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Un indépendant</p>
+          <h2 class="section-title">Ce que change un prestataire seul</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {raisons.map((item) => (
+            <div class="apparition">
+              <Icone nom={item.icone} taille={24} class="text-primary-500 mb-4" />
+              <h3 class="text-xl mb-3">{item.titre}</h3>
+              <p class="text-encre-2 text-[15px] leading-relaxed">{item.texte}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section bg-creme border-y border-ligne">
+      <div class="max-w-3xl mx-auto">
+        <div class="apparition mb-8">
+          <h2 class="section-title">Questions fréquentes</h2>
+        </div>
+
+        <div class="divide-y divide-ligne border-y border-ligne">
+          {faq.map((item) => (
+            <details class="group py-4 apparition">
+              <summary class="text-encre font-medium text-lg list-none flex items-center justify-between gap-4 cursor-pointer">
+                {item.q}
+                <Icone nom="chevron-down" class="text-primary-500 shrink-0 transition-transform group-open:rotate-180" />
+              </summary>
+              <p class="text-encre-2 mt-4 leading-relaxed">{item.a}</p>
+            </details>
+          ))}
+        </div>
+        <MentionPrix class="mt-8" />
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section bg-foret">
+      <div class="max-w-4xl mx-auto apparition">
+        <h2 class="text-3xl md:text-4xl text-creme mb-4">Personne ne s'occupe de vos logiciels ?</h2>
+        <p class="text-creme-sourd text-lg mb-8 max-w-2xl">
+          Dites-moi ce que vous utilisez et ce qui vous gêne. Je vous réponds sous 24 h, et on fixe un rendez-vous à Bordeaux, chez vous ou en visio.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/contact?subject=Prestataire%20informatique" class="btn-primary">Me décrire votre besoin</a>
+          <a href="/hebergement-exploitation" class="inline-flex items-center justify-center px-6 py-3 border border-creme-sourd text-creme font-medium rounded hover:bg-creme/10 transition-colors">Voir l'hébergement et le suivi</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,236 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import MentionPrix from '../components/MentionPrix.astro'
+import Icone from '../components/Icone.astro'
+import ListeAvis from '../components/ListeAvis.astro'
+import { AVIS } from '../data/avis'
+
+// Page locale, ouverte le 2026-10-12 sur les requêtes Search Console de
+// septembre 2026 : « développeur web bordeaux » (position 7,3),
+// « développement web bordeaux » (2,8, aucun clic), « développeur web » (4,9).
+// Chaque fait cité ici se vérifie ailleurs sur le site ou dans les dépôts.
+const title = 'Développeur web à Bordeaux et en Gironde | Guy Boireau'
+const description =
+  "Développeur web indépendant à Bordeaux. Sites et applications sur mesure pour les PME et les artisans de Gironde. Rendez-vous sur place, devis à prix fixe."
+
+const offres = [
+  {
+    icone: 'globe',
+    titre: 'Sites pour artisans et commerces',
+    texte: "Un site rapide, lisible sur téléphone, que vous mettez à jour vous-même. Mise en service à partir de 490 €.",
+    lien: '/services#sites',
+    libelle: 'Les formules de site',
+  },
+  {
+    icone: 'app-window',
+    titre: 'Applications métier',
+    texte: "Suivi de commandes, planning d'interventions, fiches de contrôle. Premier outil en service de 6 000 à 10 000 €.",
+    lien: '/services',
+    libelle: 'Les applications métier',
+  },
+  {
+    icone: 'server',
+    titre: "Reprise d'un site existant",
+    texte: "Votre prestataire ne répond plus ? Je reprends le code et l'hébergement, sans changer l'adresse du site.",
+    lien: '/hebergement-exploitation',
+    libelle: "L'hébergement et le suivi",
+  },
+] as const
+
+const proximite = [
+  {
+    icone: 'map-pin',
+    titre: 'On se rencontre',
+    texte: "Je suis installé à Bordeaux. Je vous reçois ou je viens dans vos locaux, partout en Gironde.",
+  },
+  {
+    icone: 'phone',
+    titre: 'Un seul interlocuteur',
+    texte: "Celui qui écrit le code est aussi celui qui l'héberge et qui répond au téléphone.",
+  },
+  {
+    icone: 'wrench',
+    titre: 'Après la mise en ligne',
+    texte: "Je reste responsable du site : hébergement en France, sauvegardes chaque nuit, surveillance toutes les 30 minutes.",
+  },
+] as const
+
+const faq = [
+  {
+    q: 'Combien coûte un site web chez vous ?',
+    a: "La mise en service d'un site commence à 490 €. Le suivi mensuel commence à 79 € par mois, avec l'hébergement, le nom de domaine, les sauvegardes et la fiche Google. Le prix exact figure sur un devis à prix fixe.",
+  },
+  {
+    q: 'Pouvez-vous venir dans mes locaux ?',
+    a: "Oui, à Bordeaux et dans toute la Gironde. Hors Gironde, on travaille en visio et par téléphone. Le premier échange est gratuit et sans engagement.",
+  },
+  {
+    q: 'Travaillez-vous seul ?',
+    a: "Oui. Je suis entrepreneur individuel. Vous parlez toujours à la personne qui développe votre site et qui l'héberge.",
+  },
+  {
+    q: "J'ai déjà un site. Pouvez-vous le reprendre ?",
+    a: "Oui, si votre site le permet techniquement. Je le prépare à côté de l'actuel, qui reste en ligne jusqu'à la bascule. L'adresse ne change pas.",
+  },
+  {
+    q: 'Travaillez-vous avec des clients hors de Bordeaux ?',
+    a: "Oui. Plusieurs de mes clients sont à Paris, dans la Nièvre et dans l'Allier. Tout se fait alors en visio, par téléphone et par e-mail.",
+  },
+]
+---
+
+<BaseLayout {title} {description}>
+  <script slot="jsonld" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Développement web à Bordeaux',
+    serviceType: 'Développement de sites et d’applications web',
+    provider: { '@id': 'https://guyboireau.com/#business' },
+    areaServed: [
+      { '@type': 'City', name: 'Bordeaux' },
+      { '@type': 'AdministrativeArea', name: 'Gironde' },
+    ],
+    url: 'https://guyboireau.com/developpeur-web-bordeaux/',
+  })} />
+  <script slot="jsonld" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  })} />
+  <Header />
+  <main id="contenu" tabindex="-1" class="focus:outline-none">
+    <!-- Intro -->
+    <section class="bg-creme border-b border-ligne pt-28 pb-16 md:pt-36 md:pb-20 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto">
+        <p class="etiquette mb-6">Développeur web à Bordeaux</p>
+        <h1 class="text-4xl md:text-6xl leading-[1.08] mb-6">Développeur web à Bordeaux, pour les PME et les artisans de Gironde</h1>
+        <p class="text-lg md:text-xl text-encre-2 leading-relaxed max-w-3xl">
+          Je développe des sites et des applications sur mesure. Je suis installé à Bordeaux, et je me déplace partout en Gironde.
+          Ailleurs en France, on travaille en visio.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 mt-8">
+          <a href="/contact?subject=Site%20web" class="btn-primary">Me parler de votre projet</a>
+          <a href="/projets" class="btn-secondary">Voir les projets</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Offres -->
+    <section class="section">
+      <div class="max-w-5xl mx-auto">
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Ce que je développe</p>
+          <h2 class="section-title">Du site d'artisan à l'outil de gestion</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {offres.map((item) => (
+            <div class="carte p-6 apparition flex flex-col">
+              <Icone nom={item.icone} taille={24} class="text-primary-500 mb-4" />
+              <h3 class="text-xl mb-3">{item.titre}</h3>
+              <p class="text-encre-2 text-[15px] leading-relaxed mb-4">{item.texte}</p>
+              <a href={item.lien} class="lien mt-auto">{item.libelle}</a>
+            </div>
+          ))}
+        </div>
+        <MentionPrix class="mt-8" />
+      </div>
+    </section>
+
+    <!-- Proximité -->
+    <section class="section bg-creme border-y border-ligne">
+      <div class="max-w-5xl mx-auto">
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">Bordeaux et Gironde</p>
+          <h2 class="section-title">Un développeur que vous pouvez rencontrer</h2>
+          <p class="text-lg text-encre-2">
+            Bordeaux, Mérignac, Pessac, Talence, Villenave-d'Ornon : je viens vous voir pour comprendre votre activité avant d'écrire une ligne.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {proximite.map((item) => (
+            <div class="apparition">
+              <Icone nom={item.icone} taille={24} class="text-primary-500 mb-4" />
+              <h3 class="text-xl mb-3">{item.titre}</h3>
+              <p class="text-encre-2 text-[15px] leading-relaxed">{item.texte}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Preuves -->
+    <section class="section">
+      <div class="max-w-4xl mx-auto">
+        <div class="apparition mb-12 max-w-2xl">
+          <p class="etiquette mb-4">En production</p>
+          <h2 class="section-title">Deux sites que leurs clients gèrent seuls</h2>
+        </div>
+
+        <div class="space-y-8 apparition">
+          <div>
+            <h3 class="text-xl mb-2">Arnault Janvier, maître verrier</h3>
+            <p class="text-encre-2 leading-relaxed">
+              Un site en français, en anglais et en espagnol. Arnault ajoute lui-même ses projets à sa galerie.
+              Il reçoit depuis des demandes de clients anglophones et hispanophones.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl mb-2">La Lucarne Péniche</h3>
+            <p class="text-encre-2 leading-relaxed">
+              Une péniche culturelle dont la programmation change chaque semaine.
+              L'équipe publie seule ses événements, ses actualités et ses photos.
+            </p>
+          </div>
+          <a href="/projets" class="lien inline-block">Le détail de chaque projet</a>
+        </div>
+      </div>
+    </section>
+
+    <ListeAvis avis={AVIS} />
+
+    <!-- FAQ -->
+    <section class="section bg-creme border-y border-ligne">
+      <div class="max-w-3xl mx-auto">
+        <div class="apparition mb-8">
+          <h2 class="section-title">Questions fréquentes</h2>
+        </div>
+
+        <div class="divide-y divide-ligne border-y border-ligne">
+          {faq.map((item) => (
+            <details class="group py-4 apparition">
+              <summary class="text-encre font-medium text-lg list-none flex items-center justify-between gap-4 cursor-pointer">
+                {item.q}
+                <Icone nom="chevron-down" class="text-primary-500 shrink-0 transition-transform group-open:rotate-180" />
+              </summary>
+              <p class="text-encre-2 mt-4 leading-relaxed">{item.a}</p>
+            </details>
+          ))}
+        </div>
+        <MentionPrix class="mt-8" />
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section bg-foret">
+      <div class="max-w-4xl mx-auto apparition">
+        <h2 class="text-3xl md:text-4xl text-creme mb-4">Un projet de site ou d'application en Gironde ?</h2>
+        <p class="text-creme-sourd text-lg mb-8 max-w-2xl">
+          Décrivez-moi votre activité en quelques lignes. Je vous réponds sous 24 h pour fixer un rendez-vous, à Bordeaux, chez vous ou en visio.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/contact?subject=Site%20web" class="btn-primary">Me parler de votre projet</a>
+          <a href="/services" class="inline-flex items-center justify-center px-6 py-3 border border-creme-sourd text-creme font-medium rounded hover:bg-creme/10 transition-colors">Voir les services et les tarifs</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
