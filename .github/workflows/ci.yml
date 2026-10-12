@@ -8,13 +8,12 @@ on:
       - 'docs/**'
       - 'LICENSE'
       - '.gitignore'
+  # Pas de paths-ignore sur les PR : `ci` et `build-vps` sont des checks requis
+  # par le ruleset de `main` (B01). Un workflow sauté par filtre de chemins ne
+  # rapporte aucun statut, et le check requis resterait « en attente » pour
+  # toujours sur une PR qui ne touche que de la documentation.
   pull_request:
     branches: [main]
-    paths-ignore:
-      - '**/*.md'
-      - 'docs/**'
-      - 'LICENSE'
-      - '.gitignore'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
