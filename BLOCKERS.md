@@ -31,12 +31,13 @@ Au 2026-10-07 : **OPEN 2 · LANDED 3 · SHIPPED 3 · REFUTED 1**
 Au 2026-10-08 : **OPEN 2 · LANDED 2 · SHIPPED 3 · REFUTED 2**
 Au 2026-10-12 : **OPEN 3 · LANDED 1 · SHIPPED 4 · REFUTED 2**
 Au 2026-10-12, relevés VPS et projets (session locale) : **OPEN 2 · LANDED 0 · SHIPPED 6 · REFUTED 2** (B08 et B10 → SHIPPED ; B06 : reclassement proposé, décision de Guy ; B01 : prérequis du ruleset dans cette PR)
+Au 2026-10-12, checks requis posés : **OPEN 1 · LANDED 0 · SHIPPED 7 · REFUTED 2** (B01 → SHIPPED ; reste B02 OPEN)
 
 ---
 
 ## B01 — `main` n'est pas protégé : aucun gate n'est opposable
 
-- [ ] **statut: OPEN** · ouvert le 2026-09-14 · sécurité
+- [x] **statut: SHIPPED** · ouvert le 2026-09-14 · ruleset 23932480 complété le 2026-10-12 (`required_status_checks` : `ci`, `build-vps`, `🔐 Détection de secrets`), prérequis CI par #67 (`cf3d779`) · re-prouvé le 2026-10-12 · sécurité
 
 `main` accepte une poussée directe et n'exige aucun check. `ci.yml` et
 `🔐 Détection de secrets` peuvent être rouges, un merge passe quand même.
@@ -82,6 +83,28 @@ Reste OPEN.
 (ruleset 23932480, 0 approbation), `"protected": true`, toujours aucune règle
 `required_status_checks` (même commande). Ouvert depuis 28 jours. Décision de Guy.
 
+
+**SHIPPED le 2026-10-12** (accord de Guy du même jour). Prérequis : #67 (`cf3d779`) retire le
+`paths-ignore` du déclencheur `pull_request` de `ci.yml`, sans quoi une PR de documentation
+n'aurait jamais rapporté `ci` ni `build-vps`. Puis `required_status_checks` ajouté au ruleset,
+chaque check lié à l'application GitHub Actions (id 15368, relevé sur les check-runs de #66) pour
+qu'un statut posé par un tiers ne le satisfasse pas ; `strict` désactivé (pas d'obligation d'être
+à jour de `main`). `allow_auto_merge` activé le même jour : l'auto-merge attend désormais les
+trois checks. Ruleset d'avant sauvegardé hors dépôt (JSON de `gh api …/rulesets/23932480`).
+
+```sh
+gh api repos/guyboireau/guyboireau.com/rules/branches/main --jq '[.[].type]'
+# → ["deletion","non_fast_forward","pull_request","required_status_checks"]
+gh api repos/guyboireau/guyboireau.com/rulesets/23932480 \
+  --jq '.rules[] | select(.type=="required_status_checks") | .parameters.required_status_checks[] | "\(.context) (app \(.integration_id))"'
+# → ci (app 15368) · build-vps (app 15368) · 🔐 Détection de secrets (app 15368)
+gh api repos/guyboireau/guyboireau.com --jq .allow_auto_merge
+# → true
+```
+
+Preuve d'usage : cette PR, qui ne touche que `BLOCKERS.md`, est fusionnée par auto-merge
+seulement après les trois checks (voir son historique). Avant #67, `ci.yml` ne se serait pas
+déclenché sur elle.
 ---
 
 ## B02 — Deux PR ouvertes le 2026-09-11 n'ont déclenché aucune exécution de CI
