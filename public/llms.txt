@@ -20,6 +20,8 @@
 - [Accueil](https://guyboireau.com/): présentation et assistant IA
 - [Projets](https://guyboireau.com/projets/): réalisations : La Lucarne Péniche, Arnault Janvier (maître verrier), Niido
 - [À propos](https://guyboireau.com/a-propos/): parcours, formation et compétences
+- [Développeur web à Bordeaux](https://guyboireau.com/developpeur-web-bordeaux/): sites et applications sur mesure pour les PME et les artisans de Gironde, rendez-vous sur place en Gironde
+- [Prestataire informatique à Bordeaux](https://guyboireau.com/prestataire-informatique-bordeaux/): partie logicielle de l'informatique d'une PME (applications, hébergement, facturation électronique, dépannage à distance)
 - [Contact](https://guyboireau.com/contact/): formulaire et coordonnées
 
 ## Informations légales
