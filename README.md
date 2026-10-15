@@ -22,7 +22,7 @@ Portfolio personnel de **Guy Boireau**, développeur web freelance basé à Bord
 ## Fonctionnalités
 
 - **Chatbot IA** — Assistant conversationnel en streaming SSE ; modèle Mistral AI (UE) par le relais LiteLLM du VPS. Sans relais configuré, `/api/chat` répond 503 et ne contacte aucun fournisseur (B08)
-- **Formulaire de contact** — Validation Zod, dépôt de la demande dans le CRM (`crm.demandes`, base du VPS partagée avec l'appli agent-freelance) et email via Resend. L'un peut échouer sans perdre la demande : voir « Lien avec le CRM »
+- **Formulaire de contact** — Validation Zod, dépôt de la demande dans le CRM (`crm.demandes`, base du VPS partagée avec l'appli agent-freelance) et email via Scaleway Transactional Email (Paris). L'un peut échouer sans perdre la demande : voir « Lien avec le CRM »
 - **Disponibilité et avis** — îlots serveur (`server:defer`) qui lisent le CRM à la demande, gardés 5 minutes en mémoire : la disponibilité sur /contact, les avis publiés sur l'accueil (repli : `src/data/avis.ts`)
 - **SEO avancé** — JSON-LD (Person / LocalBusiness), sitemap auto-généré, balises Open Graph, métadonnées géographiques
 - **Animations CSS** — Animations légères avec prise en charge de `prefers-reduced-motion`
@@ -55,7 +55,7 @@ remplir avant la mise en production.
 | Route | Méthode | Description |
 |-------|---------|-------------|
 | `/api/chat` | `POST` | Streaming SSE vers Mistral AI par le relais LiteLLM (`ANTHROPIC_BASE_URL` + `CHAT_MODEL`, obligatoires, sinon 503), rate limiting 10 req/min par IP |
-| `/api/contact` | `POST` | Validation Zod, envoi Resend avec rate limiting (5 req/min par IP). Rien n'est stocké côté site |
+| `/api/contact` | `POST` | Validation Zod, dépôt dans le CRM, envoi par Scaleway TEM (API HTTP, sans SDK) avec rate limiting (5 req/min par IP) |
 
 ### Sécurité des API
 
@@ -134,14 +134,15 @@ Créer un fichier `.env` à la racine :
 | `ANTHROPIC_API_KEY` | Privée | oui | Clé du relais LiteLLM du VPS (le SDK parle le protocole Anthropic) |
 | `ANTHROPIC_BASE_URL` | Privée | oui | URL du relais LiteLLM (`http://127.0.0.1:4000` sur le VPS). Obligatoire : sans elle, ou si elle vise `anthropic.com`, `/api/chat` répond 503 |
 | `CHAT_MODEL` | Privée | oui | Groupe du relais routé vers Mistral AI (ex. `assistant-site`). Obligatoire, aucun modèle par défaut |
-| `RESEND_API_KEY` | Privée | oui | Clé API Resend (envoi d'emails) |
+| `SCW_SECRET_KEY` | Privée | oui | Clé secrète de l'application IAM `guyboireau-site` (envoi Scaleway TEM, projet `guyboireau`, limitée à l'IP du VPS) |
+| `SCW_PROJECT_ID` | Privée | oui | Identifiant du projet Scaleway `guyboireau` |
 | `CRM_URL` | Privée | oui | API de la pile Supabase du VPS (`http://127.0.0.1:8003` en production) |
 | `CRM_APIKEY` | Privée | oui | Clé `anon` de la pile (exigée par la passerelle, sans droit sur `crm`) |
 | `CRM_JWT` | Privée | oui | Jeton du rôle `site_web` (voir « Lien avec le CRM ») |
 
 > `cp .env.example .env` suffit : les variables réellement lues par le code y
 > figurent. Sans les trois `CRM_*` (dev local, aperçus), le formulaire n'envoie que
-> l'email et les îlots retombent sur leur repli. Sans `RESEND_API_KEY` ni CRM,
+> l'email et les îlots retombent sur leur repli. Sans `SCW_*` ni CRM,
 > `src/pages/api/contact.ts` répond en 500 : la demande n'est enregistrée nulle part,
 > le visiteur voit l'erreur et doit écrire à me@guyboireau.com.
 

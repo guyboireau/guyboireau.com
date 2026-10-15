@@ -71,7 +71,6 @@ jobs:
         run: npm run build
         env:
           ANTHROPIC_API_KEY: mock-anthropic-key
-          RESEND_API_KEY: mock-resend-key
 
       - name: CSP — empreintes des scripts et styles en ligne
         run: npm run test:csp

@@ -1,13 +1,20 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { POST } from '@/pages/api/contact'
 
-const send = vi.hoisted(() => vi.fn())
+const TEM_URL = 'https://api.scaleway.com/transactional-email/v1alpha1/regions/fr-par/emails'
 
-vi.mock('resend', () => ({
-  Resend: vi.fn().mockImplementation(function () {
-    return { emails: { send } }
-  }),
-}))
+// Un seul fetch simulé pour Scaleway TEM et le CRM : chaque test règle la
+// réponse de TEM (`tem`) et, dans « dépôt dans le CRM », celle du CRM (`crm`).
+const fetchMock = vi.fn()
+const tem = vi.fn()
+const crm = vi.fn()
+
+/** Corps JSON des envois faits à TEM, dans l'ordre. */
+function envoisTem(): Record<string, unknown>[] {
+  return fetchMock.mock.calls
+    .filter(([url]) => url === TEM_URL)
+    .map(([, init]) => JSON.parse((init as RequestInit).body as string))
+}
 
 function createContactRequest(body: object, clientAddress = '127.0.0.1', entetes: Record<string, string> = {}) {
   return {
@@ -23,7 +30,14 @@ function createContactRequest(body: object, clientAddress = '127.0.0.1', entetes
 describe('/api/contact', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    send.mockResolvedValue({ data: { id: 'test-email-id' }, error: null })
+    tem.mockReset()
+    crm.mockReset()
+    tem.mockImplementation(async () => new Response(JSON.stringify({ emails: [{ id: 'test-email-id' }] }), { status: 200 }))
+    fetchMock.mockImplementation((url: string) => (url === TEM_URL ? tem() : crm()))
+    vi.stubGlobal('fetch', fetchMock)
+  })
+  afterEach(() => {
+    vi.unstubAllGlobals()
   })
 
   it('retourne 400 si les données sont invalides', async () => {
@@ -69,9 +83,9 @@ describe('/api/contact', () => {
     expect(body.error).toContain('Trop de requêtes')
   })
 
-  it('retourne 500 si la clé Resend est manquante', async () => {
-    const originalKey = import.meta.env.RESEND_API_KEY
-    import.meta.env.RESEND_API_KEY = ''
+  it('retourne 500 si la clé Scaleway est manquante', async () => {
+    const originalKey = import.meta.env.SCW_SECRET_KEY
+    import.meta.env.SCW_SECRET_KEY = ''
 
     const ctx = createContactRequest({
       name: 'Jean Dupont',
@@ -81,8 +95,9 @@ describe('/api/contact', () => {
 
     const response = await POST(ctx)
     expect(response.status).toBe(500)
+    expect(envoisTem()).toHaveLength(0)
 
-    import.meta.env.RESEND_API_KEY = originalKey
+    import.meta.env.SCW_SECRET_KEY = originalKey
   })
 
   it('envoie l’email et retourne 200 en cas de succès', async () => {
@@ -113,18 +128,29 @@ describe('/api/contact', () => {
     expect(response.status).toBe(200)
 
     // L'email est le seul enregistrement de la demande : il doit tout porter.
-    expect(send).toHaveBeenCalledTimes(1)
-    const envoi = send.mock.calls[0][0]
-    expect(envoi.to).toBe('boireauguy@gmail.com')
-    expect(envoi.replyTo).toBe('jean@example.com')
+    const envois = envoisTem()
+    expect(envois).toHaveLength(1)
+    const envoi = envois[0]
+    expect(envoi.project_id).toBe(import.meta.env.SCW_PROJECT_ID)
+    expect(envoi.from).toEqual({ email: 'formulaire@guyboireau.com', name: 'Portfolio' })
+    expect(envoi.to).toEqual([{ email: 'boireauguy@gmail.com' }])
+    expect(envoi.additional_headers).toEqual([{ key: 'Reply-To', value: 'jean@example.com' }])
     expect(envoi.subject).toContain('site-vitrine')
     expect(envoi.html).toContain('Jean Dupont')
     expect(envoi.html).toContain('Bonjour, je souhaite un devis pour un site vitrine.')
+    expect(envoi.text).toContain('Bonjour, je souhaite un devis pour un site vitrine.')
+
+    const [, init] = fetchMock.mock.calls.find(([url]) => url === TEM_URL)!
+    expect((init as RequestInit).headers).toMatchObject({ 'X-Auth-Token': import.meta.env.SCW_SECRET_KEY })
   })
 
-  it('répond 500 si Resend échoue, sans donnée personnelle dans les journaux', async () => {
+  it('répond 500 si TEM refuse l’envoi, sans donnée personnelle dans les journaux', async () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
-    send.mockResolvedValue({ data: null, error: { name: 'validation_error', message: 'refusé' } })
+    // TEM cite parfois l'adresse fautive dans son message : il ne doit pas fuiter.
+    tem.mockResolvedValue(new Response(
+      JSON.stringify({ type: 'invalid_arguments', message: 'invalid email jean@example.com' }),
+      { status: 400 },
+    ))
 
     const ctx = createContactRequest({
       name: 'Jean Dupont',
@@ -135,13 +161,31 @@ describe('/api/contact', () => {
     const response = await POST(ctx)
     expect(response.status).toBe(500)
 
-    const call = consoleError.mock.calls.find(([label]) => label === '[contact] Resend error:')
-    if (!call) throw new Error("aucun log d'échec Resend émis")
+    const call = consoleError.mock.calls.find(([label]) => label === '[contact] échec envoi TEM:')
+    if (!call) throw new Error("aucun log d'échec TEM émis")
     const serialized = call[1] as string
+    expect(JSON.parse(serialized)).toMatchObject({ status: 400, type: 'invalid_arguments' })
     expect(JSON.parse(serialized).requestId).toMatch(/^[0-9a-f-]{36}$/)
-    expect(serialized).not.toContain('jean@example.com')
-    expect(serialized).not.toContain('Jean Dupont')
+    expect(JSON.stringify(consoleError.mock.calls)).not.toContain('jean@example.com')
+    expect(JSON.stringify(consoleError.mock.calls)).not.toContain('Jean Dupont')
 
+    consoleError.mockRestore()
+  })
+
+  it('répond 500 si TEM est injoignable, sans lever d’exception non journalisée', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+    tem.mockRejectedValue(new DOMException('délai dépassé', 'TimeoutError'))
+
+    const response = await POST(createContactRequest({
+      name: 'Jean Dupont',
+      email: 'jean@example.com',
+      message: 'Bonjour, je souhaite un devis pour un site vitrine.',
+    }, '8.8.4.5'))
+
+    expect(response.status).toBe(500)
+    const call = consoleError.mock.calls.find(([label]) => label === '[contact] échec envoi TEM:')
+    if (!call) throw new Error("aucun log d'échec TEM émis")
+    expect(JSON.parse(call[1] as string)).toMatchObject({ erreur: 'TimeoutError' })
     consoleError.mockRestore()
   })
 
@@ -186,6 +230,7 @@ describe('/api/contact', () => {
 
     const response = await POST(ctx)
     expect(response.status).toBe(200)
+    expect(envoisTem()[0].html).not.toContain('<script>')
   })
   describe('dépôt dans le CRM', () => {
     const corps = {
@@ -194,50 +239,60 @@ describe('/api/contact', () => {
       project_type: 'site-vitrine',
       message: 'Bonjour, je souhaite un devis pour un site vitrine.',
     }
-    const fetchMock = vi.fn()
 
     beforeEach(() => {
       process.env.CRM_URL = 'http://crm.test'
       process.env.CRM_APIKEY = 'cle-anon'
       process.env.CRM_JWT = 'jeton-site-web'
-      vi.stubGlobal('fetch', fetchMock)
-      fetchMock.mockReset()
     })
     afterEach(() => {
-      vi.unstubAllGlobals()
       delete process.env.CRM_URL
       delete process.env.CRM_APIKEY
       delete process.env.CRM_JWT
     })
 
+    const appelsCrm = () => fetchMock.mock.calls.filter(([url]) => url !== TEM_URL)
+
     it('dépose la demande dans crm.demandes, puis envoie l’email', async () => {
-      fetchMock.mockResolvedValue(new Response(null, { status: 201 }))
+      crm.mockResolvedValue(new Response(null, { status: 201 }))
       const response = await POST(createContactRequest(corps, '10.0.0.1'))
 
       expect(response.status).toBe(200)
-      expect(fetchMock).toHaveBeenCalledTimes(1)
-      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({
+      expect(appelsCrm()).toHaveLength(1)
+      expect(JSON.parse(appelsCrm()[0][1].body)).toEqual({
         nom: 'Jean Dupont',
         email: 'jean@example.com',
         message: 'Bonjour, je souhaite un devis pour un site vitrine.',
         type_projet: 'site-vitrine',
       })
-      expect(send).toHaveBeenCalledTimes(1)
+      expect(envoisTem()).toHaveLength(1)
+      // Le CRM d'abord, l'email ensuite.
+      expect(fetchMock.mock.calls.map(([url]) => url === TEM_URL)).toEqual([false, true])
     })
 
     it('répond 200 si seul l’email échoue : la demande est dans le CRM', async () => {
       const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
-      fetchMock.mockResolvedValue(new Response(null, { status: 201 }))
-      send.mockResolvedValue({ data: null, error: { name: 'application_error', message: 'panne' } })
+      crm.mockResolvedValue(new Response(null, { status: 201 }))
+      tem.mockResolvedValue(new Response(JSON.stringify({ type: 'unknown_error' }), { status: 503 }))
 
       const response = await POST(createContactRequest(corps, '10.0.0.2'))
       expect(response.status).toBe(200)
       consoleError.mockRestore()
     })
 
+    it('répond 200 si TEM est injoignable mais que le CRM a la demande', async () => {
+      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+      crm.mockResolvedValue(new Response(null, { status: 201 }))
+      tem.mockRejectedValue(new TypeError('fetch failed'))
+
+      const response = await POST(createContactRequest(corps, '10.0.0.5'))
+      expect(response.status).toBe(200)
+      consoleError.mockRestore()
+    })
+
     it('répond 200 si seul le CRM échoue, et le journal ne contient aucune donnée personnelle', async () => {
       const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
-      fetchMock.mockRejectedValue(new Error('ECONNREFUSED'))
+      crm.mockRejectedValue(new Error('ECONNREFUSED'))
 
       const response = await POST(createContactRequest(corps, '10.0.0.3'))
       expect(response.status).toBe(200)
@@ -249,8 +304,8 @@ describe('/api/contact', () => {
 
     it('répond 500 si le CRM et l’email échouent tous les deux', async () => {
       const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
-      fetchMock.mockResolvedValue(new Response(null, { status: 500 }))
-      send.mockResolvedValue({ data: null, error: { name: 'application_error', message: 'panne' } })
+      crm.mockResolvedValue(new Response(null, { status: 500 }))
+      tem.mockResolvedValue(new Response(JSON.stringify({ type: 'unknown_error' }), { status: 503 }))
 
       const response = await POST(createContactRequest(corps, '10.0.0.4'))
       expect(response.status).toBe(500)
