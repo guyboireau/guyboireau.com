@@ -18,7 +18,7 @@ const sommaire = [
 ]
 ---
 
-<PageLegale {title} {description} titre="Politique de confidentialité" miseAJour="2026-10-09" {sommaire}>
+<PageLegale {title} {description} titre="Politique de confidentialité" miseAJour="2026-10-15" {sommaire}>
   <p>
     Cette page explique quelles données personnelles le site guyboireau.com traite, pourquoi, pendant combien de
     temps et avec quels prestataires. Elle couvre aussi les messages écrits directement à
@@ -56,9 +56,10 @@ const sommaire = [
     <dd>
       Guy Boireau EI est le seul destinataire. Votre message est enregistré dans l’outil de gestion de Guy
       Boireau, une base de données installée sur son serveur loué à OVH, en France, où tourne aussi le site.
-      Une copie part aussi par e-mail, envoyée par Resend
-      (États-Unis), vers la messagerie Gmail de Guy Boireau (Google), avec votre adresse e-mail comme adresse
-      de réponse.
+      Une copie part aussi par e-mail, envoyée par Scaleway Transactional Email (Scaleway SAS, serveurs à
+      Paris), vers la messagerie Gmail de Guy Boireau (Google), avec votre adresse e-mail comme adresse
+      de réponse. Scaleway conserve un journal technique de l’envoi (date, adresses, état de la remise) le temps
+      nécessaire au suivi de la distribution.
     </dd>
   </dl>
   <p>
@@ -178,7 +179,8 @@ const sommaire = [
       Boireau (Google). Un programme trie automatiquement le courrier reçu pour le classer et le résumer : il
       passe par le relais du serveur de l’éditeur, en France, puis par l’API Gemini de Google, aux États-Unis.
       Google ne se sert pas de ces messages pour entraîner ses modèles et ne les garde que pour une durée
-      limitée, afin de détecter les abus.
+      limitée, afin de détecter les abus. Les réponses de Guy Boireau partent de Gmail par le service d’envoi
+      de Resend (Resend, Inc., États-Unis).
     </dd>
   </dl>
 
@@ -209,8 +211,9 @@ const sommaire = [
   <h2 id="transferts">3. Transferts hors de l’Union européenne</h2>
   <p>
     Certains prestataires sont établis aux États-Unis ou peuvent traiter les données hors de l’Union
-    européenne : Google (Gmail, Google Drive et l’API Gemini qui trie le courrier reçu), Resend (envoi par
-    e-mail des demandes du formulaire) et ImprovMX (réception des e-mails). L’assistant IA passe par Mistral AI,
+    européenne : Google (Gmail, Google Drive et l’API Gemini qui trie le courrier reçu), Resend (envoi des
+    réponses de Guy Boireau) et ImprovMX (réception des e-mails). Le formulaire de contact n’en dépend pas
+    pour son envoi : il passe par Scaleway, en France. L’assistant IA passe par Mistral AI,
     qui traite les données dans l’Union européenne.
   </p>
   <p>
