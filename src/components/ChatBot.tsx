@@ -3,10 +3,10 @@ import ReactMarkdown from 'react-markdown'
 import { useChat } from '../hooks/useChat'
 
 const SUGGESTIONS = [
-  'Quelle est la stack technique de Guy ?',
+  'Quels sont vos tarifs ?',
   'Guy est-il disponible pour un projet ?',
+  "C'est quoi une automatisation IA ?",
   'Quels projets Guy a-t-il réalisés ?',
-  'Quels sont les tarifs de Guy ?',
 ]
 
 /** Texte lisible par un lecteur d'écran : sans la ponctuation Markdown. */
