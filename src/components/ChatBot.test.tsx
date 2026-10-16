@@ -23,10 +23,10 @@ describe('ChatBot', () => {
   it('affiche les suggestions au démarrage, formulées à propos de Guy', () => {
     render(<ChatBot />)
 
-    expect(screen.getByText('Quelle est la stack technique de Guy ?')).toBeInTheDocument()
+    expect(screen.getByText('Quels sont vos tarifs ?')).toBeInTheDocument()
     expect(screen.getByText('Guy est-il disponible pour un projet ?')).toBeInTheDocument()
     expect(screen.getByText('Quels projets Guy a-t-il réalisés ?')).toBeInTheDocument()
-    expect(screen.getByText('Quels sont les tarifs de Guy ?')).toBeInTheDocument()
+    expect(screen.getByText("C'est quoi une automatisation IA ?")).toBeInTheDocument()
   })
 
   /**
@@ -430,7 +430,7 @@ describe('ChatBot', () => {
       fireEvent.click(screen.getByRole('button', { name: /Réinitialiser la conversation/i }))
 
       expect(annonce()).toHaveTextContent('')
-      expect(screen.getByText('Quelle est la stack technique de Guy ?')).toBeInTheDocument()
+      expect(screen.getByText('Quels sont vos tarifs ?')).toBeInTheDocument()
     })
   })
 })
