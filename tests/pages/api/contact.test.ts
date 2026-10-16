@@ -232,6 +232,39 @@ describe('/api/contact', () => {
     expect(response.status).toBe(200)
     expect(envoisTem()[0].html).not.toContain('<script>')
   })
+
+  it('met le nom et le projet tels quels dans le sujet, qui est du texte brut', async () => {
+    const response = await POST(createContactRequest({
+      name: "Seán O'Brien",
+      email: 'sean@example.com',
+      project_type: 'refonte & SEO',
+      message: 'Bonjour, je souhaite refondre mon site.',
+    }, '7.7.7.8'))
+
+    expect(response.status).toBe(200)
+    const envoi = envoisTem()[0]
+    expect(envoi.subject).toBe("[Portfolio] Nouveau message de Seán O'Brien — refonte & SEO")
+    // Le HTML, lui, reste échappé.
+    expect(envoi.html).toContain('Seán O&#039;Brien')
+    expect(envoi.html).toContain('refonte &amp; SEO')
+  })
+
+  it('refuse un retour à la ligne dans le nom ou le type de projet', async () => {
+    // Les deux vont dans le sujet : \r ou \n y casserait l'en-tête.
+    const response = await POST(createContactRequest({
+      name: 'Jean\rDupont',
+      email: 'jean@example.com',
+      project_type: 'site-vitrine\nBcc: autre@example.com',
+      message: 'Bonjour, je souhaite un devis pour un site vitrine.',
+    }, '7.7.7.9'))
+
+    expect(response.status).toBe(400)
+    const { details } = await response.json()
+    expect(details.name).toEqual(['Le nom doit tenir sur une seule ligne.'])
+    expect(details.project_type).toEqual(['Le type de projet doit tenir sur une seule ligne.'])
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
   describe('dépôt dans le CRM', () => {
     const corps = {
       name: 'Jean Dupont',

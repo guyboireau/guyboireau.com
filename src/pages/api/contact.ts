@@ -7,18 +7,27 @@ import { contactRateLimiter } from '@/lib/rate-limit'
 import { adresseVisiteur } from '@/lib/client-ip'
 import { deposerDemande } from '@/lib/crm'
 
+// Le nom et le type de projet vont dans le sujet de l'email : un saut de ligne
+// y serait au mieux un sujet cassé, au pire une injection d'en-tête.
+const surUneLigne = (valeur: string) => !/[\r\n]/.test(valeur)
+
 // Messages en français : ils sont affichés sous le champ concerné par le
 // formulaire (aria-describedby), ils doivent dire au visiteur quoi corriger.
 const contactSchema = z.object({
   name: z
     .string()
     .min(2, 'Le nom doit contenir au moins 2 caractères.')
-    .max(100, 'Le nom ne doit pas dépasser 100 caractères.'),
+    .max(100, 'Le nom ne doit pas dépasser 100 caractères.')
+    .refine(surUneLigne, 'Le nom doit tenir sur une seule ligne.'),
   email: z
     .string()
     .email('Adresse e-mail invalide.')
     .max(320, "L'adresse e-mail ne doit pas dépasser 320 caractères."),
-  project_type: z.string().max(100).optional(),
+  project_type: z
+    .string()
+    .max(100)
+    .refine(surUneLigne, 'Le type de projet doit tenir sur une seule ligne.')
+    .optional(),
   message: z
     .string()
     .min(10, 'Le message doit contenir au moins 10 caractères.')
@@ -97,7 +106,8 @@ async function envoyerParTem(secretKey: string, projectId: string, demande: Dema
         project_id: projectId,
         from: EXPEDITEUR,
         to: [{ email: DESTINATAIRE }],
-        subject: `[Portfolio] Nouveau message de ${escapeHtml(name)} — ${escapeHtml(projectLabel)}`,
+        // Texte brut, comme `text` : échappé, « O'Brien » arriverait en « O&#039;Brien ».
+        subject: `[Portfolio] Nouveau message de ${name} — ${projectLabel}`,
         text: `Nom : ${name}\nEmail : ${email}\nProjet : ${projectLabel}\n\n${message}`,
         html: corpsHtml(demande),
         additional_headers: [{ key: 'Reply-To', value: email }],
