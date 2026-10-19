@@ -32,6 +32,7 @@ Au 2026-10-08 : **OPEN 2 · LANDED 2 · SHIPPED 3 · REFUTED 2**
 Au 2026-10-12 : **OPEN 3 · LANDED 1 · SHIPPED 4 · REFUTED 2**
 Au 2026-10-12, relevés VPS et projets (session locale) : **OPEN 2 · LANDED 0 · SHIPPED 6 · REFUTED 2** (B08 et B10 → SHIPPED ; B06 : reclassement proposé, décision de Guy ; B01 : prérequis du ruleset dans cette PR)
 Au 2026-10-12, checks requis posés : **OPEN 1 · LANDED 0 · SHIPPED 7 · REFUTED 2** (B01 → SHIPPED ; reste B02 OPEN)
+Au 2026-10-19, audit hebdomadaire : **OPEN 1 · LANDED 0 · SHIPPED 7 · REFUTED 2** (inchangé ; B02 OPEN depuis 35 jours, cause plateforme non établie — les PR #68, #71, #72 et #73 ont toutes déclenché leur CI)
 
 ---
 
