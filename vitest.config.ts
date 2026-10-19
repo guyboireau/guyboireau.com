@@ -28,9 +28,9 @@ export default defineConfig({
         'vitest.setup.ts',
       ],
       // La CI exécutait `test --coverage` sans jamais opposer de plancher :
-      // la couverture était mesurée, jamais défendue. Calibré quelques points
-      // sous le réel du jour (81,93 / 67,83 / 68,57 / 86,23) pour faire cliquet
-      // sans rougir au premier refactor. À remonter quand la couverture monte.
+      // la couverture était mesurée, jamais défendue. Cliquet : relevé quand
+      // la couverture monte, jamais baissé. Réel au 2026-10-19 :
+      // 98,08 / 91,79 / 96,05 / 98,91. À remonter quand la couverture monte.
       thresholds: {
         statements: 95,
         branches: 85,
