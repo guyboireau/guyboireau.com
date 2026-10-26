@@ -34,6 +34,7 @@ Au 2026-10-12, relevés VPS et projets (session locale) : **OPEN 2 · LANDED 0 �
 Au 2026-10-12, checks requis posés : **OPEN 1 · LANDED 0 · SHIPPED 7 · REFUTED 2** (B01 → SHIPPED ; reste B02 OPEN)
 Au 2026-10-19, audit hebdomadaire : **OPEN 1 · LANDED 0 · SHIPPED 7 · REFUTED 2** (inchangé ; B02 OPEN depuis 35 jours, cause plateforme non établie — les PR #68, #71, #72 et #73 ont toutes déclenché leur CI)
 Au 2026-10-26, audit hebdomadaire : **OPEN 1 · LANDED 1 · SHIPPED 7 · REFUTED 2** (B11 ouvert et LANDED dans la PR de cet audit : 6 high en prod, garde d'audit de `ci` rouge au prochain run ; B02 OPEN depuis 42 jours)
+Au 2026-10-26, après #75 : **OPEN 1 · LANDED 0 · SHIPPED 8 · REFUTED 2** (B11 → SHIPPED, re-prouvé sur `main` efd34a4 ; reste B02 OPEN)
 
 ---
 
@@ -756,7 +757,7 @@ requis). Après sa fusion : `required_status_checks` (`ci`, `build-vps`,
 
 ## B11 — `zod` < 4.6.6 (advisory high) et chaîne `@vercel/*` dans l'arbre de production : la garde d'audit de `ci` rouge au prochain run
 
-- [ ] **statut: LANDED** · ouvert le 2026-10-26 · correctif sur `claude/eager-feynman-kn41hx` (PR de l'audit du 2026-10-26), non mergé · sécurité
+- [x] **statut: SHIPPED** · ouvert le 2026-10-26 · livré par #75 (efd34a4, mergée le 2026-10-26) · re-prouvé sur `main` efd34a4 le 2026-10-26 · sécurité
 
 `npm audit --omit=dev` sur `main` 13dc0c5 remonte **6 high** et 1 low, alors que l'étape CI
 `npm audit --omit=dev --audit-level=high` (garde de B07) est un check requis (`ci`, B01) :
@@ -813,6 +814,18 @@ et l'audit rejoué.
 Reste en arbre complet, **dev seulement** : 1 high, `happy-dom` 20.14.6
 (GHSA-834v-8h66-3h79, `17.0.0 - 21.0.3`) ; le correctif est la majeure 21.0.4,
 environnement de test seulement : hors de ce correctif sans rupture.
+
+**Re-preuve sur `main` (2026-10-26, efd34a4, après `rm -rf node_modules && npm ci`)**
+
+```sh
+npm audit --omit=dev --json | jq -c .metadata.vulnerabilities
+# → {"info":0,"low":0,"moderate":0,"high":0,"critical":0,"total":0}
+npm ls zod | grep -oE 'zod@[0-9.]+' | sort -u                       # → zod@4.6.7
+```
+
+#75 a fusionné par auto-merge après ses trois checks requis (`ci` 06:37:54Z, `build-vps`
+06:37:22Z, `🔐 Détection de secrets` 06:36:59Z ; fusion 06:38:01Z). Run CI 171 sur `main`
+efd34a4 (push) : vert, étape d'audit comprise.
 
 ---
 
