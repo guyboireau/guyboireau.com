@@ -150,7 +150,7 @@ Créer un fichier `.env` à la racine :
 
 ## CI / CD
 
-Le workflow GitHub Actions (`.github/workflows/ci.yml`) s'exécute à chaque push et à chaque pull request sur `main`, sauf si seuls des `*.md`, `docs/**`, `LICENSE` ou `.gitignore` changent :
+Le workflow GitHub Actions (`.github/workflows/ci.yml`) s'exécute à chaque pull request sur `main`, et à chaque push sur `main` sauf si seuls des `*.md`, `docs/**`, `LICENSE` ou `.gitignore` changent (pas de filtre sur les PR : `ci` et `build-vps` sont des checks requis, B01) :
 
 1. Checkout du code
 2. Setup Node.js 22 avec cache `npm`

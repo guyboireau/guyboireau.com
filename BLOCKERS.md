@@ -33,6 +33,7 @@ Au 2026-10-12 : **OPEN 3 · LANDED 1 · SHIPPED 4 · REFUTED 2**
 Au 2026-10-12, relevés VPS et projets (session locale) : **OPEN 2 · LANDED 0 · SHIPPED 6 · REFUTED 2** (B08 et B10 → SHIPPED ; B06 : reclassement proposé, décision de Guy ; B01 : prérequis du ruleset dans cette PR)
 Au 2026-10-12, checks requis posés : **OPEN 1 · LANDED 0 · SHIPPED 7 · REFUTED 2** (B01 → SHIPPED ; reste B02 OPEN)
 Au 2026-10-19, audit hebdomadaire : **OPEN 1 · LANDED 0 · SHIPPED 7 · REFUTED 2** (inchangé ; B02 OPEN depuis 35 jours, cause plateforme non établie — les PR #68, #71, #72 et #73 ont toutes déclenché leur CI)
+Au 2026-10-26, audit hebdomadaire : **OPEN 1 · LANDED 1 · SHIPPED 7 · REFUTED 2** (B11 ouvert et LANDED dans la PR de cet audit : 6 high en prod, garde d'audit de `ci` rouge au prochain run ; B02 OPEN depuis 42 jours)
 
 ---
 
@@ -193,6 +194,10 @@ B01 : des checks requis. Rien à corriger dans le dépôt. Reste OPEN.
 **Relevé (2026-10-12).** Aucune PR ouverte ; les trois PR fusionnées depuis le dernier
 relevé (#63, #64, #65) ont toutes reçu `ci` et `Secret Scan` sur `main` (runs 146, 148,
 150, verts). Le cas #38 reste isolé. Ouvert depuis 28 jours.
+
+**Relevé (2026-10-26).** Aucune PR ouverte. La seule PR fusionnée depuis le dernier relevé,
+#74, a reçu `ci` sur `main` (run 169, 13dc0c5, vert). Le cas #38 reste isolé et sans cause
+établie. Ouvert depuis 42 jours.
 
 ---
 
@@ -746,6 +751,68 @@ requis, une PR de documentation serait restée bloquée « en attente ». Cette 
 requis). Après sa fusion : `required_status_checks` (`ci`, `build-vps`,
 `🔐 Détection de secrets`) sur le ruleset 23932480 et `allow_auto_merge`, puis re-preuve
 (`gh api repos/guyboireau/guyboireau.com/rulesets/23932480`) et B01 → SHIPPED.
+
+---
+
+## B11 — `zod` < 4.6.6 (advisory high) et chaîne `@vercel/*` dans l'arbre de production : la garde d'audit de `ci` rouge au prochain run
+
+- [ ] **statut: LANDED** · ouvert le 2026-10-26 · correctif sur `claude/eager-feynman-kn41hx` (PR de l'audit du 2026-10-26), non mergé · sécurité
+
+`npm audit --omit=dev` sur `main` 13dc0c5 remonte **6 high** et 1 low, alors que l'étape CI
+`npm audit --omit=dev --audit-level=high` (garde de B07) est un check requis (`ci`, B01) :
+le dernier run vert de `main` (169, 2026-10-19) est antérieur aux advisories, et la
+prochaine PR, quelle qu'elle soit, aura `ci` rouge et ne pourra pas fusionner.
+
+- `zod` 4.5.4, dépendance directe (GHSA-mrhx-c7xc-m3w5, high, `<4.6.6` : consommation
+  mémoire lors de la validation de collections bornées surdimensionnées). Utilisé par les
+  deux routes publiques. Exploitabilité en prod **faible** : `/api/chat` répond 503 avant
+  de lire le corps tant que l'assistant n'est pas configuré (B08), et `contactSchema` ne
+  contient aucune collection ; `chatBodySchema` (`z.array(...).max(20)`) le serait dès la
+  réactivation de l'assistant.
+- `@vercel/cli-config` 0.2.0 → épingle `zod` **4.1.11 exact** (même dans sa dernière
+  version 0.3.3) ; en remontent `@vercel/oidc`, `@vercel/functions` et `@astrojs/vercel`
+  (build Vercel, pas le VPS — mais livrés selon `npm audit`).
+- `undici` 8.10.2 (GHSA-4qv8-2p9j-2685, GHSA-f72v-6w45-q472, GHSA-xjj6-f33q-929c ; via
+  `astro` → `unifont`), `vite` 8.1.4 (GHSA-9jrq-w75r-8gcw, GHSA-rq7h-c2jc-7f22 et
+  `launch-editor`), `astro` 7.3.2 (GHSA-mpr7-6m5w-76rw, low).
+
+**Preuve re-exécutable** (rouge, sur `main` 13dc0c5, après `npm ci`)
+
+```sh
+npm audit --omit=dev --json | jq -c .metadata.vulnerabilities
+# → {"info":0,"low":1,"moderate":0,"high":6,"critical":0,"total":7}
+jq .dependencies.zod node_modules/@vercel/cli-config/package.json   # → "4.1.11"
+```
+
+**Correctif** — lockfile dans les plages de `package.json` (`astro` 7.4.1, `@astrojs/vercel`
+11.0.16, `zod` 4.6.7, `undici` 8.12.3, `vite` 8.3.5), plus une `override` ciblée
+`"@vercel/cli-config": { "zod": "^4.6.6" }` (seul moyen : l'épinglage exact est dans la
+dernière version publiée). `@astrojs/node` conservé (B03). Au passage, outillage de dev :
+`vitest`/`@vitest/coverage-v8` 4.1.12 (GHSA-qxg6-89mg-rqv8, moderate) et override
+`fast-uri` `^3.1.9` (4 moderate). `npm audit fix` plante sur ce dépôt avec npm 10.9.4
+(`Cannot read properties of null (reading 'edgesOut')`, `#loadPeerSet` d'arborist) :
+correctif fait par `npm update` ciblé, puis `npm install` en npm 10 pour que `npm ci`
+(npm 10, CI) accepte le lockfile.
+
+```sh
+git fetch origin claude/eager-feynman-kn41hx && git checkout origin/claude/eager-feynman-kn41hx
+rm -rf node_modules && npm ci
+npm audit --omit=dev --json | jq -c .metadata.vulnerabilities
+# → {"info":0,"low":0,"moderate":0,"high":0,"critical":0,"total":0}
+npm ls zod | grep -oE 'zod@[0-9.]+' | sort -u                       # → zod@4.6.7
+npm audit --json | jq -c .metadata.vulnerabilities
+# → {"info":0,"low":0,"moderate":0,"high":1,"critical":0,"total":1}  (happy-dom, dev)
+```
+
+Lint (`astro check` + ESLint), `tsc --noEmit`, 15 fichiers / 206 tests (couverture
+98,08/91,79/96,05/98,91, seuils tenus), build Vercel, `test:csp`, `test:pages`, build
+`astro.config.vps.mjs` et fumée du serveur Node (accueil 200, `/api/chat` 503
+`ASSISTANT_NON_CONFIGURE`) verts localement. Passe SHIPPED quand la PR est sur `main`
+et l'audit rejoué.
+
+Reste en arbre complet, **dev seulement** : 1 high, `happy-dom` 20.14.6
+(GHSA-834v-8h66-3h79, `17.0.0 - 21.0.3`) ; le correctif est la majeure 21.0.4,
+environnement de test seulement : hors de ce correctif sans rupture.
 
 ---
 
