@@ -35,6 +35,7 @@ Au 2026-10-12, checks requis posés : **OPEN 1 · LANDED 0 · SHIPPED 7 · REFUT
 Au 2026-10-19, audit hebdomadaire : **OPEN 1 · LANDED 0 · SHIPPED 7 · REFUTED 2** (inchangé ; B02 OPEN depuis 35 jours, cause plateforme non établie — les PR #68, #71, #72 et #73 ont toutes déclenché leur CI)
 Au 2026-10-26, audit hebdomadaire : **OPEN 1 · LANDED 1 · SHIPPED 7 · REFUTED 2** (B11 ouvert et LANDED dans la PR de cet audit : 6 high en prod, garde d'audit de `ci` rouge au prochain run ; B02 OPEN depuis 42 jours)
 Au 2026-10-26, après #75 : **OPEN 1 · LANDED 0 · SHIPPED 8 · REFUTED 2** (B11 → SHIPPED, re-prouvé sur `main` efd34a4 ; reste B02 OPEN)
+Au 2026-11-02, audit hebdomadaire : **OPEN 1 · LANDED 1 · SHIPPED 8 · REFUTED 2** (B12 ouvert et LANDED dans la PR de cet audit : `happy-dom` 21.0.4, dev ; B02 OPEN depuis 49 jours)
 
 ---
 
@@ -199,6 +200,12 @@ relevé (#63, #64, #65) ont toutes reçu `ci` et `Secret Scan` sur `main` (runs 
 **Relevé (2026-10-26).** Aucune PR ouverte. La seule PR fusionnée depuis le dernier relevé,
 #74, a reçu `ci` sur `main` (run 169, 13dc0c5, vert). Le cas #38 reste isolé et sans cause
 établie. Ouvert depuis 42 jours.
+
+**Relevé (2026-11-02).** Aucune PR ouverte. #75 a reçu `ci`, `build-vps` et
+`🔐 Détection de secrets` (voir B11) ; #76, qui ne touche que `BLOCKERS.md`, a été
+fusionnée après les mêmes checks requis (B01), et n'a pas de run `ci` sur `main`
+(`paths-ignore` du push, attendu). Le cas #38 reste isolé et sans cause établie.
+Ouvert depuis 49 jours.
 
 ---
 
@@ -826,6 +833,50 @@ npm ls zod | grep -oE 'zod@[0-9.]+' | sort -u                       # → zod@4.
 #75 a fusionné par auto-merge après ses trois checks requis (`ci` 06:37:54Z, `build-vps`
 06:37:22Z, `🔐 Détection de secrets` 06:36:59Z ; fusion 06:38:01Z). Run CI 171 sur `main`
 efd34a4 (push) : vert, étape d'audit comprise.
+
+---
+
+## B12 — `happy-dom` 20.9.0 (3 advisories high, dont exécution de code sur l'hôte) dans l'environnement de test
+
+- [ ] **statut: LANDED** · ouvert le 2026-11-02 · correctif dans la PR de l'audit du 2026-11-02 (branche `claude/eager-feynman-fckh8k`) · sécurité
+
+`npm audit` (arbre complet) sur `main` d137df6 remonte 1 high : `happy-dom` **20.9.0**
+(et non 20.14.6 comme l'écrivait B11 : c'est la version du lockfile), environnement DOM
+de Vitest. Trois advisories, tous corrigés seulement dans la majeure 21.0.4 :
+GHSA-834v-8h66-3h79 (alias d'import non assaini → exécution de code sur l'hôte,
+`>=17.0.0 <=21.0.3`), GHSA-c8p4-j97h-3vg8 et GHSA-5fpq-26gf-qwcr (SSRF par iframe /
+feuille de style, falsification de portée de cookie). **Dev seulement**, jamais livré
+(`npm audit --omit=dev` n'en dit rien) ; le risque est sur le poste et le runner CI qui
+exécutent les tests, pas sur le site. Les tests ne parsent que du HTML du dépôt.
+
+**Preuve re-exécutable** (rouge, sur `main` d137df6, après `npm ci`)
+
+```sh
+npm audit --json | jq -c '.metadata.vulnerabilities, .vulnerabilities["happy-dom"].range'
+# → {"info":0,"low":0,"moderate":14,"high":1,"critical":0,"total":15}  "<=21.0.3"
+node -p "require('./package-lock.json').packages['node_modules/happy-dom'].version"   # → 20.9.0
+```
+
+**Correctif** — `happy-dom` `^21.0.4` en devDependency (seul changement du lockfile avec
+`buffer-image-size`, nouvelle dépendance de happy-dom). Aucun test ni configuration modifiés.
+
+```sh
+git fetch origin claude/eager-feynman-fckh8k && git checkout origin/claude/eager-feynman-fckh8k
+rm -rf node_modules && npm ci
+npm audit --json | jq -c .metadata.vulnerabilities
+# → {"info":0,"low":0,"moderate":14,"high":0,"critical":0,"total":14}
+npx vitest run --coverage   # → 15 fichiers, 206 tests verts (3 passes), 98,08/91,79/96,05/98,91
+```
+
+Verts localement aussi : `npm run lint`, `tsc --noEmit`, build Vercel, `test:csp`,
+`test:pages`, build `astro.config.vps.mjs` + CSP/pages sur `dist/client/`, fumée du serveur
+Node (accueil 200, `/api/chat` 503 `ASSISTANT_NON_CONFIGURE`). Passe SHIPPED quand la PR
+est sur `main` et l'audit rejoué.
+
+À noter, hors de ce constat : `npm audit --omit=dev` remonte depuis le 2026-10-26 **4
+moderate** (`@astrojs/vercel` → `@vercel/nft` → `glob` → `minimatch`, GHSA-3g3m-2fjr-6pw4,
+GHSA-g3hv-75wg-m249), sous le seuil `high` de la garde CI ; build Vercel seulement, pas le
+VPS. Le seul correctif proposé par npm est une majeure en arrière (`@astrojs/vercel` 8.1.0).
 
 ---
 
