@@ -30,6 +30,12 @@ if (pages.length === 0) {
   process.exit(1);
 }
 
+// Siège déménagé le 14/09/2026 : 16 quai de Bacalan, 33300 Bordeaux, SIRET
+// 993 605 542 00022 (même SIREN). L'ancienne adresse, l'ancien SIRET et tout
+// autre code postal dans le JSON-LD ne doivent revenir sur aucune page. Écrits
+// en motifs pour que la recherche des anciennes valeurs dans le dépôt reste vide.
+const ANCIENNE_IDENTITE = [/993\s*605\s*542\s*0+14\b/, /rue\s+Beck/i, /"postalCode":\s*"(?!33300")/];
+
 const echecs = new Map();
 const signaler = (page, probleme) => {
   if (!echecs.has(page)) echecs.set(page, []);
@@ -61,6 +67,10 @@ for (const chemin of pages) {
   }
   if (!html.includes('aria-label="Pied de page"')) signaler(nom, 'pied de page : <nav aria-label="Pied de page"> absent');
   if (!texte(html).includes('Guy Boireau EI')) signaler(nom, '« Guy Boireau EI » absent de la page');
+  if (!texte(html).includes('SIRET 993 605 542 00022')) signaler(nom, 'pied de page : SIRET 993 605 542 00022 absent');
+  for (const ancien of ANCIENNE_IDENTITE) {
+    if (ancien.test(html)) signaler(nom, `ancienne identité (avant le 14/09/2026) : ${ancien}`);
+  }
 
   for (const commentaire of html.match(/<!--[\s\S]*?-->/g) ?? []) {
     if (/Google Tag Manager|Umami, auto-hébergé/.test(commentaire))
@@ -104,7 +114,7 @@ const exiger = (chemin, attendus, interdits = []) => {
 exiger(
   'mentions-legales/index.html',
   [
-    'Guy Boireau EI', 'micro-entreprise', '993 605 542 00014', '62.01Z', '293 B du CGI',
+    'Guy Boireau EI', 'micro-entreprise', '993 605 542 00022', '16 quai de Bacalan, 33300 Bordeaux', '62.01Z', '293 B du CGI',
     /Dispensé d.immatriculation au registre du commerce et des sociétés/, 'OVH SAS', '1007',
     '424 761 419', 'serveur privé virtuel', 'href="/confidentialite"', 'href="/cgv#mediation"',
   ],
@@ -119,6 +129,7 @@ exiger(
     'data-opposition-mesure', 'umami.disabled', 'renouvelé chaque mois', '25 mois', '30 jours',
     '3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07', 'Data Privacy Framework',
     '14 copies sont gardées sur le serveur', 'directives post-mortem', 'Ce site ne dépose aucun cookie',
+    'Guy Boireau EI (entrepreneur individuel), 16 quai de Bacalan, 33300 Bordeaux',
   ],
   ['sel renouvelé chaque jour', 'change chaque jour', /Ces transferts sont encadrés par les clauses contractuelles types/],
 );
@@ -128,7 +139,7 @@ exiger(
   [
     'id="mediation"', 'id="retractation"', 'id="garantie-legale"', 'id="formulaire-retractation"',
     'L221-18', 'L221-24', 'L221-25', 'L221-28, 1°', 'L221-28, 8°', 'L224-25-12', 'L215-1', 'L215-1-1',
-    'L441-10', 'D441-5', '40 €', 'R212-1', '293 B du CGI', 'Rayez la mention inutile', 'Guy Boireau EI, 17 rue Beck, 33800 Bordeaux',
+    'L441-10', 'D441-5', '40 €', 'R212-1', '293 B du CGI', 'Rayez la mention inutile', 'Guy Boireau EI, 16 quai de Bacalan, 33300 Bordeaux',
   ],
   [/règlement en ligne des litiges/i, 'ec.europa.eu/consumers/odr'],
 );
@@ -159,8 +170,10 @@ if (!llms) signaler('/llms.txt', 'fichier absent');
 else {
   if (!/^# \S/.test(llms)) signaler('/llms.txt', 'doit commencer par un titre « # … » (format llmstxt.org)');
   // Liens sans « / » final, forme unique des URL du site (trailingSlash: 'never').
-  for (const attendu of ['Guy Boireau EI', 'https://guyboireau.com/mentions-legales)', 'https://guyboireau.com/confidentialite)', 'https://guyboireau.com/cgv)'])
+  for (const attendu of ['Guy Boireau EI', '16 quai de Bacalan, 33300 Bordeaux', 'https://guyboireau.com/mentions-legales)', 'https://guyboireau.com/confidentialite)', 'https://guyboireau.com/cgv)'])
     if (!llms.includes(attendu)) signaler('/llms.txt', `attendu : ${attendu}`);
+  for (const ancien of ANCIENNE_IDENTITE)
+    if (ancien.test(llms)) signaler('/llms.txt', `ancienne identité (avant le 14/09/2026) : ${ancien}`);
 }
 
 const robots = fichier('robots.txt');

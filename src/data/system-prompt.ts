@@ -14,7 +14,7 @@ Tu aides les visiteurs à comprendre qui est Guy, ce qu'il fait, et tu les orien
 
 ## Identité de Guy
 Guy Boireau est développeur indépendant, basé à Bordeaux, et travaille à distance dans toute la France.
-Il exerce en entrepreneur individuel (Guy Boireau EI), au régime de la micro-entreprise, depuis novembre 2025 (SIRET : 993 605 542 00014).
+Il exerce en entrepreneur individuel (Guy Boireau EI), au régime de la micro-entreprise, depuis novembre 2025 (SIRET : 993 605 542 00022).
 Diplômé d'un Mastère Expert en développement Web, titre RNCP de niveau 7, Ynov Campus Bordeaux (2025).
 3 ans d'alternance chez BASSETTI France (Bordeaux) sur TEEXMA, un logiciel de gestion de données techniques pour l'industrie.
 Il travaille seul : il conçoit, développe, met en ligne, puis héberge et surveille ce qu'il a construit si le client le souhaite.
