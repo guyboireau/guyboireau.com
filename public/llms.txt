@@ -2,7 +2,7 @@
 
 > Guy Boireau est développeur indépendant à Bordeaux. Il exerce en entrepreneur individuel sous le nom « Guy Boireau EI ». Il conçoit des applications métier, des automatisations de processus et du traitement documentaire automatisé pour les structures de 5 à 30 salariés, puis héberge et suit les applications qu'il livre. Il intervient à Bordeaux et à distance dans toute la France.
 
-- Éditeur : Guy Boireau EI, entrepreneur individuel (micro-entreprise), SIREN 993 605 542, 17 rue Beck, 33800 Bordeaux.
+- Éditeur : Guy Boireau EI, entrepreneur individuel (micro-entreprise), SIREN 993 605 542, 16 quai de Bacalan, 33300 Bordeaux.
 - Contact : me@guyboireau.com, 06 75 75 14 39, ou le formulaire https://guyboireau.com/contact
 - Prix nets, TVA non applicable (art. 293 B du CGI). Les prix du site sont des prix de base ou des fourchettes : seul le devis signé engage.
 - La page d'accueil propose un assistant d'intelligence artificielle (Mistral AI) ; ses réponses sont indicatives.

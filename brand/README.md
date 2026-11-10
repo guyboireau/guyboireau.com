@@ -58,7 +58,7 @@ Tous les SVG sont **en contours vectoriels** (aucune dépendance police) et à
 
 ### Mentions légales incluses (à vérifier selon ta situation)
 
-- Statut **Entrepreneur Individuel (EI)** + SIRET `993 605 542 00014`.
+- Statut **Entrepreneur Individuel (EI)** + SIRET `993 605 542 00022`.
 - **TVA non applicable, art. 293 B du CGI** (régime micro). ⚠️ Si tu es
   assujetti à la TVA, il faut ajouter le taux + le n° de TVA intracommunautaire.
 - Pénalités de retard (3× le taux légal) + indemnité forfaitaire de **40 €**.
