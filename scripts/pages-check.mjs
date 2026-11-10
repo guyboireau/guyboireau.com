@@ -158,7 +158,8 @@ const llms = fichier('llms.txt');
 if (!llms) signaler('/llms.txt', 'fichier absent');
 else {
   if (!/^# \S/.test(llms)) signaler('/llms.txt', 'doit commencer par un titre « # … » (format llmstxt.org)');
-  for (const attendu of ['Guy Boireau EI', 'https://guyboireau.com/mentions-legales/', 'https://guyboireau.com/confidentialite/', 'https://guyboireau.com/cgv/'])
+  // Liens sans « / » final, forme unique des URL du site (trailingSlash: 'never').
+  for (const attendu of ['Guy Boireau EI', 'https://guyboireau.com/mentions-legales)', 'https://guyboireau.com/confidentialite)', 'https://guyboireau.com/cgv)'])
     if (!llms.includes(attendu)) signaler('/llms.txt', `attendu : ${attendu}`);
 }
 
