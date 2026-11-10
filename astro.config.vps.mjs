@@ -20,6 +20,11 @@ import { csp } from './csp.mjs'
 
 export default defineConfig({
   site: 'https://guyboireau.com',
+  // Une seule URL par page, sans « / » final : c'est la forme de tous les liens
+  // du site. En 'ignore' (défaut), /contact et /contact/ répondaient tous deux 200,
+  // la canonique et le sitemap portaient le « / » : la Search Console voyait des
+  // doublons (relevé du 2026-11-10). 'never' redirige /contact/ en 301 vers /contact.
+  trailingSlash: 'never',
   security: { csp },
   adapter: node({ mode: 'standalone' }),
   integrations: [react(), sitemap()],

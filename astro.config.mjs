@@ -8,6 +8,8 @@ import { vercelSecurityHeaders } from './security-headers.mjs'
 
 export default defineConfig({
   site: 'https://guyboireau.com',
+  // Même règle qu'en production (astro.config.vps.mjs) : URL sans « / » final.
+  trailingSlash: 'never',
   security: { csp },
   adapter: vercel(),
   integrations: [
