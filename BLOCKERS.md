@@ -838,7 +838,7 @@ efd34a4 (push) : vert, étape d'audit comprise.
 
 ## B12 — `happy-dom` 20.9.0 (3 advisories high, dont exécution de code sur l'hôte) dans l'environnement de test
 
-- [ ] **statut: LANDED** · ouvert le 2026-11-02 · correctif dans la PR de l'audit du 2026-11-02 (branche `claude/eager-feynman-fckh8k`) · sécurité
+- [x] **statut: SHIPPED** (2026-11-15, #77 `7a1b149`, re-prouvé sur `main` `f86d0dd`) · ouvert le 2026-11-02 · correctif dans la PR de l'audit du 2026-11-02 (branche `claude/eager-feynman-fckh8k`) · sécurité
 
 `npm audit` (arbre complet) sur `main` d137df6 remonte 1 high : `happy-dom` **20.9.0**
 (et non 20.14.6 comme l'écrivait B11 : c'est la version du lockfile), environnement DOM
@@ -877,6 +877,18 @@ est sur `main` et l'audit rejoué.
 moderate** (`@astrojs/vercel` → `@vercel/nft` → `glob` → `minimatch`, GHSA-3g3m-2fjr-6pw4,
 GHSA-g3hv-75wg-m249), sous le seuil `high` de la garde CI ; build Vercel seulement, pas le
 VPS. Le seul correctif proposé par npm est une majeure en arrière (`@astrojs/vercel` 8.1.0).
+
+### B12 → SHIPPED (re-preuve du 2026-11-15, `main` `f86d0dd`)
+
+```sh
+rm -rf node_modules && npm ci
+node -p "require('./node_modules/happy-dom/package.json').version"   # → 21.0.4
+npm audit --json | jq -c .metadata.vulnerabilities
+# → {"info":0,"low":0,"moderate":12,"high":0,"critical":0,"total":12}
+npx vitest run --coverage   # → 15 fichiers, 206 tests verts, 98,08/91,79/96,05/98,91
+```
+
+CI de `main` verte sur `f86d0dd` (run 179).
 
 ---
 
